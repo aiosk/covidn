@@ -98,7 +98,7 @@ func (v HarianList) EmitICal() goics.Componenter {
 			v2.TotalActive.Value, v2.Active.Value,
 		)
 		event.AddProperty("DESCRIPTION", desc)
-		event.AddProperty("SUMMARY", fmt.Sprintf("IDN %d(+%d) Case", v2.TotalCase.Value, v2.Case.Value))
+		event.AddProperty("SUMMARY", fmt.Sprintf("%d(+%d) Cases", v2.TotalCase.Value, v2.Case.Value))
 		event.AddProperty("URL", "covid19.go.id")
 		event.AddProperty("CONTACT", "covid19.go.id")
 		event.AddProperty("TRANSP", "TRANSPARENT")
