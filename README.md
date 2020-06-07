@@ -40,7 +40,7 @@ $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date 
 ```sh
 curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s)" |
 /path/to/file/covid19Idn prov | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
-parallel -k curl --compressed {} | paste -sd',' | sed 's/.*/[&]/' |
+parallel -k sh -c \"curl --compressed {}\;echo\" | paste -sd',' | sed 's/.*/[&]/' |
 /path/to/file/covid19Idn provdetail > dist/prov.csv
 ```
 
