@@ -50,16 +50,20 @@ func (v File) ToCsv() [][]string {
 	listPerkembanganTags := v[0].ListPerkembangan[0].GetTag("json")
 	title := []string{
 		provDetailTags["Provinsi"], listPerkembanganTags["Date"],
-		listPerkembanganTags["Death"], listPerkembanganTags["Active"], listPerkembanganTags["Recover"], listPerkembanganTags["Case"],
-		listPerkembanganTags["TotalDeath"], listPerkembanganTags["TotalActive"], listPerkembanganTags["TotalRecover"], listPerkembanganTags["TotalCase"],
+		listPerkembanganTags["TotalCase"], listPerkembanganTags["Case"],
+		listPerkembanganTags["TotalRecover"], listPerkembanganTags["Recover"],
+		listPerkembanganTags["TotalDeath"], listPerkembanganTags["Death"],
+		listPerkembanganTags["TotalActive"], listPerkembanganTags["Active"],
 	}
 	dataCsv = append(dataCsv, title)
 	for _, v := range v {
 		for _, v2 := range v.ListPerkembangan {
 			row := []string{
 				v.Provinsi, libs.UnixToMyFormat(v2.Date),
-				strconv.Itoa(v2.Death), strconv.Itoa(v2.Active), strconv.Itoa(v2.Recover), strconv.Itoa(v2.Case),
-				strconv.Itoa(v2.TotalDeath), strconv.Itoa(v2.TotalActive), strconv.Itoa(v2.TotalRecover), strconv.Itoa(v2.TotalCase),
+				strconv.Itoa(v2.TotalCase), strconv.Itoa(v2.Case),
+				strconv.Itoa(v2.TotalRecover), strconv.Itoa(v2.Recover),
+				strconv.Itoa(v2.TotalDeath), strconv.Itoa(v2.Death),
+				strconv.Itoa(v2.TotalActive), strconv.Itoa(v2.Active),
 			}
 			dataCsv = append(dataCsv, row)
 		}
@@ -91,11 +95,11 @@ func (v File) EmitICal() goics.Componenter {
 			event.AddProperty("X-MICROSOFT-CDO-ALLDAYEVENT", "True")
 			event.AddProperty("CLASS", "PUBLIC")
 			desc := fmt.Sprintf(`%d(+%d) Cases
-%d(+%d) Death Cases
 %d(+%d) Recovered Cases 
+%d(+%d) Death Cases
 %d(+%d) Active Cases`, v3.TotalCase, v3.Case,
-				v3.TotalDeath, v3.Death,
 				v3.TotalRecover, v3.Recover,
+				v3.TotalDeath, v3.Death,
 				v3.TotalActive, v3.Active,
 			)
 			event.AddProperty("DESCRIPTION", desc)

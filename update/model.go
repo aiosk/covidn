@@ -49,8 +49,10 @@ func (v HarianList) ToCsv() [][]string {
 	tags := v[0].GetTag("json")
 	title := []string{
 		tags["DateStr"],
-		tags["Death"], tags["Active"], tags["Recover"], tags["Case"],
-		tags["TotalDeath"], tags["TotalActive"], tags["TotalRecover"], tags["TotalCase"],
+		tags["TotalCase"], tags["Case"],
+		tags["TotalRecover"], tags["Recover"],
+		tags["TotalDeath"], tags["Death"],
+		tags["TotalActive"], tags["Active"],
 	}
 	dataCsv = append(dataCsv, title)
 
@@ -58,8 +60,10 @@ func (v HarianList) ToCsv() [][]string {
 		// log.Printf("%+v\n", v)
 		row := []string{
 			v.DateStr[:10],
-			strconv.Itoa(v.Death.Value), strconv.Itoa(v.Active.Value), strconv.Itoa(v.Recover.Value), strconv.Itoa(v.Case.Value),
-			strconv.Itoa(v.TotalDeath.Value), strconv.Itoa(v.TotalActive.Value), strconv.Itoa(v.TotalRecover.Value), strconv.Itoa(v.TotalCase.Value),
+			strconv.Itoa(v.TotalCase.Value), strconv.Itoa(v.Case.Value),
+			strconv.Itoa(v.TotalRecover.Value), strconv.Itoa(v.Recover.Value),
+			strconv.Itoa(v.TotalDeath.Value), strconv.Itoa(v.Death.Value),
+			strconv.Itoa(v.TotalActive.Value), strconv.Itoa(v.Active.Value),
 		}
 		dataCsv = append(dataCsv, row)
 	}
@@ -89,12 +93,11 @@ func (v HarianList) EmitICal() goics.Componenter {
 		event.AddProperty("X-MICROSOFT-CDO-ALLDAYEVENT", "True")
 		event.AddProperty("CLASS", "PUBLIC")
 		desc := fmt.Sprintf(`%d(+%d) Cases
-%d(+%d) Death Cases
 %d(+%d) Recovered Cases 
+%d(+%d) Death Cases
 %d(+%d) Active Cases`, v2.TotalCase.Value, v2.Case.Value,
-			v2.TotalDeath.Value,
-			v2.Death.Value,
 			v2.TotalRecover.Value, v2.Recover.Value,
+			v2.TotalDeath.Value, v2.Death.Value,
 			v2.TotalActive.Value, v2.Active.Value,
 		)
 		event.AddProperty("DESCRIPTION", desc)

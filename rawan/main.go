@@ -2,9 +2,11 @@ package rawan
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"regexp"
+	"sort"
 	"strconv"
 
 	"github.com/aiosk/covid19Idn/libs"
@@ -32,6 +34,10 @@ func ToCsv(file io.Reader) {
 		panic(err)
 	}
 	// log.Printf("%+v\n", allRawanFile.Status.Data)
+	sort.Slice(allRawanFile.Status.Data, func(i, j int) bool {
+		return allRawanFile.Status.Data[i].Density > allRawanFile.Status.Data[j].Density
+	})
+
 	wilayah := GetWilayah()
 	// log.Printf("%+v\n", wilayah)
 
@@ -39,7 +45,7 @@ func ToCsv(file io.Reader) {
 
 	tags := allRawanFile.Status.Data[0].GetTag("json")
 	title := []string{
-		tags["LevelKerawanan"], tags["JumlahPenduduk"], tags["Total"],
+		tags["LevelKerawanan"], tags["JumlahPenduduk"], tags["Total"], tags["Density"],
 		tags["KodeKecamatan"],
 		"nama_kecamatan",
 		"nama_kabupatenKota",
@@ -52,9 +58,8 @@ func ToCsv(file io.Reader) {
 		namaKabkota := wilayah[regexp.MustCompile(`(\d\d)(\d\d)\d\d`).ReplaceAllString(v.KodeKecamatan, "$1.$2")]["nama"]
 		namaProv := wilayah[regexp.MustCompile(`(\d\d)\d\d\d\d`).ReplaceAllString(v.KodeKecamatan, "$1")]["nama"]
 		row := []string{
-			strconv.Itoa(v.LevelKerawanan), strconv.Itoa(v.JumlahPenduduk), strconv.Itoa(v.Total),
-			v.KodeKecamatan,
-			namaKec, namaKabkota, namaProv,
+			strconv.Itoa(v.LevelKerawanan), strconv.Itoa(v.JumlahPenduduk), strconv.Itoa(v.Total), fmt.Sprintf("%f", v.Density),
+			v.KodeKecamatan, namaKec, namaKabkota, namaProv,
 		}
 		dataCsv = append(dataCsv, row)
 	}

@@ -7,12 +7,13 @@ type Wilayah map[string]map[string]string
 
 // DataKecamatan ...
 type DataKecamatan struct {
-	LevelKerawanan    int    `json:"levelKerawanan"`
-	JumlahPenduduk    int    `json:"jumlah_penduduk"`
-	Total             int    `json:"total"`
-	KodeKecamatan     string `json:"kode_kecamatan"`
-	NamaKabupatenKota string `json:"nama_kabupatenkota"`
-	NamaProvinsi      string `json:"nama_provinsi"`
+	LevelKerawanan    int     `json:"levelKerawanan"`
+	KodeKecamatan     string  `json:"kode_kecamatan"`
+	JumlahPenduduk    int     `json:"jumlah_penduduk"`
+	Total             int     `json:"total"`
+	Density           float64 `json:"density"`
+	NamaKabupatenKota string  `json:"nama_kabupatenkota"`
+	NamaProvinsi      string  `json:"nama_provinsi"`
 }
 
 // GetTag ...
