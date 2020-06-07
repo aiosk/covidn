@@ -10,6 +10,7 @@ Indonesia COVID-19 Data
     - [Update Harian](#update-harian-1)
     - [Provinsi Harian](#provinsi-harian-1)
 - [Powered by](#powered-by)
+- [test](#test)
 
 # Build
 ```sh
@@ -78,3 +79,5 @@ parallel -k sh -c \"curl --compressed {}\;echo\" | paste -sd',' | sed 's/.*/[&]/
 - [github.com/cahyadsn/wilayah](https://github.com/cahyadsn/wilayah)
 
   Kode dan Data Wilayah Administarsi Indonesia sesuai Permendagri No 72 Tahun 2019
+
+# test
