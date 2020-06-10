@@ -8,7 +8,7 @@ Indonesia COVID-19 Data
   - [ICalendar / ICS](#icalendar--ics)
     - [Update Harian](#update-harian-1)
     - [Provinsi Harian](#provinsi-harian-1)
-- [Powered by](#powered-by)
+- [Credits](#credits)
 
 Download the latest releases on [releases](https://github.com/aiosk/covid19Idn/releases) according to your OS,
 
@@ -27,28 +27,31 @@ $ go install
 ```
 this put executable file in `~/go/bin`
 
+for simplicity, usage below will use `go build`.
+
 # Usage
 ## CSV
 To output CSV format
 ### Update Harian
 ```sh
 $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date +%s)" |
-/path/to/file/covid19Idn update > dist/update.csv
+./covid19Idn update - > dist/update.csv
 ```
 
 ### Provinsi Harian
 ```sh
 curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s)" |
-/path/to/file/covid19Idn prov | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
+./covid19Idn prov | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
 parallel -k sh -c \"curl --compressed {}\;echo\" | paste -sd',' | sed 's/.*/[&]/' |
-/path/to/file/covid19Idn provdetail > dist/prov.csv
+./covid19Idn provdetail - > dist/prov.csv
 ```
 
 ### Zona Rawan Kecamatan
+make sure `wilayah_2020.json` exist alongside binary file
 ```sh
-curl --compressed -H "User-Agent:okhttp/3.12.1" \
+curl --compressed \
 "https://api-rdt-v2.bersatulawancovid.id/dev/location/all_rawan?_=$(date +%s)" |
-/path/to/file/covid19Idn rawan > dist/rawan.csv
+./covid19Idn rawan - > dist/rawan.csv
 ```
 
 ## ICalendar / ICS
@@ -56,18 +59,18 @@ To output in ICS format
 ### Update Harian
 ```sh
 $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date +%s)" |
-/path/to/file/covid19Idn update -ics > dist/update.ics
+./covid19Idn update -ics - > dist/update.ics
 ```
 
 ### Provinsi Harian
 ```sh
 $ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s)" |
-/path/to/file/covid19Idn prov | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
+./covid19Idn prov - | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
 parallel -k sh -c \"curl --compressed {}\;echo\" | paste -sd',' | sed 's/.*/[&]/' |
-/path/to/file/covid19Idn provdetail -ics > dist/prov.ics
+./covid19Idn provdetail -ics - > dist/prov.ics
 ```
 
-# Powered by
+# Credits
 - [covid19.go.id](https://covid19.go.id/peta-sebaran)
 
   Informasi terbaru seputar penanganan COVID-19 di Indonesia oleh Pemerintah

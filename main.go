@@ -32,26 +32,28 @@ func main() {
 		printHelp()
 		os.Exit(1)
 	}
-
+	var srcFile *os.File
 	switch os.Args[1] {
 	case "update":
 		cmdUpdate.Parse(os.Args[2:])
-		srcFile := libs.OpenStdinOrFile(cmdUpdate)
+		srcFile = libs.OpenStdinOrFile(cmdUpdate)
 		update.Main(srcFile, *cmdUpdateIcs)
 	case "prov":
 		cmdProv.Parse(os.Args[2:])
-		srcFile := libs.OpenStdinOrFile(cmdProv)
+		srcFile = libs.OpenStdinOrFile(cmdProv)
 		prov.Parse(srcFile)
 	case "provdetail":
 		cmdProvDetail.Parse(os.Args[2:])
-		srcFile := libs.OpenStdinOrFile(cmdProvDetail)
+		srcFile = libs.OpenStdinOrFile(cmdProvDetail)
 		provdetail.Main(srcFile, *cmdProvDetailIcs)
 	case "rawan":
 		cmdRawan.Parse(os.Args[2:])
-		srcFile := libs.OpenStdinOrFile(cmdRawan)
+		srcFile = libs.OpenStdinOrFile(cmdRawan)
 		rawan.ToCsv(srcFile)
 	default:
 		printHelp()
 		os.Exit(1)
 	}
+
+	defer srcFile.Close()
 }

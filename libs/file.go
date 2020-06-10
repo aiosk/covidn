@@ -2,23 +2,29 @@ package libs
 
 import (
 	"encoding/csv"
+	"errors"
 	"flag"
-	"io"
 	"os"
 )
 
 // OpenStdinOrFile ...
-func OpenStdinOrFile(cmd *flag.FlagSet) io.Reader {
+func OpenStdinOrFile(cmd *flag.FlagSet) *os.File {
 	var err error
-	r := os.Stdin
 
 	// log.Printf("%+v\n", cmd.Args())
-	if len(cmd.Args()) > 1 {
-		r, err = os.Open(cmd.Args()[0])
-		if err != nil {
+	cmdArgs := cmd.Args()
+	if len(cmdArgs) < 1 {
+		panic(errors.New("no file specified"))
+	}
+	var r *os.File
+	if cmdArgs[0] == "-" {
+		r = os.Stdin
+	} else {
+		if r, err = os.Open(cmdArgs[0]); err != nil {
 			panic(err)
 		}
 	}
+
 	return r
 }
 
