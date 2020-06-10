@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/aiosk/covid19Idn/libs"
-	"github.com/aiosk/covid19Idn/prov"
-	"github.com/aiosk/covid19Idn/provdetail"
-	"github.com/aiosk/covid19Idn/rawan"
-	"github.com/aiosk/covid19Idn/update"
+	"github.com/aiosk/covidn/libs"
+	"github.com/aiosk/covidn/prov"
+	"github.com/aiosk/covidn/provdetail"
+	"github.com/aiosk/covidn/rawan"
+	"github.com/aiosk/covidn/update"
 )
 
 func printHelp() {

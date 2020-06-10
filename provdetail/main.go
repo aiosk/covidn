@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/aiosk/covid19Idn/libs"
+	"github.com/aiosk/covidn/libs"
 	"github.com/jordic/goics"
 )
 

@@ -1,5 +1,7 @@
 Indonesia COVID-19 Data
 
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/aiosk/covidn)
+
 - [Usage](#usage)
   - [CSV](#csv)
     - [Update Harian](#update-harian)
@@ -10,7 +12,7 @@ Indonesia COVID-19 Data
     - [Provinsi Harian](#provinsi-harian-1)
 - [Credits](#credits)
 
-Download the latest releases on [releases](https://github.com/aiosk/covid19Idn/releases) page according to your OS,
+Download the latest releases on [releases](https://github.com/aiosk/covidn/releases) page according to your OS,
 
 or build your self
 
@@ -35,15 +37,15 @@ To output CSV format
 ### Update Harian
 ```sh
 $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date +%s)" |
-./covid19Idn update - > dist/update.csv
+./covidn update - > dist/update.csv
 ```
 
 ### Provinsi Harian
 ```sh
 curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s)" |
-./covid19Idn prov - | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
+./covidn prov - | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
 parallel -k "curl --compressed {};echo" | paste -sd',' | sed 's/.*/[&]/' |
-./covid19Idn provdetail - > dist/prov.csv
+./covidn provdetail - > dist/prov.csv
 ```
 
 ### Zona Rawan Kecamatan
@@ -51,7 +53,7 @@ make sure `wilayah_2020.json` exist alongside binary file
 ```sh
 curl --compressed \
 "https://api-rdt-v2.bersatulawancovid.id/dev/location/all_rawan?_=$(date +%s)" |
-./covid19Idn rawan - > dist/rawan.csv
+./covidn rawan - > dist/rawan.csv
 ```
 
 ## ICalendar / ICS
@@ -59,15 +61,15 @@ To output in ICS format
 ### Update Harian
 ```sh
 $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date +%s)" |
-./covid19Idn update -ics - > dist/update.ics
+./covidn update -ics - > dist/update.ics
 ```
 
 ### Provinsi Harian
 ```sh
 $ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s)" |
-./covid19Idn prov - | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
+./covidn prov - | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
 parallel -k "curl --compressed {};echo" | paste -sd',' | sed 's/.*/[&]/' |
-./covid19Idn provdetail -ics - > dist/prov.ics
+./covidn provdetail -ics - > dist/prov.ics
 ```
 
 # Credits

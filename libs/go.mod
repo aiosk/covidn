@@ -1,3 +1,3 @@
-module github.com/aiosk/covid19Idn/libs
+module github.com/aiosk/covidn/libs
 
 go 1.14

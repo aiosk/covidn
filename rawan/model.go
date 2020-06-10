@@ -1,6 +1,6 @@
 package rawan
 
-import "github.com/aiosk/covid19Idn/libs"
+import "github.com/aiosk/covidn/libs"
 
 // Wilayah ...
 type Wilayah map[string]map[string]string
