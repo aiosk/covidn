@@ -10,7 +10,7 @@ Indonesia COVID-19 Data
     - [Provinsi Harian](#provinsi-harian-1)
 - [Credits](#credits)
 
-Download the latest releases on [releases](https://github.com/aiosk/covid19Idn/releases) according to your OS,
+Download the latest releases on [releases](https://github.com/aiosk/covid19Idn/releases) page according to your OS,
 
 or build your self
 
@@ -41,8 +41,8 @@ $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date 
 ### Provinsi Harian
 ```sh
 curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s)" |
-./covid19Idn prov | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
-parallel -k sh -c \"curl --compressed {}\;echo\" | paste -sd',' | sed 's/.*/[&]/' |
+./covid19Idn prov - | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
+parallel -k "curl --compressed {};echo" | paste -sd',' | sed 's/.*/[&]/' |
 ./covid19Idn provdetail - > dist/prov.csv
 ```
 
@@ -66,7 +66,7 @@ $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date 
 ```sh
 $ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s)" |
 ./covid19Idn prov - | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
-parallel -k sh -c \"curl --compressed {}\;echo\" | paste -sd',' | sed 's/.*/[&]/' |
+parallel -k "curl --compressed {};echo" | paste -sd',' | sed 's/.*/[&]/' |
 ./covid19Idn provdetail -ics - > dist/prov.ics
 ```
 
