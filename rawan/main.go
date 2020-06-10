@@ -34,7 +34,10 @@ func ToCsv(file io.Reader) {
 		panic(err)
 	}
 	// log.Printf("%+v\n", allRawanFile.Status.Data)
-	sort.Slice(allRawanFile.Status.Data, func(i, j int) bool {
+	sort.SliceStable(allRawanFile.Status.Data, func(i, j int) bool {
+		if allRawanFile.Status.Data[i].KodeKecamatan != allRawanFile.Status.Data[i].KodeKecamatan {
+			return allRawanFile.Status.Data[i].KodeKecamatan < allRawanFile.Status.Data[i].KodeKecamatan
+		}
 		return allRawanFile.Status.Data[i].Density > allRawanFile.Status.Data[j].Density
 	})
 
