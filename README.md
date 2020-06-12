@@ -36,15 +36,14 @@ for simplicity, usage below will use `go build`.
 To output CSV format
 ### Update Harian
 ```sh
-$ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date +%s)" |
+$ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date +%s%3N)" |
 ./covidn update - > dist/update.csv
 ```
 
 ### Provinsi Harian
 ```sh
-curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s)" |
-./covidn prov - | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
-parallel -k "curl --compressed {};echo" | paste -sd',' | sed 's/.*/[&]/' |
+curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s%3N)" | ./covidn prov - |
+parallel -k "curl --compressed 'https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s%3N)'; echo" | paste -sd',' | sed 's/.*/[&]/' |
 ./covidn provdetail - > dist/prov.csv
 ```
 
@@ -52,7 +51,7 @@ parallel -k "curl --compressed {};echo" | paste -sd',' | sed 's/.*/[&]/' |
 make sure `wilayah_2020.json` exist alongside binary file
 ```sh
 curl --compressed \
-"https://api-rdt-v2.bersatulawancovid.id/dev/location/all_rawan?_=$(date +%s)" |
+"https://api-rdt-v2.bersatulawancovid.id/dev/location/all_rawan?_=$(date +%s%3N)" |
 ./covidn rawan - > dist/rawan.csv
 ```
 
@@ -60,15 +59,14 @@ curl --compressed \
 To output in ICS format
 ### Update Harian
 ```sh
-$ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date +%s)" |
+$ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date +%s%3N)" |
 ./covidn update -ics - > dist/update.ics
 ```
 
 ### Provinsi Harian
 ```sh
-$ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s)" |
-./covidn prov - | xargs -i echo "https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s)" |
-parallel -k "curl --compressed {};echo" | paste -sd',' | sed 's/.*/[&]/' |
+curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s%3N)" | ./covidn prov - |
+parallel -k "curl --compressed 'https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s%3N)'; echo" | paste -sd',' | sed 's/.*/[&]/' |
 ./covidn provdetail -ics - > dist/prov.ics
 ```
 
