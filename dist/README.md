@@ -1,19 +1,29 @@
-- [Legenda](#legenda)
+- [Chart](#chart)
   - [update](#update)
-    - [update.csv](#updatecsv)
-    - [update.ics](#updateics)
   - [prov](#prov)
-    - [prov.csv](#provcsv)
-    - [prov-pivot.csv](#prov-pivotcsv)
-    - [prov.ics](#provics)
   - [rawan](#rawan)
-    - [rawan.csv](#rawancsv)
+- [CSV](#csv)
+  - [update.csv](#updatecsv)
+  - [prov.csv](#provcsv)
+    - [prov-pivot.csv](#prov-pivotcsv)
+  - [rawan.csv](#rawancsv)
     - [Pengelompokan Kriteria Risiko COVID-19 di Daerah Berdasarkan Zonasi Warna](#pengelompokan-kriteria-risiko-covid-19-di-daerah-berdasarkan-zonasi-warna)
+- [ICS / ICAL](#ics--ical)
+    - [update.ics](#updateics)
+    - [prov.ics](#provics)
 - [Credits](#credits)
 
-# Legenda
+# Chart
 ## update
-### update.csv
+see [chart](https://codepen.io/andry_yosua/full/eYJzbbZ)
+## prov
+see chart
+## rawan
+see chart
+
+# CSV
+
+## update.csv
 Berisi data tabular kasus harian **seluruh** indonesia dari [covid19.go.id](https://covid19.go.id/peta-sebaran)
 
 | judul | keterangan |
@@ -27,17 +37,7 @@ Berisi data tabular kasus harian **seluruh** indonesia dari [covid19.go.id](http
 | jumlah_meninggal | jumlah kasus **meninggal** harian |
 | jumlah_dirawat_kum | akumulasi jumlah kasus **dirawat / diisolasi** |
 | jumlah_dirawat | jumlah kasus **dirawat / diisolasi** harian |
-
-<iframe height="164" style="width: 100%;" scrolling="no" title="update.csv" src="https://codepen.io/andry_yosua/embed/eYJzbbZ?height=164&theme-id=dark&default-tab=result" frameborder="no" allowtransparency="true" allowfullscreen="true">
-  See the Pen <a href='https://codepen.io/andry_yosua/pen/eYJzbbZ'>update.csv</a> by Andry Yosua
-  (<a href='https://codepen.io/andry_yosua'>@andry_yosua</a>) on <a href='https://codepen.io'>CodePen</a>.
-</iframe>
-
-### update.ics
-Berisi data calendar dari [update.csv](#updatecsv) yang bisa di-subscribe melalui [update.ics](https://github.com/aiosk/covidn/raw/master/dist/update.ics)
-
-## prov
-### prov.csv
+## prov.csv
 Berisi data tabular kasus harian **per provinsi** indonesia dari [covid19.go.id](https://covid19.go.id/peta-sebaran)
 
 | judul | keterangan |
@@ -56,11 +56,7 @@ Berisi data tabular kasus harian **per provinsi** indonesia dari [covid19.go.id]
 ### prov-pivot.csv
 Berisi data tabular rangkuman dari [prov.csv](#provcsv)
 
-### prov.ics
-Berisi data calendar dari [prov.csv](#provcsv) yang bisa di-subscribe melalui [prov.ics](https://github.com/aiosk/covidn/raw/master/dist/prov.ics)
-
-## rawan
-### rawan.csv
+## rawan.csv
 Berisi data tabular kasus **per kecamatan** indonesia dari [bersatulawancovid.id](https://www.bersatulawancovid.id/)
 
 | judul | keterangan |
@@ -81,6 +77,13 @@ Berisi data tabular kasus **per kecamatan** indonesia dari [bersatulawancovid.id
 - Zona Kuning atau Risiko Rendah
 - Zona Oranye atau Risiko Sedang
 - Zona Risiko Tinggi
+# ICS / ICAL
+### update.ics
+Berisi data calendar dari [update.csv](#updatecsv) yang bisa di-subscribe melalui [update.ics](https://github.com/aiosk/covidn/raw/master/dist/update.ics)
+
+
+### prov.ics
+Berisi data calendar dari [prov.csv](#provcsv) yang bisa di-subscribe melalui [prov.ics](https://github.com/aiosk/covidn/raw/master/dist/prov.ics)
 
 
 # [Credits](https://github.com/aiosk/covidn/#credits)
