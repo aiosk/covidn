@@ -28,6 +28,11 @@ Berisi data tabular kasus harian **seluruh** indonesia dari [covid19.go.id](http
 | jumlah_dirawat_kum | akumulasi jumlah kasus **dirawat / diisolasi** |
 | jumlah_dirawat | jumlah kasus **dirawat / diisolasi** harian |
 
+<iframe height="164" style="width: 100%;" scrolling="no" title="update.csv" src="https://codepen.io/andry_yosua/embed/eYJzbbZ?height=164&theme-id=dark&default-tab=result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/andry_yosua/pen/eYJzbbZ'>update.csv</a> by Andry Yosua
+  (<a href='https://codepen.io/andry_yosua'>@andry_yosua</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+
 ### update.ics
 Berisi data calendar dari [update.csv](#updatecsv) yang bisa di-subscribe melalui [update.ics](https://github.com/aiosk/covidn/raw/master/dist/update.ics)
 
