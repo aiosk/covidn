@@ -12,7 +12,6 @@ Indonesia COVID-19 Data
   - [ICalendar / ICS](#icalendar--ics)
     - [Update Harian](#update-harian-1)
     - [Provinsi Harian](#provinsi-harian-1)
-      - [Split provinsi ics](#split-provinsi-ics)
   - [Get delta change](#get-delta-change)
 - [Credits](#credits)
 
@@ -75,13 +74,6 @@ $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date 
 ```
 
 ### Provinsi Harian
-```sh
-$ cd /path/to/project
-$ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s%3N)" |  ./covidn prov - |
-parallel -k "curl --compressed 'https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s%3N)'" | jq -s 'flatten' |
-./covidn provdetail -ics - > dist/prov.ics
-```
-#### Split provinsi ics
 ```sh
 $ cd /path/to/project
 $ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s%3N)" |  ./covidn prov - |
