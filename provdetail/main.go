@@ -24,6 +24,8 @@ func Main(file io.Reader, isIcs bool) {
 	} else {
 		f := bufio.NewWriter(os.Stdout)
 		defer f.Flush()
-		goics.NewICalEncode(f).Encode(provDetailList)
+		for _, v := range provDetailList {
+			goics.NewICalEncode(f).Encode(v)
+		}
 	}
 }

@@ -72,52 +72,49 @@ func (v File) ToCsv() [][]string {
 }
 
 // EmitICal ...
-func (v File) EmitICal() goics.Componenter {
+func (v FileItem) EmitICal() goics.Componenter {
 
 	cal := goics.NewComponent()
 	cal.SetType("VCALENDAR")
 	cal.AddProperty("CALSCAL", "GREGORIAN")
 	cal.AddProperty("PRODID;X-RICAL-TZSOURCE=TZINFO", "-//tmpo.io")
-	cal.AddProperty("SUMMARY", "Covid19 INDONESIA")
+	cal.AddProperty("SUMMARY", "Covid-19 Province INDONESIA")
 
-	for _, v2 := range v {
-		for _, v3 := range v2.ListPerkembangan {
+	for _, v3 := range v.ListPerkembangan {
+		event := goics.NewComponent()
+		event.SetType("VEVENT")
 
-			event := goics.NewComponent()
-			event.SetType("VEVENT")
-
-			event.AddProperty("UID", fmt.Sprintf("%s-%s@covid19.go.id", strings.Replace(v2.Provinsi, " ", "_", -1), libs.UnixToMyFormat(v3.Date)))
-			k4, v4 := goics.FormatDateField("DTEND", time.Unix(v3.Date/1000, 0))
-			event.AddProperty(k4, v4)
-			k4, v4 = goics.FormatDateField("DTSTART", time.Unix(v3.Date/1000, 0))
-			event.AddProperty(k4, v4)
-			event.AddProperty("X-FUNAMBOL-ALLDAY", "1")
-			event.AddProperty("X-MICROSOFT-CDO-ALLDAYEVENT", "True")
-			event.AddProperty("CLASS", "PUBLIC")
-			desc := fmt.Sprintf(`%d(+%d) Cases
+		event.AddProperty("UID", fmt.Sprintf("%s-%s@covid19.go.id", strings.Replace(v.Provinsi, " ", "_", -1), libs.UnixToMyFormat(v3.Date)))
+		k4, v4 := goics.FormatDateField("DTEND", time.Unix(v3.Date/1000, 0))
+		event.AddProperty(k4, v4)
+		k4, v4 = goics.FormatDateField("DTSTART", time.Unix(v3.Date/1000, 0))
+		event.AddProperty(k4, v4)
+		event.AddProperty("X-FUNAMBOL-ALLDAY", "1")
+		event.AddProperty("X-MICROSOFT-CDO-ALLDAYEVENT", "True")
+		event.AddProperty("CLASS", "PUBLIC")
+		desc := fmt.Sprintf(`%d(+%d) Cases
 %d(+%d) Recovered Cases 
 %d(+%d) Death Cases
 %d(+%d) Active Cases`, v3.TotalCase, v3.Case,
-				v3.TotalRecover, v3.Recover,
-				v3.TotalDeath, v3.Death,
-				v3.TotalActive, v3.Active,
-			)
-			event.AddProperty("DESCRIPTION", desc)
-			event.AddProperty("SUMMARY", fmt.Sprintf("%s %d(+%d) Cases", v2.Provinsi, v3.TotalCase, v3.Case))
-			event.AddProperty("URL", "covid19.go.id")
-			event.AddProperty("CONTACT", "covid19.go.id")
-			event.AddProperty("TRANSP", "TRANSPARENT")
+			v3.TotalRecover, v3.Recover,
+			v3.TotalDeath, v3.Death,
+			v3.TotalActive, v3.Active,
+		)
+		event.AddProperty("DESCRIPTION", desc)
+		event.AddProperty("SUMMARY", fmt.Sprintf("%s %d(+%d) Covid-19 Cases", v.Provinsi, v3.TotalCase, v3.Case))
+		event.AddProperty("URL", "covid19.go.id")
+		event.AddProperty("CONTACT", "covid19.go.id")
+		event.AddProperty("TRANSP", "TRANSPARENT")
 
-			k4, v4 = goics.FormatDateTimeField("CREATED", time.Unix(v3.Date/1000, 0))
-			event.AddProperty(k4, v4)
-			k4, v4 = goics.FormatDateTimeField("LAST-MODIFIED", time.Unix(v3.Date/1000, 0))
-			event.AddProperty(k4, v4)
-			k4, v4 = goics.FormatDateTimeField("DTSTAMP", time.Unix(v3.Date/1000, 0))
-			event.AddProperty(k4, v4)
-			event.AddProperty("LOCATION", fmt.Sprintf("%s - Indonesia", v2.Provinsi))
+		k4, v4 = goics.FormatDateTimeField("CREATED", time.Unix(v3.Date/1000, 0))
+		event.AddProperty(k4, v4)
+		k4, v4 = goics.FormatDateTimeField("LAST-MODIFIED", time.Unix(v3.Date/1000, 0))
+		event.AddProperty(k4, v4)
+		k4, v4 = goics.FormatDateTimeField("DTSTAMP", time.Unix(v3.Date/1000, 0))
+		event.AddProperty(k4, v4)
+		event.AddProperty("LOCATION", fmt.Sprintf("%s - Indonesia", v.Provinsi))
 
-			cal.AddComponent(event)
-		}
+		cal.AddComponent(event)
 	}
 
 	return cal
