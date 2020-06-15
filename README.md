@@ -12,13 +12,13 @@ Indonesia COVID-19 Data
   - [ICalendar / ICS](#icalendar--ics)
     - [Update Harian](#update-harian-1)
     - [Provinsi Harian](#provinsi-harian-1)
-  - [Get delta change](#get-delta-change)
+  - [Get delta update](#get-delta-update)
 - [Credits](#credits)
 
 # Dependencies
 - [GNU Parallel](https://www.gnu.org/software/parallel/)
 - [jq](https://stedolan.github.io/jq/)
-- [git](https://git-scm.com/) if you want to [Get delta change](#get-delta-change)
+- [git](https://git-scm.com/) if you want to [Get delta update](#get-delta-update)
 
 # Build
 
@@ -27,6 +27,7 @@ Download the latest releases on [releases](https://github.com/aiosk/covidn/relea
 or build your self
 
 ```sh
+$ git clone https://github.com/aiosk/covidn
 $ cd /path/to/project
 $ go build
 ```
@@ -80,8 +81,7 @@ $ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s%3
 parallel -k "curl --compressed 'https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s%3N)'" | jq -s 'flatten' |
 ./covidn provdetail -ics - | csplit - --elide-empty-files  --prefix "dist/prov-" --suffix-format '%02d.ics' '/BEGIN:VCALENDAR/' '{*}'
 ```
-
-## Get delta change
+## Get delta update
 to get data differences between the new updated data and owned data, use this.
 ```sh
 ... | git diff --no-index /path/to/data/file -
