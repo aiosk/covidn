@@ -79,7 +79,7 @@ $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date 
 $ cd /path/to/project
 $ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s%3N)" |  ./covidn prov - |
 parallel -k "curl --compressed 'https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s%3N)'" | jq -s 'flatten' |
-./covidn provdetail -ics - > dist/prov.ics
+./covidn provdetail -ics - | csplit - --elide-empty-files  --prefix "dist/prov-" --suffix-format '%02d.ics' '/BEGIN:VCALENDAR/' '{*}'
 ```
 ## Get delta update
 to get data differences between the new updated data and owned data, use this.
