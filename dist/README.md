@@ -29,8 +29,8 @@ Berisi data tabular kasus harian **seluruh** indonesia dari [covid19.go.id](http
 | judul | keterangan |
 | --- | --- |
 | key_as_string | tanggal |
-| jumlah_positif_kum | akumulasi jumlah kasus ter-konfirmasi |
-| jumlah_positif | jumlah kasus harian ter-konfirmasi |
+| jumlah_positif_kum | akumulasi jumlah kasus ter-**konfirmasi** |
+| jumlah_positif | jumlah kasus harian ter-**konfirmasi** |
 | jumlah_sembuh_kum | akumulasi jumlah kasus **sembuh** |
 | jumlah_sembuh | jumlah kasus **sembuh** harian |
 | jumlah_meninggal_kum | akumulasi jumlah kasus **meninggal** |
@@ -44,8 +44,8 @@ Berisi data tabular kasus harian **per provinsi** indonesia dari [covid19.go.id]
 | --- | --- |
 | provinsi | provins |
 | tanggal | tanggal |
-| AKUMULASI_KASUS | akumulasi jumlah kasus ter-konfirmasi|
-| KASUS | jumlah kasus harian ter-konfirmasi|
+| AKUMULASI_KASUS | akumulasi jumlah kasus ter-**konfirmasi**|
+| KASUS | jumlah kasus harian ter-**konfirmasi**|
 | AKUMULASI_SEMBUH | akumulasi jumlah kasus **sembuh** |
 | SEMBUH | jumlah kasus **sembuh** harian |
 | AKUMULASI_MENINGGAL | akumulasi jumlah kasus **meninggal** |
@@ -63,7 +63,7 @@ Berisi data tabular kasus **per kecamatan** indonesia dari [bersatulawancovid.id
 | --- | --- |
 | levelKerawanan |  [Pengelompokan Kriteria Risiko COVID-19 di Daerah Berdasarkan Zonasi Warna](#pengelompokan-kriteria-risiko-covid-19-di-daerah-berdasarkan-zonasi-warna) |
 | jumlah_penduduk | jumlah penduduk |
-| total | total kasus ter-konfirmasi|
+| total | total kasus ter-**konfirmasi**|
 | density | kepadatan total kasus. dihitung dari (total kasus / jumlah penduduk) |
 | kode_kecamatan | kode kecamatan |
 | nama_kecamatan | nama kecamatan |
