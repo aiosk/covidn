@@ -2,10 +2,10 @@ Indonesia COVID-19 Data
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/aiosk/covidn)
 
-- [Data](#data)
-- [Dependencies](#dependencies)
+- [Data and Chart](#data-and-chart)
 - [Build](#build)
 - [Usage](#usage)
+  - [Dependencies](#dependencies)
   - [CSV](#csv)
     - [Update Harian](#update-harian)
     - [Provinsi Harian](#provinsi-harian)
@@ -16,13 +16,9 @@ Indonesia COVID-19 Data
   - [Get delta update](#get-delta-update)
 - [Credits](#credits)
 
-# Data
-see [dist](https://github.com/aiosk/covidn/tree/master/dist) directory 
+# Data and Chart
+see [dist](https://github.com/aiosk/covidn/tree/master/dist) directory for **CSV**. **ICS**, and **CHART**
 
-# Dependencies
-- [GNU Parallel](https://www.gnu.org/software/parallel/)
-- [jq](https://stedolan.github.io/jq/)
-- [git](https://git-scm.com/) if you want to [Get delta update](#get-delta-update)
 
 # Build
 
@@ -35,9 +31,14 @@ $ git clone https://github.com/aiosk/covidn
 $ cd /path/to/project
 $ go build
 ```
-this put executable file in `/path/to/project` directory
 
 # Usage
+
+## Dependencies
+- [GNU Parallel](https://www.gnu.org/software/parallel/)
+- [jq](https://stedolan.github.io/jq/)
+- [git](https://git-scm.com/) (optional) if you want to [Get delta update](#get-delta-update)
+- 
 ## CSV
 To output CSV format
 ### Update Harian

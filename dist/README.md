@@ -15,8 +15,10 @@
 # Chart
 ## update
 see [chart](https://codepen.io/andry_yosua/project/full/ZgRNdK)
+<!-- see [chart](https://000501720.production.codepen.plumbing/#panel1) -->
 ## prov
 see [chart](https://codepen.io/andry_yosua/project/full/ZgRNdK)
+<!-- see [chart](https://000501720.production.codepen.plumbing/#panel2) -->
 
 # CSV
 
