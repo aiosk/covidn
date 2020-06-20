@@ -2,6 +2,7 @@ Indonesia COVID-19 Data
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/aiosk/covidn)
 
+- [Data](#data)
 - [Dependencies](#dependencies)
 - [Build](#build)
 - [Usage](#usage)
@@ -14,6 +15,9 @@ Indonesia COVID-19 Data
     - [Provinsi Harian](#provinsi-harian-1)
   - [Get delta update](#get-delta-update)
 - [Credits](#credits)
+
+# Data
+see [dist](https://github.com/aiosk/covidn/tree/master/dist) directory 
 
 # Dependencies
 - [GNU Parallel](https://www.gnu.org/software/parallel/)
@@ -82,7 +86,7 @@ parallel -k "curl --compressed 'https://data.covid19.go.id/public/api/prov_detai
 ./covidn provdetail -ics - | csplit - --elide-empty-files  --prefix "dist/prov-" --suffix-format '%02d.ics' '/BEGIN:VCALENDAR/' '{*}'
 ```
 ## Get delta update
-to get data differences between the new updated data and owned data, use this.
+to get data differences between the new updated data and owned data, append this.
 ```sh
 ... | git diff --no-index /path/to/data/file -
 ```

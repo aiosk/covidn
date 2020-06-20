@@ -1,7 +1,6 @@
 - [Chart](#chart)
   - [update](#update)
   - [prov](#prov)
-  - [rawan](#rawan)
 - [CSV](#csv)
   - [update.csv](#updatecsv)
   - [prov.csv](#provcsv)
@@ -15,11 +14,9 @@
 
 # Chart
 ## update
-see [chart](https://codepen.io/andry_yosua/full/eYJzbbZ)
+see [chart](https://codepen.io/andry_yosua/project/full/ZgRNdK)
 ## prov
-see chart
-## rawan
-see chart
+see [chart](https://codepen.io/andry_yosua/project/full/ZgRNdK)
 
 # CSV
 
