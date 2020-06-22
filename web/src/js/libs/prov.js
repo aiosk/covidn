@@ -8,7 +8,7 @@ const provinces = ["DKI_JAKARTA", "JAWA_BARAT", "JAWA_TIMUR", "JAWA_TENGAH", "SU
 
 const getFile = async () => {
   let res = await fetch(
-    `https://raw.githubusercontent.com/aiosk/covidn/master/dist/prov.csv?_=${Date.now()}`
+    `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/prov.csv?_=${Date.now()}`
   );
   let resTxt = await res.text();
   let file = csv2Array(resTxt);
