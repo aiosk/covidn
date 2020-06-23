@@ -1,6 +1,6 @@
 import delay from "lodash/delay";
 import isUndefined from "lodash/isUndefined";
-import head from "lodash/last";
+import cloneDeep from "lodash/cloneDeep";
 import National from "./libs/national.js";
 const { getFile: getFileNational } = National;
 import Prov from "./libs/prov.js";
@@ -16,6 +16,13 @@ const { chunkByDays } = File;
 
 let periods = 14;
 const $slider = document.querySelector("form input[type='range']");
+
+// console.log(Foundation.MediaQuery.atLeast("large"));
+// if (Foundation.MediaQuery.atLeast("large")) {
+//   periods = 7;
+//   $slider.value = 7;
+// }
+
 const onSliderReleaseUpdateLabel = (e) => {
   let { value, id } = e.target;
   periods = value;
@@ -34,8 +41,16 @@ delay(() => {
     elements_selector: "canvas",
     // unobserve_entered: true,
     callback_enter: onCanvasEnterViewport,
+    callback_exit: logEl,
+    callback_loading: logEl,
+    callback_loaded: logEl,
   });
 }, 9);
+const logEl = (el) => {
+  // myChart[el.id].destroy();
+  // console.log(myChart[el.id]);
+  console.log(el);
+};
 
 const elId2dataId = (elId) => elId.split("_").slice(1).join("_");
 
@@ -63,11 +78,11 @@ let myChartDataDefault = { datasets: [], labels: [] };
 
 /* init dataDefault myChartDataDefault */
 let dataAll = {};
-dataAll["National"] = dataDefault;
-myChartData["Chart_National"] = myChartDataDefault;
+dataAll["National"] = cloneDeep(dataDefault);
+myChartData["Chart_National"] = cloneDeep(myChartDataDefault);
 provinces.forEach((v) => {
-  dataAll[v] = dataDefault;
-  myChartData[`Chart_${v}`] = myChartDataDefault;
+  dataAll[v] = cloneDeep(dataDefault);
+  myChartData[`Chart_${v}`] = cloneDeep(myChartDataDefault);
 });
 
 /* wait fetch file */
@@ -89,10 +104,11 @@ let initCanvasViewport = [];
 const updateChart = (elementId) => {
   const dataId = elId2dataId(elementId);
 
-  let dataChunk = chunkByDays(dataAll[dataId], periods);
-  let parsedData = parseCases(dataChunk);
+  const dataChunk = chunkByDays(dataAll[dataId], periods);
+  const parsedData = parseCases(dataChunk);
   myChartData[elementId].labels = parsedData.labels;
   myChartData[elementId].datasets = parsedData.datasets;
+  // myChartData[elementId] = parsedData;
   myChart[elementId].options.title.text = dataId
     .split("_")
     .join(" ")
@@ -101,9 +117,10 @@ const updateChart = (elementId) => {
 };
 
 const onCanvasEnterViewport = (el) => {
-  // console.log(el)
+  // console.log("enter", el);
   if (isUndefined(myChart[el.id])) {
     initCanvasViewport.push(el.id);
+    // console.log(el.id, myChartData[el.id]);
     myChart[el.id] = new Chart(el.id, {
       type: "bar",
       data: myChartData[el.id],
@@ -122,20 +139,9 @@ const onCanvasEnterViewport = (el) => {
       },
     });
   }
-
-  updateChart(el.id);
+  delay(() => {
+    updateChart(el.id);
+  }, 9);
 };
 
-// if (Foundation.MediaQuery.atLeast("large")) {
-//   $slider.data("initialStart", 7);
-// }
 // $(document).foundation();
-
-// // prov
-
-(() => {
-  //   const main = e => {
-  //     if (Foundation.MediaQuery.atLeast("large")) {
-  //         });
-  //     }
-})();

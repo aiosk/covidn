@@ -43,7 +43,7 @@
 // // Basic components
 // @import 'components/badge';
 // @import 'components/breadcrumbs';
-// @import 'components/callout';
+@import "../node_modules/foundation-sites/scss/components/callout";
 // @import 'components/card';
 // @import 'components/dropdown';
 // @import 'components/pagination';
@@ -117,7 +117,7 @@
   //   // Basic components
   //   @include foundation-badge;
   //   @include foundation-breadcrumbs;
-  //   @include foundation-callout;
+  @include foundation-callout;
   //   @include foundation-card;
   //   @include foundation-dropdown;
   //   @include foundation-pagination;

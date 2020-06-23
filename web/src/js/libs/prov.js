@@ -68,7 +68,7 @@ const initChartHtml = ($dom, fileObjKeys, size = 2) => {
   let html = "";
   fileObjKeysChunk.forEach((v) => {
     v.forEach((v2) => {
-      html += `<div class="cell clearfix">`;
+      html += `<div class="cell callout">`;
       html += `<canvas id='Chart_${v2}'></canvas>`;
       html += "</div>";
     });
