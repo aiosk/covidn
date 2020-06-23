@@ -20,20 +20,39 @@ $slider.addEventListener('mouseup', onSliderReleaseUpdateLabel)
 $slider.addEventListener('touchend', onSliderReleaseUpdateLabel)
 
 initChartHtmlProv(document.querySelector("#myChart.grid-x"), provinces);
+let lazyLoad;
 delay(() => {
-  const _ = new LazyLoad({
+  lazyLoad = new LazyLoad({
     elements_selector: "canvas",
     // unobserve_entered: true,
     callback_enter: onCanvasEnterViewport
   });
 }, 9);
 
+const elId2dataId = (elId) => elId.split('_').slice(1).join('_')
+
+const $cellChart = document.querySelectorAll("#myChart.grid-x .cell");
+$cellChart.forEach(v => {
+  v.addEventListener('click', e => {
+    let $this = e.target.closest('.cell');
+    let $thisCanvas = $this.querySelector("canvas");
+
+    let chartId = $thisCanvas.id;
+
+    if ($this.style.width == "100%") {
+      $this.style.width = "";
+    } else {
+      $this.style.width = "100%";
+    }
+
+    myChart[chartId].resize();
+  })
+})
 
 let myChart = {}
 let myChartData = {}
 let myChartDataDefault = { datasets: [], labels: [] };
 
-const elId2dataId = (elId) => elId.split('_').slice(1).join('_')
 
 const updateChart = elementId => {
   const dataId = elId2dataId(elementId)
@@ -66,8 +85,9 @@ provinces.forEach(v => {
 })();
 
 const onCanvasEnterViewport = (el) => {
-  console.log(el)
+  // console.log(el)
   if (isUndefined(myChart[el.id])) {
+    // console.log(el)
     myChart[el.id] = new Chart(el.id, {
       type: "bar",
       data: myChartData[el.id],
@@ -105,27 +125,6 @@ const onCanvasEnterViewport = (el) => {
 
   //   const main = e => {
   //     if (Foundation.MediaQuery.atLeast("large")) {
-  //       $("#provinces .grid-x")
-  //         .off("click", ".cell")
-  //         .on("click", ".cell", e => {
-  //           let $this = $(e.target)
-  //             .closest(".cell")
-  //             .find("canvas");
-  //           let chartId = $this
-  //             .attr("id")
-  //             .split("_")
-  //             .slice(1)
-  //             .join("_");
-  //           let myChartParent = $(myChart[chartId].canvas)
-  //             .closest(".cell")
-  //             .get(0);
-  //           if (myChartParent.style.width == "100%") {
-  //             myChartParent.style.width = "";
-  //           } else {
-  //             myChartParent.style.width = "100%";
-  //           }
-
-  //           myChart[chartId].resize();
   //         });
   //     }
 
