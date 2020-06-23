@@ -25,11 +25,37 @@ html(lang="en")
     meta(name="twitter:creator" content="@andry_yosua")
     meta(name="twitter:image" content="https://aiosk.github.io/covidn/covidn-img-min.png")
   body.grid-container.fluid
-
-
     h4.text-center Indonesia COVID-19 cases&nbsp;
       br
       small National and Provinces
+    #chartHelpText.help-text.callout.warning
+      ul
+        li Usage
+          ul
+            li Try changing days period (default:&nbsp;
+              strong 7 days
+              | ) to see more complex or simplified chart
+            li
+              strong Less&nbsp;
+              | days period to see more complex chart
+            li
+              strong More&nbsp;
+              | days period to see simplified chart
+        li Mobile
+          ul
+            li Try&nbsp;
+              strong landscape&nbsp;
+              | mode
+            li
+              strong Long tap&nbsp;
+              | on chart bar to see cases number
+        li Desktop
+          ul
+            li Click chart to view chart in&nbsp;
+              strong full width mode
+            li
+              strong Hover&nbsp;
+              | on chart bar to see cases number
     #top.clearfix
       a.float-right(href='https://github.com/aiosk/covidn')
         img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
@@ -42,11 +68,6 @@ html(lang="en")
         input#periods(type='range' min='1' max='21' step='1' value='7')
         p#periodsHelpText.help-text Slide this to change days period
 
-    #chartHelpText.help-text.callout
-      ul
-        li Click chart to view chart in&nbsp;
-          strong full width
-        li hover on chart bar to see cases number
     #myChart.grid-x.large-up-2(aria-describedby="chartHelpText")
       .cell(style='width:100%').callout
         canvas#Chart_National
