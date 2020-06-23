@@ -36,14 +36,10 @@ html(lang="en")
     form.grid-x.callout
       .cell.large-3
         label(for='periods')
-          span#periodsValue 14
+          span#periodsValue 7
           | &nbsp; days period
       .cell.large-9
-        //- .slider(data-slider data-initial-start='14' data-start='1' data-end='21' data-step='1' aria-describedby="periodsHelpText")
-        //-   span.slider-handle(data-slider-handle role='slider' tabindex='1')
-        //-   span.slider-fill(data-slider-fill)
-        //-   input(type='hidden')
-        input#periods(type='range' min='1' max='21' step='1' value='14')
+        input#periods(type='range' min='1' max='21' step='1' value='7')
         p#periodsHelpText.help-text Slide this to change days period
 
     #chartHelpText.help-text.callout

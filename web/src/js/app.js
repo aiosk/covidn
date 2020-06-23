@@ -14,7 +14,7 @@ const { data: dataDefault, parseCases: parseCases } = ChartLibs;
 import File from "./libs/file.js";
 const { chunkByDays } = File;
 
-let periods = 14;
+let periods = 7;
 const $slider = document.querySelector("form input[type='range']");
 
 // console.log(Foundation.MediaQuery.atLeast("large"));
