@@ -1,5 +1,6 @@
 import delay from "lodash/delay";
 import isUndefined from "lodash/isUndefined";
+import head from "lodash/last";
 import National from "./libs/national.js";
 const { getFile: getFileNational } = National;
 import Prov from "./libs/prov.js";
@@ -19,13 +20,12 @@ const onSliderReleaseUpdateLabel = (e) => {
   let { value, id } = e.target;
   periods = value;
   document.querySelector(`#periodsValue`).innerHTML = value;
-
   initCanvasViewport.forEach((v) => {
     updateChart(v);
   });
 };
-$slider.addEventListener("mouseup", onSliderReleaseUpdateLabel);
-$slider.addEventListener("touchend", onSliderReleaseUpdateLabel);
+$slider.addEventListener("input", onSliderReleaseUpdateLabel);
+$slider.addEventListener("change", onSliderReleaseUpdateLabel);
 
 initChartHtmlProv(document.querySelector("#myChart.grid-x"), provinces);
 let lazyLoad;
@@ -102,8 +102,8 @@ const updateChart = (elementId) => {
 
 const onCanvasEnterViewport = (el) => {
   // console.log(el)
-  initCanvasViewport.push(el.id);
   if (isUndefined(myChart[el.id])) {
+    initCanvasViewport.push(el.id);
     myChart[el.id] = new Chart(el.id, {
       type: "bar",
       data: myChartData[el.id],
