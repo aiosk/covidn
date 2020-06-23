@@ -15,7 +15,7 @@ see [**Chart**](https://aiosk.github.io/covidn/) on web
 
 # Compile ur self
 
-see [instructioons](https://github.com/aiosk/covidn/blob/master/cli/README.md)
+see [**instructions**](https://github.com/aiosk/covidn/blob/master/cli/README.md)
 
 # Credits
 
