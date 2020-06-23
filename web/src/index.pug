@@ -6,19 +6,19 @@ html(lang="en")
     meta(http-equiv="x-ua-compatible" content="ie=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
-    title Covidn
+    title Covidn - Indonesia COVID-19 cases
     meta(name="description" content="Indonesia COVID-19 cases, National and Provinces")
     meta(name="keywords" content="Indonesia covid-19 covid19 national provinces")
     meta(name="author" content="andry.yosua@gmail.com")
 
-    meta(property="og:title" content="Covidn")
+    meta(property="og:title" content="Covidn - Indonesia COVID-19 cases")
     meta(property="og:type" content="website")
     meta(property="og:description" content="Indonesia COVID-19 cases, National and Provinces")
     meta(property="og:url" content="https://aiosk.github.io/covidn/")
     meta(property="og:image" content="https://aiosk.github.io/covidn/covidn-img-min.png")
 
     meta(name="twitter:card" content="summary_large_image")
-    meta(name="twitter:title" content="Covidn")
+    meta(name="twitter:title" content="Covidn - Indonesia COVID-19 cases")
     meta(name="twitter:description" content="Indonesia COVID-19 cases, National and Provinces")
     meta(name="twitter:type" content="website")
     meta(name="twitter:site" content="@andry_yosua")
@@ -32,30 +32,20 @@ html(lang="en")
       ul
         li Mobile
           ul
-            li Try&nbsp;
+            li For best results please view in&nbsp;
               strong landscape&nbsp;
               | mode
             li
-              strong Long tap&nbsp;
-              | on chart bar to see cases number
+              strong Tap or Touch&nbsp;
+              | chart bar to see case number
         li Desktop
           ul
-            li Click chart to view chart in&nbsp;
-              strong full width mode
+            li Click chart to toggle chart&nbsp;
+              strong full-width&nbsp;
+              | mode
             li
-              strong Hover&nbsp;
-              | on chart bar to see cases number
-        li Usage
-          ul
-            li Try changing days period (default:&nbsp;
-              strong 7 days
-              | ) to see more complex or simplified chart
-            li
-              strong Less&nbsp;
-              | days period to see more complex chart
-            li
-              strong More&nbsp;
-              | days period to see simplified chart
+              strong Hover mouse&nbsp;
+              | on chart bar to see case number
     #top.clearfix
       a.float-right(href='https://github.com/aiosk/covidn')
         img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
@@ -63,10 +53,17 @@ html(lang="en")
       .cell.large-3
         label(for='periods')
           span#periodsValue 7
-          | &nbsp; days period
+          | &nbsp;days period
       .cell.large-9
         input#periods(type='range' min='1' max='21' step='1' value='7')
-        p#periodsHelpText.help-text Slide this to change days period
+        p#periodsHelpText.help-text Try smaller or larger data periods by sliding (tap/click => hold => move) slider to change days period.
+          br
+          strong Smaller&nbsp;
+          | day periods will generate complicated chart data, while
+          strong larger&nbsp;
+          | day periods will generate simplified chart data.&nbsp;
+          br
+          | Use wisely.
 
     #myChart.grid-x.large-up-2(aria-describedby="chartHelpText")
       .cell(style='width:100%').callout

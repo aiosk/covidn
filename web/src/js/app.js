@@ -129,6 +129,11 @@ const onCanvasEnterViewport = (el) => {
           display: true,
           text: "...",
         },
+        tooltips: {
+          filter: function (tooltipItem) {
+            return [2, 4].indexOf(tooltipItem.datasetIndex) === -1;
+          },
+        },
         animation: {
           duration: 0,
         },
