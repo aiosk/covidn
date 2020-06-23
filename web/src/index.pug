@@ -7,27 +7,32 @@ html(lang="en")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
     title Covidn
-    meta(name="description" content="Indonesia covid-19 cases")
+    meta(name="description" content="Indonesia COVID-19 cases, National and Provinces")
     meta(name="keywords" content="Indonesia covid-19 covid19 national provinces")
     meta(name="author" content="andry.yosua@gmail.com")
 
     meta(property="og:title" content="Covidn")
     meta(property="og:type" content="website")
-    meta(property="og:description" content="Indonesia covid-19 cases")
-    meta(property="og:url" content="https://000501720.production.codepen.plumbing/")
-    meta(property="og:image" content="https://www.dropbox.com/s/raw/qa2p78mmkih06nl/covidn-img.png")
+    meta(property="og:description" content="Indonesia COVID-19 cases, National and Provinces")
+    meta(property="og:url" content="https://aiosk.github.io/covidn/")
+    meta(property="og:image" content="https://aiosk.github.io/covidn/covidn-img-min.png")
 
     meta(name="twitter:card" content="summary_large_image")
     meta(name="twitter:title" content="Covidn")
-    meta(name="twitter:description" content="Indonesia covid-19 cases")
+    meta(name="twitter:description" content="Indonesia COVID-19 cases, National and Provinces")
     meta(name="twitter:type" content="website")
     meta(name="twitter:site" content="@andry_yosua")
     meta(name="twitter:creator" content="@andry_yosua")
-    meta(name="twitter:image" content="https://www.dropbox.com/s/raw/qa2p78mmkih06nl/covidn-img.png")
+    meta(name="twitter:image" content="https://aiosk.github.io/covidn/covidn-img-min.png")
   body.grid-container.fluid
-    #top
-    h3.text-center Indonesia covid-19 cases
 
+
+    h4.text-center Indonesia COVID-19 cases&nbsp;
+      br
+      small National and Provinces
+    #top.clearfix
+      a.float-right(href='https://github.com/aiosk/covidn')
+        img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
     form.grid-x.callout
       .cell.large-3
         label(for='periods')
@@ -49,11 +54,8 @@ html(lang="en")
     #myChart.grid-x.large-up-2(aria-describedby="chartHelpText")
       .cell(style='width:100%').callout
         canvas#Chart_National
-    .grid-x
-      a(href='https://github.com/aiosk/covidn')
-        img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
     a(href="#top" data-smooth-scroll)
-      img(src="vertical_align_top-24px.svg" alt="Scroll to top")
+      img(src="baseline_vertical_align_top_black_18dp.png" alt="Scroll to top")
 
     link(rel="stylesheet" href=`app.css` media="print" onload="this.media='all'")
     script(defer src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/16.1.0/lazyload.iife.min.js")

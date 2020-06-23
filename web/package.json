@@ -1,7 +1,7 @@
 {
-  "name": "covidn.github.io",
-  "version": "1.0.0",
-  "description": "",
+  "name": "covidn",
+  "version": "2.0.0",
+  "description": "Indonesia COVID-19 cases, National and Provinces",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,7 +15,7 @@
     "build:js": "npx rollup --config --environment BUILD:prod",
     "build": "concurrently 'npm:build:*'"
   },
-  "author": "",
+  "author": "andry.yosua@gmail.com",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.10.3",
