@@ -1,6 +1,7 @@
 doctype html
 html(lang="en")
   head
+    link(rel="shortcut icon" href="")
     meta(charset="UTF-8")
     meta(http-equiv="x-ua-compatible" content="ie=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
@@ -20,15 +21,15 @@ html(lang="en")
     meta(name="twitter:title" content="Covidn")
     meta(name="twitter:description" content="Indonesia covid-19 cases")
     meta(name="twitter:type" content="website")
-    //- meta(name="twitter:site" content="@CodePen")
+    meta(name="twitter:site" content="@andry_yosua")
     meta(name="twitter:creator" content="@andry_yosua")
     meta(name="twitter:image" content="https://www.dropbox.com/s/raw/qa2p78mmkih06nl/covidn-img.png")
   body.grid-container.fluid
     h3.text-center Indonesia covid-19 cases
 
     form.grid-x.callout
-      .cell.large-3 
-        label(for='periods') 
+      .cell.large-3
+        label(for='periods')
           span#periodsValue 14
           | &nbsp; days period
       .cell.large-9
@@ -41,19 +42,22 @@ html(lang="en")
 
     #chartHelpText.help-text.callout
       ul
-        li Hover or click on chart to see detail
-        li Click on chart to resize
+        li Click chart to view chart in
+          strong &nbsp;full width
+        li In
+          strong full width
+          | &nbsp;mode, hover on chart bar to see detail
     #myChart.grid-x.large-up-2.callout(aria-describedby="chartHelpText")
-        .cell(style='width:100%')
-            canvas#Chart_National
+      .cell(style='width:100%')
+        canvas#Chart_National
     .grid-x
-        a(href='https://github.com/aiosk/covidn')
-          img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
+      a(href='https://github.com/aiosk/covidn')
+        img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
 
 
     link(rel="stylesheet" href=`app.css` media="print" onload="this.media='all'")
-    script(defer src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/16.1.0/lazyload.min.js")
-    
+    script(defer src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/16.1.0/lazyload.iife.min.js")
+
     //- script(defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
     //- script(defer src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/foundation.min.js")
     script(defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js")

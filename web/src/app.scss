@@ -1,4 +1,4 @@
-@import "foundation.scss"; 
+@import "foundation.scss";
 // @include foundation-normalize();
 // @include foundation-everything($prototype:true);
 @include foundation-everything();
@@ -9,6 +9,10 @@ form {
   }
 }
 
-.preload{
-  text-align: center; 
+.preload {
+  text-align: center;
+}
+
+span#periodsValue {
+  font-weight: bold;
 }
