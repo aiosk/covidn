@@ -68,6 +68,38 @@ func (v FileItem) ToCsv() [][]string {
 	return dataCsv
 }
 
+// ToChartjs ...
+func (v FileItem) ToChartjs() libs.Chartjs {
+	var data libs.Chartjs
+	tags := v.GetTags("json")
+
+	var item [4]libs.ChartjsDatasetsItem
+
+	for _, v2 := range v.ListPerkembangan {
+		data.Labels = append(data.Labels, libs.UnixToMyFormat(v2.Date))
+		item[0].Data = append(item[0].Data, v2.Case)
+		item[1].Data = append(item[1].Data, v2.Recover)
+		item[2].Data = append(item[2].Data, v2.Death)
+		item[3].Data = append(item[3].Data, v2.Active)
+	}
+
+	item[0].Label = tags["Case"]
+	item[1].Label = tags["Recover"]
+	item[2].Label = tags["Death"]
+	item[3].Label = tags["Active"]
+
+	item[0].BgColor = libs.ChartjsColor["case"]
+	item[1].BgColor = libs.ChartjsColor["recover"]
+	item[2].BgColor = libs.ChartjsColor["death"]
+	item[3].BgColor = libs.ChartjsColor["active"]
+
+	data.Datasets = append(data.Datasets, item[0])
+	data.Datasets = append(data.Datasets, item[1])
+	data.Datasets = append(data.Datasets, item[2])
+	data.Datasets = append(data.Datasets, item[3])
+	return data
+}
+
 // EmitICal ...
 func (v FileItem) EmitICal() goics.Componenter {
 

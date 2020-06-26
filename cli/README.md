@@ -12,7 +12,7 @@ Indonesia COVID-19 Data
 
 # Data
 
-see [raw **CSV** and **ICS**](https://github.com/aiosk/covidn/blob/master/cli/dist/README.md) file
+see [raw **CSV** and **ICS**](https://github.com/aiosk/covidn/blob/master/cli/dist) file
 
 # Build
 

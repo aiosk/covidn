@@ -2,20 +2,20 @@ Indonesia COVID-19 Data
 
 - [Data](#data)
 - [Chart](#chart)
-- [Compile ur self](#compile-ur-self)
+- [Generate data ur self](#generate-data-ur-self)
 - [Credits](#credits)
 
 # Data
 
-see [raw **CSV** and **ICS**](https://github.com/aiosk/covidn/blob/master/cli/dist/README.md) file
+see [raw **CSV** and **ICS**](https://github.com/aiosk/covidn/blob/master/cli/dist) file
 
 # Chart
 
 see [**Chart**](https://aiosk.github.io/covidn/) on web
 
-# Compile ur self
+# Generate data ur self
 
-see [**instructions**](https://github.com/aiosk/covidn/blob/master/cli/README.md)
+see [**instructions**](https://github.com/aiosk/covidn/blob/master/cli)
 
 # Credits
 

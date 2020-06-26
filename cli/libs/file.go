@@ -3,8 +3,10 @@ package libs
 import (
 	"bufio"
 	"encoding/csv"
+	"encoding/json"
 	"errors"
 	"flag"
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -63,4 +65,14 @@ func WriteToIcs(filepath string, data interface{}) {
 	}()
 	goics.NewICalEncode(f).Encode(data.(goics.ICalEmiter))
 
+}
+
+// WriteToChartjs ...
+func WriteToChartjs(filepath string, data Chartjs) {
+	jsonStr, err := json.Marshal(data)
+	PanicError(err)
+
+	err = ioutil.WriteFile(filepath, jsonStr, os.ModePerm)
+	PanicError(err)
+	log.Printf("Write to %s", filepath)
 }
