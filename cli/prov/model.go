@@ -12,15 +12,16 @@ import (
 
 // Perkembangan ...
 type Perkembangan struct {
-	Date         int64 `json:"tanggal"`
-	Death        int   `json:"MENINGGAL"`
-	Active       int   `json:"DIRAWAT_OR_ISOLASI"`
-	Recover      int   `json:"SEMBUH"`
-	Case         int   `json:"KASUS"`
-	TotalDeath   int   `json:"AKUMULASI_MENINGGAL"`
-	TotalActive  int   `json:"AKUMULASI_DIRAWAT_OR_ISOLASI"`
-	TotalRecover int   `json:"AKUMULASI_SEMBUH"`
-	TotalCase    int   `json:"AKUMULASI_KASUS"`
+	Date         int64  `json:"tanggal"`
+	DateStr      string `json:"date"`
+	Death        int    `json:"MENINGGAL"`
+	Active       int    `json:"DIRAWAT_OR_ISOLASI"`
+	Recover      int    `json:"SEMBUH"`
+	Case         int    `json:"KASUS"`
+	TotalDeath   int    `json:"AKUMULASI_MENINGGAL"`
+	TotalActive  int    `json:"AKUMULASI_DIRAWAT_OR_ISOLASI"`
+	TotalRecover int    `json:"AKUMULASI_SEMBUH"`
+	TotalCase    int    `json:"AKUMULASI_KASUS"`
 }
 
 // PerkembanganList ...
@@ -83,7 +84,11 @@ func (v FileItem) Chunk(size int) FileItem {
 	var newData FileItem
 	for _, v2 := range chunks {
 		var item Perkembangan
-		item.Date = v2[0].Date
+		if size == 1 {
+			item.DateStr = libs.UnixToMyShortFormat(v2[0].Date)
+		} else {
+			item.DateStr = fmt.Sprintf("%s - %s", libs.UnixToMyShortFormat(v2[0].Date), libs.UnixToMyShortFormat(v2[len(v2)-1].Date))
+		}
 		item.Case = 0
 		item.Recover = 0
 		item.Death = 0
@@ -109,7 +114,7 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 	var item [4]libs.ChartjsDatasetsItem
 
 	for _, v2 := range v.ListPerkembangan {
-		data.Labels = append(data.Labels, libs.UnixToMyFormat(v2.Date))
+		data.Labels = append(data.Labels, v2.DateStr)
 		item[0].Data = append(item[0].Data, v2.Case)
 		item[1].Data = append(item[1].Data, v2.Recover)
 		item[2].Data = append(item[2].Data, v2.Death)
