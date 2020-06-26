@@ -12,7 +12,7 @@ import (
 )
 
 func printHelp() {
-	fmt.Println(`Usage see https://github.com/aiosk/covidn/blob/master/README.md`)
+	fmt.Println(`Usage see https://github.com/aiosk/covidn/blob/master/cli/README.md`)
 }
 
 func main() {

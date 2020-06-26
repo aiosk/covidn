@@ -1,6 +1,8 @@
+# Indonesia COVID-19 Data
+
 - [CSV](#csv)
   - [national.csv](#nationalcsv)
-  - [prov-{name}.csv](#prov-namecsv)
+  - [{name}.csv](#namecsv)
   - [rawan.csv](#rawancsv)
     - [Pengelompokan Kriteria Risiko COVID-19 di Daerah Berdasarkan Zonasi Warna](#pengelompokan-kriteria-risiko-covid-19-di-daerah-berdasarkan-zonasi-warna)
 - [ICS](#ics)
@@ -8,9 +10,9 @@
     - [prov.ics](#provics)
 - [Credits](#credits)
 
-# CSV
+## CSV
 
-## national.csv
+### national.csv
 
 Berisi data tabular kasus harian **nasional** indonesia dari [covid19.go.id](https://covid19.go.id/peta-sebaran)
 
@@ -26,7 +28,7 @@ Berisi data tabular kasus harian **nasional** indonesia dari [covid19.go.id](htt
 | jumlah_dirawat_kum   | akumulasi jumlah kasus **dirawat / diisolasi** |
 | jumlah_dirawat       | jumlah kasus **dirawat / diisolasi** harian    |
 
-## prov-{name}.csv
+### {name}.csv
 
 Berisi data tabular kasus harian **provinsi** indonesia dari [covid19.go.id](https://covid19.go.id/peta-sebaran)
 
@@ -43,7 +45,7 @@ Berisi data tabular kasus harian **provinsi** indonesia dari [covid19.go.id](htt
 | AKUMULASI_DIRAWAT_OR_ISOLASI | akumulasi jumlah kasus **dirawat / diisolasi** |
 | DIRAWAT_OR_ISOLASI           | jumlah kasus **dirawat / diisolasi** harian    |
 
-## rawan.csv
+### rawan.csv
 
 Berisi data tabular kasus **per kecamatan** indonesia dari [bersatulawancovid.id](https://www.bersatulawancovid.id/)
 
@@ -58,7 +60,7 @@ Berisi data tabular kasus **per kecamatan** indonesia dari [bersatulawancovid.id
 | nama_kabupatenKota | nama kabupaten / kota                                                                                                                                   |
 | nama_provinsi      | nama provinsi                                                                                                                                           |
 
-### Pengelompokan Kriteria Risiko COVID-19 di Daerah Berdasarkan Zonasi Warna
+#### Pengelompokan Kriteria Risiko COVID-19 di Daerah Berdasarkan Zonasi Warna
 
 [Pengelompokan Kriteria Risiko COVID-19 di Daerah Berdasarkan Zonasi Warna](https://bnpb.go.id/berita/pengelompokan-kriteria-risiko-covid19-di-daerah-berdasarkan-zonasi-warna)
 
@@ -67,14 +69,14 @@ Berisi data tabular kasus **per kecamatan** indonesia dari [bersatulawancovid.id
 - Zona Oranye atau Risiko Sedang
 - Zona Risiko Tinggi
 
-# ICS
+## ICS
 
-### national.ics
+#### national.ics
 
 Berisi data calendar dari [national.csv](#nationalcsv) yang bisa di-subscribe melalui [national.ics](https://github.com/aiosk/covidn/raw/master/dist/national.ics)
 
-### prov.ics
+#### prov.ics
 
 Berisi data calendar dari [prov-{name}.csv](#prov-namecsv) yang bisa di-subscribe melalui prov-{name}.ics
 
-# [Credits](https://github.com/aiosk/covidn/#credits)
+## [Credits](https://github.com/aiosk/covidn/#credits)

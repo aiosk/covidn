@@ -1,4 +1,4 @@
-Indonesia COVID-19 Data
+# Indonesia COVID-19 Data
 
 - [Data](#data)
 - [Build](#build)
@@ -10,11 +10,11 @@ Indonesia COVID-19 Data
     - [Zona Rawan Kecamatan](#zona-rawan-kecamatan)
 - [Credits](#credits)
 
-# Data
+## Data
 
 see [raw **CSV** and **ICS**](https://github.com/aiosk/covidn/blob/master/cli/dist) file
 
-# Build
+## Build
 
 Download the latest releases on [releases](https://github.com/aiosk/covidn/releases) page according to your OS,
 
@@ -26,15 +26,15 @@ $ cd /path/to/project
 $ go build
 ```
 
-# Usage
+## Usage
 
 **Dependencies**
 
 - [GNU Parallel](https://www.gnu.org/software/parallel/)
 
-## Daily
+### Daily
 
-### National
+#### National
 
 ```sh
 $ cd /path/to/project
@@ -42,7 +42,7 @@ $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date 
 ./covidn national -
 ```
 
-### Province
+#### Province
 
 ```sh
 $ cd /path/to/project
@@ -50,9 +50,9 @@ $ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s%3
 parallel -k "curl --compressed 'https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s%3N)' | ./covidn provitem -"
 ```
 
-## Weekly
+### Weekly
 
-### Zona Rawan Kecamatan
+#### Zona Rawan Kecamatan
 
 make sure `wilayah_2020.json` exist alongside binary file
 
@@ -68,4 +68,4 @@ $ curl --compressed \
 ./covidn rawan -
 ```
 
-# [Credits](https://github.com/aiosk/covidn/#credits)
+## [Credits](https://github.com/aiosk/covidn/#credits)
