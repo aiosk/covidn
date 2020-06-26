@@ -76,29 +76,40 @@ func (v HarianList) ToChartjs() libs.Chartjs {
 	var data libs.Chartjs
 	tags := v[0].GetTags("json")
 
-	var item [4]libs.ChartjsDatasetsItem
+	var item [6]libs.ChartjsDatasetsItem
 	for _, v2 := range v {
 		data.Labels = append(data.Labels, v2.DateStr)
-		item[0].Data = append(item[0].Data, v2.Case.Value)
-		item[1].Data = append(item[1].Data, v2.Recover.Value)
-		item[2].Data = append(item[2].Data, v2.Death.Value)
-		item[3].Data = append(item[3].Data, v2.Active.Value)
+		item[0].Data = append(item[0].Data, float64(v2.Case.Value))
+		item[1].Data = append(item[1].Data, float64(v2.Recover.Value))
+		item[2].Data = append(item[2].Data, float64(v2.Death.Value))
+		item[3].Data = append(item[3].Data, float64(v2.Active.Value))
 	}
+	// log.Println(item[0].Data)
+	item[4].Data = libs.MyRegression(item[2].Data)
+	item[5].Data = libs.MyRegression(item[3].Data)
 
 	item[0].Label = tags["Case"]
 	item[1].Label = tags["Recover"]
 	item[2].Label = tags["Death"]
 	item[3].Label = tags["Active"]
+	item[4].Label = tags["Death"]
+	item[5].Label = tags["Active"]
+
+	item[4].Type = "line"
 
 	item[0].BgColor = libs.ChartjsColor["case"]
 	item[1].BgColor = libs.ChartjsColor["recover"]
 	item[2].BgColor = libs.ChartjsColor["death"]
 	item[3].BgColor = libs.ChartjsColor["active"]
+	item[4].BgColor = libs.ChartjsColor["death"]
+	item[5].BgColor = libs.ChartjsColor["active"]
 
 	data.Datasets = append(data.Datasets, item[0])
 	data.Datasets = append(data.Datasets, item[1])
 	data.Datasets = append(data.Datasets, item[2])
 	data.Datasets = append(data.Datasets, item[3])
+	data.Datasets = append(data.Datasets, item[4])
+	data.Datasets = append(data.Datasets, item[5])
 	return data
 }
 

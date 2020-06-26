@@ -115,10 +115,10 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 
 	for _, v2 := range v.ListPerkembangan {
 		data.Labels = append(data.Labels, v2.DateStr)
-		item[0].Data = append(item[0].Data, v2.Case)
-		item[1].Data = append(item[1].Data, v2.Recover)
-		item[2].Data = append(item[2].Data, v2.Death)
-		item[3].Data = append(item[3].Data, v2.Active)
+		item[0].Data = append(item[0].Data, float64(v2.Case))
+		item[1].Data = append(item[1].Data, float64(v2.Recover))
+		item[2].Data = append(item[2].Data, float64(v2.Death))
+		item[3].Data = append(item[3].Data, float64(v2.Active))
 	}
 
 	item[0].Label = tags["Case"]

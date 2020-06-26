@@ -69,6 +69,7 @@ func WriteToIcs(filepath string, data interface{}) {
 
 // WriteToChartjs ...
 func WriteToChartjs(filepath string, data Chartjs) {
+	// jsonStr, err := json.MarshalIndent(data, "", "  ")
 	jsonStr, err := json.Marshal(data)
 	PanicError(err)
 
