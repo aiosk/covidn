@@ -6,10 +6,9 @@ import (
 	"os"
 
 	"github.com/aiosk/covidn/libs"
+	"github.com/aiosk/covidn/national"
 	"github.com/aiosk/covidn/prov"
-	"github.com/aiosk/covidn/provdetail"
 	"github.com/aiosk/covidn/rawan"
-	"github.com/aiosk/covidn/update"
 )
 
 func printHelp() {
@@ -17,11 +16,9 @@ func printHelp() {
 }
 
 func main() {
-	cmdUpdate := flag.NewFlagSet("update", flag.ExitOnError)
-	cmdUpdateIcs := cmdUpdate.Bool("ics", false, "output to ics")
+	cmdNational := flag.NewFlagSet("national", flag.ExitOnError)
 	cmdProv := flag.NewFlagSet("prov", flag.ExitOnError)
-	cmdProvDetail := flag.NewFlagSet("provdetail", flag.ExitOnError)
-	cmdProvDetailIcs := cmdProvDetail.Bool("ics", false, "output to ics")
+	cmdProvItem := flag.NewFlagSet("provitem", flag.ExitOnError)
 	cmdRawan := flag.NewFlagSet("rawan", flag.ExitOnError)
 
 	if len(os.Args) < 2 {
@@ -30,22 +27,22 @@ func main() {
 	}
 	var srcFile *os.File
 	switch os.Args[1] {
-	case "update":
-		cmdUpdate.Parse(os.Args[2:])
-		srcFile = libs.OpenStdinOrFile(cmdUpdate)
-		update.Main(srcFile, *cmdUpdateIcs)
+	case "national":
+		cmdNational.Parse(os.Args[2:])
+		srcFile = libs.OpenStdinOrFile(cmdNational)
+		national.Main(srcFile)
 	case "prov":
 		cmdProv.Parse(os.Args[2:])
 		srcFile = libs.OpenStdinOrFile(cmdProv)
-		prov.Parse(srcFile)
-	case "provdetail":
-		cmdProvDetail.Parse(os.Args[2:])
-		srcFile = libs.OpenStdinOrFile(cmdProvDetail)
-		provdetail.Main(srcFile, *cmdProvDetailIcs)
+		prov.Main(srcFile)
+	case "provitem":
+		cmdProvItem.Parse(os.Args[2:])
+		srcFile = libs.OpenStdinOrFile(cmdProvItem)
+		prov.Item(srcFile)
 	case "rawan":
 		cmdRawan.Parse(os.Args[2:])
 		srcFile = libs.OpenStdinOrFile(cmdRawan)
-		rawan.ToCsv(srcFile)
+		rawan.Main(srcFile)
 	default:
 		printHelp()
 		os.Exit(1)

@@ -1,5 +1,7 @@
 github.com/PuerkitoBio/goquery v1.5.1 h1:PSPBGne8NIUWw+/7vFBV+kG2J/5MOjbzc7154OaKCSE=
 github.com/PuerkitoBio/goquery v1.5.1/go.mod h1:GsLWisAFVj4WgDibEWF4pvYnkVQBpKBKeU+7zCJoLcc=
+github.com/aiosk/covidn/libs v0.0.0-20200610142018-89a51708fe45 h1:s+800mkrZuBk/NJNgPLUNNS/ZZQbAuoDNUm+NYOvTwg=
+github.com/aiosk/covidn/libs v0.0.0-20200610142018-89a51708fe45/go.mod h1:VaTOCsSX7VxXouIyP5G16yC8jY4JSwxJQCOLcjuOFNU=
 github.com/andybalholm/cascadia v1.1.0 h1:BuuO6sSfQNFRu1LppgbD25Hr2vLYW25JvxHs5zzsLTo=
 github.com/andybalholm/cascadia v1.1.0/go.mod h1:GsXiBklL0woXo1j/WYWtSYYC4ouU9PqHO0sqidkEA4Y=
 github.com/jordic/goics v0.0.0-20181215212140-feb996c8e01f h1:r6TpWQDAk/KGccXaNcNB2RBycc5DDuGsVowuq5DGmnk=

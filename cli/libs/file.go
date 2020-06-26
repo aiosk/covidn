@@ -1,10 +1,14 @@
 package libs
 
 import (
+	"bufio"
 	"encoding/csv"
 	"errors"
 	"flag"
+	"log"
 	"os"
+
+	"github.com/jordic/goics"
 )
 
 // OpenStdinOrFile ...
@@ -14,25 +18,49 @@ func OpenStdinOrFile(cmd *flag.FlagSet) *os.File {
 	// log.Printf("%+v\n", cmd.Args())
 	cmdArgs := cmd.Args()
 	if len(cmdArgs) < 1 {
-		panic(errors.New("no file specified"))
+		PanicError(errors.New("no file specified"))
 	}
 	var r *os.File
 	if cmdArgs[0] == "-" {
 		r = os.Stdin
 	} else {
-		if r, err = os.Open(cmdArgs[0]); err != nil {
-			panic(err)
-		}
+		r, err = os.Open(cmdArgs[0])
+		PanicError(err)
 	}
 
 	return r
 }
 
 // WriteToCsv ...
-func WriteToCsv(data [][]string) {
-	w := csv.NewWriter(os.Stdout)
-	w.WriteAll(data)
-	if err := w.Error(); err != nil {
-		panic(err)
-	}
+func WriteToCsv(filepath string, data [][]string) {
+	file, err := os.Create(filepath)
+	FatalError("Cannot create file", err)
+	defer func() {
+		err := file.Close()
+		PanicError(err)
+	}()
+
+	w := csv.NewWriter(file)
+	err = w.WriteAll(data)
+	FatalError("Cannot write file", err)
+	log.Printf("Write to %s", filepath)
+}
+
+// WriteToIcs ...
+func WriteToIcs(filepath string, data interface{}) {
+	file, err := os.Create(filepath)
+	FatalError("Cannot create file", err)
+	defer func() {
+		err := file.Close()
+		PanicError(err)
+	}()
+
+	f := bufio.NewWriter(file)
+	defer func() {
+		err := f.Flush()
+		PanicError(err)
+		log.Printf("Write to %s", filepath)
+	}()
+	goics.NewICalEncode(f).Encode(data.(goics.ICalEmiter))
+
 }
