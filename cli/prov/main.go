@@ -39,9 +39,9 @@ func Item(file io.Reader) {
 
 	// log.Printf("%+v\n", strings.ReplaceAll(provItem.Provinsi, " ", "_"))
 	fileName := strings.ReplaceAll(provItem.Provinsi, " ", "_")
-	filepathCsv := fmt.Sprintf("dist/csv/prov/%s.csv", fileName)
-	filepathIcs := fmt.Sprintf("dist/ics/prov/%s.ics", fileName)
-	filepathChartjs := fmt.Sprintf("dist/chartjs/prov/%s.json", fileName)
+	filepathCsv := fmt.Sprintf("dist/csv/%s.csv", fileName)
+	filepathIcs := fmt.Sprintf("dist/ics/%s.ics", fileName)
+	filepathChartjs := fmt.Sprintf("dist/chartjs/%s.json", fileName)
 	libs.WriteToCsv(filepathCsv, provItem.ToCsv())
 	libs.WriteToIcs(filepathIcs, provItem)
 	libs.WriteToChartjs(filepathChartjs, provItem.ToChartjs())
