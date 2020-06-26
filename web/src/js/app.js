@@ -1,18 +1,9 @@
 import delay from "lodash/delay";
 import isUndefined from "lodash/isUndefined";
 import cloneDeep from "lodash/cloneDeep";
-import National from "./libs/national.js";
-const { getFile: getFileNational } = National;
+import Chartjs from "./libs/chartjs.js";
 import Prov from "./libs/prov.js";
-const {
-  provinces,
-  getFile: getFileProv,
-  initChartHtml: initChartHtmlProv,
-} = Prov;
-import ChartLibs from "./libs/chart.js";
-const { data: dataDefault, parseCases: parseCases } = ChartLibs;
-import File from "./libs/file.js";
-const { chunkByDays } = File;
+const { provinces, initChartHtml: initChartHtmlProv } = Prov;
 
 let periods = 7;
 const $slider = document.querySelector("form input[type='range']");
@@ -22,24 +13,22 @@ const $slider = document.querySelector("form input[type='range']");
 //   periods = 7;
 //   $slider.value = 7;
 // }
-
+let lazyLoad;
 const onSliderReleaseUpdateLabel = (e) => {
-  let { value, id } = e.target;
+  let { value } = e.target;
   periods = value;
   document.querySelector(`#periodsValue`).innerHTML = value;
-  initCanvasViewport.forEach((v) => {
-    updateChart(v);
-  });
+  lazyLoad.update();
 };
 $slider.addEventListener("input", onSliderReleaseUpdateLabel);
-$slider.addEventListener("change", onSliderReleaseUpdateLabel);
+// $slider.addEventListener("change", onSliderReleaseUpdateLabel);
 
 initChartHtmlProv(document.querySelector("#myChart.grid-x"), provinces);
-let lazyLoad;
+
 delay(() => {
   lazyLoad = new LazyLoad({
     elements_selector: "canvas",
-    // unobserve_entered: true,
+    unobserve_entered: true,
     callback_enter: onCanvasEnterViewport,
     callback_exit: logEl,
     callback_loading: logEl,
@@ -51,8 +40,6 @@ const logEl = (el) => {
   // console.log(myChart[el.id]);
   console.log(el);
 };
-
-const elId2dataId = (elId) => elId.split("_").slice(1).join("_");
 
 const $cellChart = document.querySelectorAll("#myChart.grid-x .cell");
 $cellChart.forEach((v) => {
@@ -77,49 +64,27 @@ let myChartData = {};
 let myChartDataDefault = { datasets: [], labels: [] };
 
 /* init dataDefault myChartDataDefault */
-let dataAll = {};
-dataAll["National"] = cloneDeep(dataDefault);
-myChartData["Chart_National"] = cloneDeep(myChartDataDefault);
+myChartData["Chart_NATIONAL"] = cloneDeep(myChartDataDefault);
 provinces.forEach((v) => {
-  dataAll[v] = cloneDeep(dataDefault);
   myChartData[`Chart_${v}`] = cloneDeep(myChartDataDefault);
 });
 
-/* wait fetch file */
-let initCanvasViewport = [];
-(async () => {
-  const dataNational = await getFileNational();
-  dataAll["National"] = dataNational;
-
-  const dataProv = await getFileProv();
-  provinces.forEach((v) => {
-    dataAll[v] = dataProv[v];
-  });
-
-  initCanvasViewport.forEach((v) => {
-    updateChart(v);
-  });
-})();
-
 const updateChart = (elementId) => {
-  const dataId = elId2dataId(elementId);
+  const dataId = elementId.split("_").slice(1).join("_");
 
-  const dataChunk = chunkByDays(dataAll[dataId], periods);
-  const parsedData = parseCases(dataChunk);
-  myChartData[elementId].labels = parsedData.labels;
-  myChartData[elementId].datasets = parsedData.datasets;
-  // myChartData[elementId] = parsedData;
-  myChart[elementId].options.title.text = dataId
-    .split("_")
-    .join(" ")
-    .toUpperCase();
-  myChart[elementId].update();
+  (async () => {
+    const data = await Chartjs.getFile(dataId, periods);
+    // console.log(elementId, dataId, data, data.labels);
+    data.datasets[0].hidden = true;
+    myChartData[elementId].labels = data.labels;
+    myChartData[elementId].datasets = data.datasets;
+    myChart[elementId].update();
+  })();
 };
 
 const onCanvasEnterViewport = (el) => {
   // console.log("enter", el);
   if (isUndefined(myChart[el.id])) {
-    initCanvasViewport.push(el.id);
     // console.log(el.id, myChartData[el.id]);
     myChart[el.id] = new Chart(el.id, {
       type: "bar",
@@ -127,7 +92,7 @@ const onCanvasEnterViewport = (el) => {
       options: {
         title: {
           display: true,
-          text: "...",
+          text: el.id.split("_").slice(1).join(" "),
         },
         tooltips: {
           filter: function (tooltipItem) {
@@ -146,7 +111,5 @@ const onCanvasEnterViewport = (el) => {
   }
   delay(() => {
     updateChart(el.id);
-  }, 9);
+  }, 99);
 };
-
-// $(document).foundation();

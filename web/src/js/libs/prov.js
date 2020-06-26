@@ -1,9 +1,6 @@
 import isUndefined from "lodash/isUndefined";
 import chunk from "lodash/chunk";
 
-import File from "./file.js";
-const { csv2Array } = File;
-
 const provinces = [
   "DKI_JAKARTA",
   "JAWA_BARAT",
@@ -41,28 +38,6 @@ const provinces = [
   "NUSA_TENGGARA_TIMUR",
 ];
 
-const getFile = async () => {
-  let res = await fetch(
-    `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/prov.csv?_=${Date.now()}`
-  );
-  let resTxt = await res.text();
-  let file = csv2Array(resTxt);
-
-  let fileObj = {};
-  let fileTitle = file[0].slice(1);
-  let fileData = file.slice(1);
-  fileData.forEach((v) => {
-    let key = v[0].replace(/\s/gi, "_");
-    if (isUndefined(fileObj[key])) {
-      fileObj[key] = [];
-      fileObj[key] = fileObj[key].concat([fileTitle]);
-    }
-    fileObj[key] = fileObj[key].concat([v.slice(1)]);
-  });
-
-  return fileObj;
-};
-
 const initChartHtml = ($dom, fileObjKeys, size = 2) => {
   let fileObjKeysChunk = chunk(fileObjKeys, size);
   let html = "";
@@ -77,4 +52,4 @@ const initChartHtml = ($dom, fileObjKeys, size = 2) => {
   $dom.innerHTML += html;
 };
 
-export default { provinces, getFile, initChartHtml };
+export default { provinces, initChartHtml };

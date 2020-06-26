@@ -6,14 +6,14 @@
  */
 
 // --- Dependencies ---
-@import "../node_modules/foundation-sites/scss/vendor/normalize";
-@import "../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/helpers/missing-dependencies";
-@import "../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/helpers/true";
-@import "../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/functions/contain";
-@import "../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/functions/purge";
-@import "../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/functions/remove";
-@import "../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/functions/replace";
-@import "../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/functions/to-list";
+@import "../../node_modules/foundation-sites/scss/vendor/normalize";
+@import "../../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/helpers/missing-dependencies";
+@import "../../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/helpers/true";
+@import "../../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/functions/contain";
+@import "../../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/functions/purge";
+@import "../../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/functions/remove";
+@import "../../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/functions/replace";
+@import "../../node_modules/foundation-sites/scss/../_vendor/sassy-lists/stylesheets/functions/to-list";
 
 // // --- Settings ---
 // // import your own `settings` here or
@@ -22,15 +22,15 @@
 
 // --- Components ---
 // Utilities
-@import "../node_modules/foundation-sites/scss/util/util";
+@import "../../node_modules/foundation-sites/scss/util/util";
 // Global styles
-@import "../node_modules/foundation-sites/scss/global";
-@import "../node_modules/foundation-sites/scss/forms/forms";
-@import "../node_modules/foundation-sites/scss/typography/typography";
+@import "../../node_modules/foundation-sites/scss/global";
+@import "../../node_modules/foundation-sites/scss/forms/forms";
+@import "../../node_modules/foundation-sites/scss/typography/typography";
 
 // Grids
-@import "../node_modules/foundation-sites/scss/grid/grid";
-@import "../node_modules/foundation-sites/scss/xy-grid/xy-grid";
+@import "../../node_modules/foundation-sites/scss/grid/grid";
+@import "../../node_modules/foundation-sites/scss/xy-grid/xy-grid";
 // // Generic components
 // @import 'components/button';
 // @import 'components/button-group';
@@ -40,10 +40,10 @@
 // @import 'components/slider';
 // @import 'components/switch';
 // @import 'components/table';
-// // Basic components
+// Basic components
 // @import 'components/badge';
 // @import 'components/breadcrumbs';
-@import "../node_modules/foundation-sites/scss/components/callout";
+@import "../../node_modules/foundation-sites/scss/components/callout";
 // @import 'components/card';
 // @import 'components/dropdown';
 // @import 'components/pagination';
@@ -71,8 +71,8 @@
 // @import 'components/top-bar';
 
 // Helpers
-@import "../node_modules/foundation-sites/scss/components/float";
-@import "../node_modules/foundation-sites/scss/components/flex";
+@import "../../node_modules/foundation-sites/scss/components/float";
+@import "../../node_modules/foundation-sites/scss/components/flex";
 // @import 'components/visibility';
 // @import 'prototype/prototype';
 
@@ -152,3 +152,7 @@
   //   @include foundation-visibility-classes;
   //   @if $prototype { @include foundation-prototype-classes; }
 }
+
+// @include foundation-normalize();
+// @include foundation-everything($prototype:true);
+@include foundation-everything();
