@@ -57,6 +57,9 @@ $cellChart.forEach((v) => {
 
     myChart[chartId].resize();
   });
+  v.querySelector("canvas").addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
 });
 
 let myChart = {};
@@ -83,7 +86,7 @@ const updateChart = (elementId) => {
 };
 
 const onCanvasEnterViewport = (el) => {
-  // console.log("enter", el);
+  // console.log("enter", el, i, i2);
   if (isUndefined(myChart[el.id])) {
     // console.log(el.id, myChartData[el.id]);
     myChart[el.id] = new Chart(el.id, {
@@ -95,8 +98,13 @@ const onCanvasEnterViewport = (el) => {
           text: el.id.split("_").slice(1).join(" "),
         },
         tooltips: {
-          filter: function (tooltipItem) {
-            return [2, 4].indexOf(tooltipItem.datasetIndex) === -1;
+          filter: function (tooltipItem, data) {
+            // console.log(
+            //   data.datasets[tooltipItem.datasetIndex].label,
+            //   data.datasets[tooltipItem.datasetIndex].type
+            // );
+
+            return isUndefined(data.datasets[tooltipItem.datasetIndex].type);
           },
         },
         animation: {
@@ -109,6 +117,7 @@ const onCanvasEnterViewport = (el) => {
       },
     });
   }
+
   delay(() => {
     updateChart(el.id);
   }, 99);
