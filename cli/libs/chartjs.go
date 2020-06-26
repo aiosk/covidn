@@ -8,10 +8,11 @@ import (
 
 // ChartjsDatasetsItem ...
 type ChartjsDatasetsItem struct {
-	Label   string    `json:"label"`
-	Data    []float64 `json:"data"`
-	BgColor string    `json:"backgroundColor"`
-	Type    string    `json:"type,omitempty"`
+	Label           string    `json:"label"`
+	Data            []float64 `json:"data"`
+	BackgroundColor string    `json:"backgroundColor,omitempty"`
+	BorderColor     string    `json:"borderColor,omitempty"`
+	Type            string    `json:"type,omitempty"`
 }
 
 // Chartjs ...

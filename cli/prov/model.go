@@ -27,7 +27,7 @@ type Perkembangan struct {
 // PerkembanganList ...
 type PerkembanganList []Perkembangan
 
-// GetTag ...
+// GetTags ...
 func (v Perkembangan) GetTags(tag string) map[string]string {
 	return libs.StructGetTags(v, tag)
 }
@@ -126,10 +126,10 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 	item[2].Label = tags["Death"]
 	item[3].Label = tags["Active"]
 
-	item[0].BgColor = libs.ChartjsColor["case"]
-	item[1].BgColor = libs.ChartjsColor["recover"]
-	item[2].BgColor = libs.ChartjsColor["death"]
-	item[3].BgColor = libs.ChartjsColor["active"]
+	item[0].BackgroundColor = libs.ChartjsColor["case"]
+	item[1].BackgroundColor = libs.ChartjsColor["recover"]
+	item[2].BackgroundColor = libs.ChartjsColor["death"]
+	item[3].BackgroundColor = libs.ChartjsColor["active"]
 
 	data.Datasets = append(data.Datasets, item[0])
 	data.Datasets = append(data.Datasets, item[1])
