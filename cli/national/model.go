@@ -17,7 +17,7 @@ type HarianJumlah struct {
 // HarianItem ...
 type HarianItem struct {
 	Date         int64        `json:"key"`
-	DateStr      string       `json:"key_as_string"`
+	DateStr      string       `json:"date"`
 	Death        HarianJumlah `json:"jumlah_meninggal"`
 	Active       HarianJumlah `json:"jumlah_dirawat"`
 	Recover      HarianJumlah `json:"jumlah_sembuh"`
@@ -48,7 +48,7 @@ func (v HarianList) ToCsv() [][]string {
 	var data [][]string
 	tags := v[0].GetTags("json")
 	title := []string{
-		tags["DateStr"],
+		tags["Date"],
 		tags["TotalCase"], tags["Case"],
 		tags["TotalRecover"], tags["Recover"],
 		tags["TotalDeath"], tags["Death"],
@@ -59,7 +59,7 @@ func (v HarianList) ToCsv() [][]string {
 	for _, v := range v {
 		// log.Printf("%+v\n", v)
 		row := []string{
-			v.DateStr[:10],
+			libs.UnixToMyFormat(v.Date),
 			strconv.Itoa(v.TotalCase.Value), strconv.Itoa(v.Case.Value),
 			strconv.Itoa(v.TotalRecover.Value), strconv.Itoa(v.Recover.Value),
 			strconv.Itoa(v.TotalDeath.Value), strconv.Itoa(v.Death.Value),
@@ -78,7 +78,7 @@ func (v HarianList) ToChartjs() libs.Chartjs {
 
 	var item [4]libs.ChartjsDatasetsItem
 	for _, v2 := range v {
-		data.Labels = append(data.Labels, v2.DateStr[:10])
+		data.Labels = append(data.Labels, v2.DateStr)
 		item[0].Data = append(item[0].Data, v2.Case.Value)
 		item[1].Data = append(item[1].Data, v2.Recover.Value)
 		item[2].Data = append(item[2].Data, v2.Death.Value)
@@ -115,7 +115,11 @@ func (v HarianList) Chunk(size int) HarianList {
 	for _, v2 := range chunks {
 		var item HarianItem
 		item.Date = v2[0].Date
-		item.DateStr = v2[0].DateStr
+		if size == 1 {
+			item.DateStr = libs.UnixToMyShortFormat(v2[0].Date)
+		} else {
+			item.DateStr = fmt.Sprintf("%s - %s", libs.UnixToMyShortFormat(v2[0].Date), libs.UnixToMyShortFormat(v2[len(v2)-1].Date))
+		}
 		item.Case.Value = 0
 		item.Recover.Value = 0
 		item.Death.Value = 0

@@ -18,7 +18,7 @@ Berisi data tabular kasus harian **nasional** indonesia dari [covid19.go.id](htt
 
 | judul                | keterangan                                     |
 | -------------------- | ---------------------------------------------- |
-| key_as_string        | tanggal                                        |
+| key                  | tanggal                                        |
 | jumlah_positif_kum   | akumulasi jumlah kasus ter-**konfirmasi**      |
 | jumlah_positif       | jumlah kasus harian ter-**konfirmasi**         |
 | jumlah_sembuh_kum    | akumulasi jumlah kasus **sembuh**              |
