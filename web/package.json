@@ -1,0 +1,39 @@
+{
+  "name": "covidn",
+  "version": "2.0.0",
+  "description": "Indonesia COVID-19 cases, National and Provinces",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:server": "lite-server --baseDir='dist'",
+    "dev:watch:html": "pug --out dist --pretty --watch src/index.pug",
+    "dev:watch:css": "sass --watch src/app.scss:dist/app.css",
+    "dev:watch:js": "npx rollup --config --watch --sourcemap",
+    "dev:watch": "concurrently --kill-others 'npm:dev:watch:*'",
+    "build:html": "pug --out dist src/index.pug",
+    "build:css": "sass src/app.scss:dist/app.css --style compressed --no-source-map",
+    "build:js": "npx rollup --config --environment BUILD:prod",
+    "build": "concurrently 'npm:build:*'"
+  },
+  "author": "andry.yosua@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
+    "@rollup/plugin-babel": "^5.0.3",
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^8.0.1",
+    "@rollup/plugin-url": "^5.0.1",
+    "concurrently": "^5.2.0",
+    "foundation-sites": "^6.6.3",
+    "lite-server": "^2.5.4",
+    "lodash": "^4.17.15",
+    "pug-cli": "^1.0.0-alpha6",
+    "rollup-plugin-terser": "^6.1.0",
+    "sass": "^1.26.8"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.10.1",
+    "core-js": "^3.6.5"
+  }
+}

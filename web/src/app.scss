@@ -1,0 +1,39 @@
+@import "foundation.scss";
+// @include foundation-normalize();
+// @include foundation-everything($prototype:true);
+@include foundation-everything();
+
+// html {
+//   scroll-behavior: smooth;
+// }
+form {
+  input[type="range"] {
+    width: 100%;
+  }
+}
+
+.preload {
+  text-align: center;
+}
+
+span#periodsValue {
+  font-weight: bold;
+}
+
+a[href="#top"] {
+  position: fixed;
+  bottom: 1rem;
+  left: calc(100% - 4rem);
+  img {
+    $size: 2rem;
+    width: $size;
+    height: $size;
+    margin: $size/3;
+  }
+
+  background: rgba(192, 192, 192, 0.5);
+  border-radius: 50%;
+}
+#top {
+  margin-bottom: 0.5rem;
+}
