@@ -15,5 +15,6 @@ func Main(file io.Reader) {
 
 	libs.WriteToCsv("dist/csv/national.csv", rawFile.Update.Harian.ToCsv())
 	libs.WriteToIcs("dist/ics/national.ics", rawFile.Update.Harian)
+	libs.WriteToChartjs("dist/chartjs/national.json", rawFile.Update.Harian.ToChartjs())
 
 }
