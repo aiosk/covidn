@@ -27,7 +27,7 @@ type Perkembangan struct {
 type PerkembanganList []Perkembangan
 
 // GetTag ...
-func (v Perkembangan) GetTag(tag string) map[string]string {
+func (v Perkembangan) GetTags(tag string) map[string]string {
 	return libs.StructGetTags(v, tag)
 }
 
@@ -47,7 +47,7 @@ func (v FileItem) ToCsv() [][]string {
 
 	var dataCsv [][]string
 	itemTags := v.GetTags("json")
-	listPerkembanganTags := v.ListPerkembangan[0].GetTag("json")
+	listPerkembanganTags := v.ListPerkembangan[0].GetTags("json")
 	title := []string{
 		itemTags["Provinsi"], listPerkembanganTags["Date"],
 		listPerkembanganTags["TotalCase"], listPerkembanganTags["Case"],
@@ -95,16 +95,16 @@ func (v FileItem) Chunk(size int) FileItem {
 			item.Active += v3.Active
 		}
 
-		newData.Provinsi = v.Provinsi
 		newData.ListPerkembangan = append(newData.ListPerkembangan, item)
 	}
+	newData.Provinsi = v.Provinsi
 	return newData
 }
 
 // ToChartjs ...
 func (v FileItem) ToChartjs() libs.Chartjs {
 	var data libs.Chartjs
-	tags := v.GetTags("json")
+	tags := v.ListPerkembangan[0].GetTags("json")
 
 	var item [4]libs.ChartjsDatasetsItem
 
