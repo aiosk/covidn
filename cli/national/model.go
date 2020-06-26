@@ -96,6 +96,7 @@ func (v HarianList) ToChartjs() libs.Chartjs {
 	item[5].Label = tags["Active"]
 
 	item[4].Type = "line"
+	item[5].Type = "line"
 
 	item[0].BackgroundColor = libs.ChartjsColor["case"]
 	item[1].BackgroundColor = libs.ChartjsColor["recover"]
