@@ -38,9 +38,9 @@ func Item(file io.Reader) {
 	libs.PanicError(err)
 
 	// log.Printf("%+v\n", strings.ReplaceAll(provItem.Provinsi, " ", "_"))
-	fileName := fmt.Sprintf("prov-%s", strings.ReplaceAll(provItem.Provinsi, " ", "_"))
-	filepathCsv := fmt.Sprintf("dist/%s.csv", fileName)
-	filepathIcs := fmt.Sprintf("dist/%s.ics", fileName)
+	fileName := strings.ReplaceAll(provItem.Provinsi, " ", "_")
+	filepathCsv := fmt.Sprintf("dist/csv/prov/%s.csv", fileName)
+	filepathIcs := fmt.Sprintf("dist/ics/prov/%s.ics", fileName)
 	libs.WriteToCsv(filepathCsv, provItem.ToCsv())
 	libs.WriteToIcs(filepathIcs, provItem)
 

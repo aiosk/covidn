@@ -69,5 +69,5 @@ func Main(file io.Reader) {
 		dataCsv = append(dataCsv, row)
 	}
 
-	libs.WriteToCsv("dist/rawan.csv", dataCsv)
+	libs.WriteToCsv("dist/csv/rawan.csv", dataCsv)
 }

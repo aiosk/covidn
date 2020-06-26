@@ -8,11 +8,12 @@ Indonesia COVID-19 Data
     - [Province](#province)
   - [Weekly](#weekly)
     - [Zona Rawan Kecamatan](#zona-rawan-kecamatan)
+  - [Chart](#chart)
 - [Credits](#credits)
 
 # Data
 
-see [raw **CSV** and **ICS**](https://github.com/aiosk/covidn/blob/master/cli/dist/README.md) file
+see [raw **CSV** and **ICS**](https://github.com/aiosk/covidn/blob/master/cli/dist) file
 
 # Build
 
@@ -67,5 +68,7 @@ $ curl --compressed \
 "https://api-rdt-v2.bersatulawancovid.id/dev/location/all_rawan?_=$(date +%s%3N)" |
 ./covidn rawan -
 ```
+
+## Chart
 
 # [Credits](https://github.com/aiosk/covidn/#credits)
