@@ -69,6 +69,7 @@ const initChartHtml = ($dom, fileObjKeys, size = 2) => {
   fileObjKeysChunk.forEach((v) => {
     v.forEach((v2) => {
       html += `<div class="cell callout">`;
+      // html += `<a class='anchor' href="#Chart_${v2}"><img src="baseline_attach_file_black_18dp.png" alt="anchor"></a>`;
       html += `<canvas id='Chart_${v2}'></canvas>`;
       html += "</div>";
     });
