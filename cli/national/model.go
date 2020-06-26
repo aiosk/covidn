@@ -102,6 +102,36 @@ func (v HarianList) ToChartjs() libs.Chartjs {
 	return data
 }
 
+// Chunk ...
+func (v HarianList) Chunk(size int) HarianList {
+	var chunks []HarianList
+	for size < len(v) {
+		v, chunks = v[size:], append(chunks, v[0:size:size])
+	}
+
+	chunks = append(chunks, v)
+
+	var newData HarianList
+	for _, v2 := range chunks {
+		var item HarianItem
+		item.Date = v2[0].Date
+		item.DateStr = v2[0].DateStr
+		item.Case.Value = 0
+		item.Recover.Value = 0
+		item.Death.Value = 0
+		item.Active.Value = 0
+		for _, v3 := range v2 {
+			item.Case.Value += v3.Case.Value
+			item.Recover.Value += v3.Recover.Value
+			item.Death.Value += v3.Death.Value
+			item.Active.Value += v3.Active.Value
+		}
+
+		newData = append(newData, item)
+	}
+	return newData
+}
+
 // EmitICal ...
 func (v HarianList) EmitICal() goics.Componenter {
 

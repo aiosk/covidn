@@ -40,10 +40,15 @@ func Item(file io.Reader) {
 	// log.Printf("%+v\n", strings.ReplaceAll(provItem.Provinsi, " ", "_"))
 	fileName := strings.ReplaceAll(provItem.Provinsi, " ", "_")
 	filepathCsv := fmt.Sprintf("dist/csv/%s.csv", fileName)
-	filepathIcs := fmt.Sprintf("dist/ics/%s.ics", fileName)
-	filepathChartjs := fmt.Sprintf("dist/chartjs/%s.json", fileName)
 	libs.WriteToCsv(filepathCsv, provItem.ToCsv())
+	filepathIcs := fmt.Sprintf("dist/ics/%s.ics", fileName)
 	libs.WriteToIcs(filepathIcs, provItem)
-	libs.WriteToChartjs(filepathChartjs, provItem.ToChartjs())
+	// filepathChartjs := fmt.Sprintf("dist/chartjs/%s.json", fileName)
+	// libs.WriteToChartjs(filepathChartjs, provItem.ToChartjs())
+
+	for i := 1; i <= 21; i++ {
+		filepath := fmt.Sprintf("dist/chartjs/chunks/%s-%d.json", fileName, i)
+		libs.WriteToChartjs(filepath, provItem.Chunk(i).ToChartjs())
+	}
 
 }

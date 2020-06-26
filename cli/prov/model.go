@@ -23,6 +23,9 @@ type Perkembangan struct {
 	TotalCase    int   `json:"AKUMULASI_KASUS"`
 }
 
+// PerkembanganList ...
+type PerkembanganList []Perkembangan
+
 // GetTag ...
 func (v Perkembangan) GetTag(tag string) map[string]string {
 	return libs.StructGetTags(v, tag)
@@ -30,8 +33,8 @@ func (v Perkembangan) GetTag(tag string) map[string]string {
 
 // FileItem ...
 type FileItem struct {
-	Provinsi         string         `json:"provinsi"`
-	ListPerkembangan []Perkembangan `json:"list_perkembangan"`
+	Provinsi         string           `json:"provinsi"`
+	ListPerkembangan PerkembanganList `json:"list_perkembangan"`
 }
 
 // GetTags ...
@@ -66,6 +69,36 @@ func (v FileItem) ToCsv() [][]string {
 	}
 
 	return dataCsv
+}
+
+// Chunk ...
+func (v FileItem) Chunk(size int) FileItem {
+	var chunks []PerkembanganList
+	for size < len(v.ListPerkembangan) {
+		v.ListPerkembangan, chunks = v.ListPerkembangan[size:], append(chunks, v.ListPerkembangan[0:size:size])
+	}
+
+	chunks = append(chunks, v.ListPerkembangan)
+
+	var newData FileItem
+	for _, v2 := range chunks {
+		var item Perkembangan
+		item.Date = v2[0].Date
+		item.Case = 0
+		item.Recover = 0
+		item.Death = 0
+		item.Active = 0
+		for _, v3 := range v2 {
+			item.Case += v3.Case
+			item.Recover += v3.Recover
+			item.Death += v3.Death
+			item.Active += v3.Active
+		}
+
+		newData.Provinsi = v.Provinsi
+		newData.ListPerkembangan = append(newData.ListPerkembangan, item)
+	}
+	return newData
 }
 
 // ToChartjs ...

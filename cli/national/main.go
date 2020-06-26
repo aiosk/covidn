@@ -2,6 +2,7 @@ package national
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 
 	"github.com/aiosk/covidn/libs"
@@ -15,6 +16,10 @@ func Main(file io.Reader) {
 
 	libs.WriteToCsv("dist/csv/NATIONAL.csv", rawFile.Update.Harian.ToCsv())
 	libs.WriteToIcs("dist/ics/NATIONAL.ics", rawFile.Update.Harian)
-	libs.WriteToChartjs("dist/chartjs/NATIONAL.json", rawFile.Update.Harian.ToChartjs())
+
+	for i := 1; i <= 21; i++ {
+		filepath := fmt.Sprintf("dist/chartjs/chunks/NATIONAL-%d.json", i)
+		libs.WriteToChartjs(filepath, rawFile.Update.Harian.Chunk(i).ToChartjs())
+	}
 
 }
