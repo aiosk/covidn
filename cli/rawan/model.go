@@ -16,14 +16,14 @@ type DataKecamatan struct {
 	NamaProvinsi      string  `json:"nama_provinsi"`
 }
 
-// GetTag ...
-func (v DataKecamatan) GetTag(tag string) map[string]string {
-	return libs.StructGetTag(v, tag)
+// GetTags ...
+func (v DataKecamatan) GetTags(tag string) map[string]string {
+	return libs.StructGetTags(v, tag)
 }
 
 // AllRawanFile ...
 type AllRawanFile struct {
 	Status struct {
-		Data []DataKecamatan
+		Data []DataKecamatan `json:"data"`
 	}
 }

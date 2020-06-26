@@ -15,25 +15,27 @@ import (
 // GetWilayah ...
 func GetWilayah() Wilayah {
 
-	wilayahFile, err := os.Open("wilayah_2020.json")
-	if err != nil {
-		panic(err)
-	}
+	file, err := os.Open("wilayah_2020.json")
+	libs.PanicError(err)
+	defer func() {
+		err := file.Close()
+		libs.PanicError(err)
+	}()
 
 	var wilayah Wilayah
-	if err := json.NewDecoder(wilayahFile).Decode(&wilayah); err != nil {
-		panic(err)
-	}
+	err = json.NewDecoder(file).Decode(&wilayah)
+	libs.PanicError(err)
+
 	return wilayah
 }
 
-// ToCsv ...
-func ToCsv(file io.Reader) {
+// Main ...
+func Main(file io.Reader) {
 	var allRawanFile AllRawanFile
-	if err := json.NewDecoder(file).Decode(&allRawanFile); err != nil {
-		panic(err)
-	}
+	err := json.NewDecoder(file).Decode(&allRawanFile)
+	libs.PanicError(err)
 	// log.Printf("%+v\n", allRawanFile.Status.Data)
+
 	sort.SliceStable(allRawanFile.Status.Data, func(i, j int) bool {
 		if allRawanFile.Status.Data[i].KodeKecamatan != allRawanFile.Status.Data[i].KodeKecamatan {
 			return allRawanFile.Status.Data[i].KodeKecamatan < allRawanFile.Status.Data[i].KodeKecamatan
@@ -46,7 +48,7 @@ func ToCsv(file io.Reader) {
 
 	var dataCsv [][]string
 
-	tags := allRawanFile.Status.Data[0].GetTag("json")
+	tags := allRawanFile.Status.Data[0].GetTags("json")
 	title := []string{
 		tags["LevelKerawanan"], tags["JumlahPenduduk"], tags["Total"], tags["Density"],
 		tags["KodeKecamatan"],
@@ -67,5 +69,5 @@ func ToCsv(file io.Reader) {
 		dataCsv = append(dataCsv, row)
 	}
 
-	libs.WriteToCsv(dataCsv)
+	libs.WriteToCsv("dist/rawan.csv", dataCsv)
 }

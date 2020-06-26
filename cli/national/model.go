@@ -1,4 +1,4 @@
-package update
+package national
 
 import (
 	"fmt"
@@ -28,9 +28,9 @@ type HarianItem struct {
 	TotalCase    HarianJumlah `json:"jumlah_positif_kum"`
 }
 
-// GetTag ...
-func (v HarianItem) GetTag(tag string) map[string]string {
-	return libs.StructGetTag(v, tag)
+// GetTags ...
+func (v HarianItem) GetTags(tag string) map[string]string {
+	return libs.StructGetTags(v, tag)
 }
 
 // HarianList ...
@@ -46,7 +46,7 @@ type SrcFile struct {
 // ToCsv ...
 func (v HarianList) ToCsv() [][]string {
 	var dataCsv [][]string
-	tags := v[0].GetTag("json")
+	tags := v[0].GetTags("json")
 	title := []string{
 		tags["DateStr"],
 		tags["TotalCase"], tags["Case"],

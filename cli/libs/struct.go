@@ -4,8 +4,8 @@ import (
 	"reflect"
 )
 
-// StructGetTag ...
-func StructGetTag(structVal interface{}, tag string) map[string]string {
+// StructGetTags ...
+func StructGetTags(structVal interface{}, tag string) map[string]string {
 	val := reflect.ValueOf(structVal)
 	t := val.Type()
 

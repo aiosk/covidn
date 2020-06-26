@@ -1,4 +1,4 @@
-package provdetail
+package prov
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ type Perkembangan struct {
 
 // GetTag ...
 func (v Perkembangan) GetTag(tag string) map[string]string {
-	return libs.StructGetTag(v, tag)
+	return libs.StructGetTags(v, tag)
 }
 
 // FileItem ...
@@ -34,40 +34,37 @@ type FileItem struct {
 	ListPerkembangan []Perkembangan `json:"list_perkembangan"`
 }
 
-// GetTag ...
-func (v FileItem) GetTag(tag string) map[string]string {
-	return libs.StructGetTag(v, tag)
+// GetTags ...
+func (v FileItem) GetTags(tag string) map[string]string {
+	return libs.StructGetTags(v, tag)
 }
 
-//File ...
-type File []FileItem
-
 // ToCsv ...
-func (v File) ToCsv() [][]string {
+func (v FileItem) ToCsv() [][]string {
 
 	var dataCsv [][]string
-	provDetailTags := v[0].GetTag("json")
-	listPerkembanganTags := v[0].ListPerkembangan[0].GetTag("json")
+	itemTags := v.GetTags("json")
+	listPerkembanganTags := v.ListPerkembangan[0].GetTag("json")
 	title := []string{
-		provDetailTags["Provinsi"], listPerkembanganTags["Date"],
+		itemTags["Provinsi"], listPerkembanganTags["Date"],
 		listPerkembanganTags["TotalCase"], listPerkembanganTags["Case"],
 		listPerkembanganTags["TotalRecover"], listPerkembanganTags["Recover"],
 		listPerkembanganTags["TotalDeath"], listPerkembanganTags["Death"],
 		listPerkembanganTags["TotalActive"], listPerkembanganTags["Active"],
 	}
 	dataCsv = append(dataCsv, title)
-	for _, v := range v {
-		for _, v2 := range v.ListPerkembangan {
-			row := []string{
-				v.Provinsi, libs.UnixToMyFormat(v2.Date),
-				strconv.Itoa(v2.TotalCase), strconv.Itoa(v2.Case),
-				strconv.Itoa(v2.TotalRecover), strconv.Itoa(v2.Recover),
-				strconv.Itoa(v2.TotalDeath), strconv.Itoa(v2.Death),
-				strconv.Itoa(v2.TotalActive), strconv.Itoa(v2.Active),
-			}
-			dataCsv = append(dataCsv, row)
+
+	for _, v2 := range v.ListPerkembangan {
+		row := []string{
+			v.Provinsi, libs.UnixToMyFormat(v2.Date),
+			strconv.Itoa(v2.TotalCase), strconv.Itoa(v2.Case),
+			strconv.Itoa(v2.TotalRecover), strconv.Itoa(v2.Recover),
+			strconv.Itoa(v2.TotalDeath), strconv.Itoa(v2.Death),
+			strconv.Itoa(v2.TotalActive), strconv.Itoa(v2.Active),
 		}
+		dataCsv = append(dataCsv, row)
 	}
+
 	return dataCsv
 }
 
