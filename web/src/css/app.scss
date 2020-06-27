@@ -42,12 +42,12 @@ canvas {
 }
 
 .loader {
-  border: 16px solid $light-gray;
+  $size: 0.75rem;
+  border: $size solid $light-gray;
   $border-primary: map-get($foundation-palette, "primary");
-  border-top: 16px solid $border-primary;
-  border-bottom: 16px solid $border-primary;
+  border-top: $size solid $border-primary;
+  border-bottom: $size solid $border-primary;
   border-radius: 50%;
-  $size: 2rem;
   width: $size;
   height: $size;
   animation: spin 2s linear infinite;

@@ -102,7 +102,7 @@ const updateChart = (elementId) => {
     myChartData[elementId].labels = data.labels;
     myChartData[elementId].datasets = data.datasets;
     myChart[elementId].update();
-    myChart[elementId].canvas.previousElementSibling.style.display = "none";
+    // myChart[elementId].canvas.previousElementSibling.style.display = "none";
     console.log();
   })();
 };
