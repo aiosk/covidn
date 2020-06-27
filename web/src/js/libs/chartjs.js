@@ -2,7 +2,7 @@ import isUndefined from "lodash/isUndefined";
 
 let dataDefault = { datasets: [], labels: [] };
 
-const getFile = async (zone, periods = 7) => {
+const getFile = async (zone, periods = 14) => {
   let res = await fetch(
     `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/chartjs/${zone}-${periods}.json?_=${Date.now()}`
   );

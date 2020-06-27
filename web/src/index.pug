@@ -56,12 +56,12 @@ html(lang="en")
       a.float-right(href='https://github.com/aiosk/covidn')
         img.lazy(alt="GitHub stars" data-src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
     form.grid-x.callout
-      .cell.large-3
+      .cell.xlarge-3
         label(for='periods')
-          span#periodsValue 7
+          span#periodsValue 14
           | &nbsp;days period
-      .cell.large-9
-        input#periods(type='range' min='1' max='21' step='1' value='7')
+      .cell.xlarge-9
+        input#periods(type='range' min='1' max='21' step='1' value='14')
         p#periodsHelpText.help-text Try smaller or larger data periods by sliding (tap/click => hold => move) slider to change days period.
           br
           strong Smaller&nbsp;
@@ -69,7 +69,7 @@ html(lang="en")
           strong larger&nbsp;
           | day periods will generate simplified chart data. Use wisely.
 
-    #myChart.grid-x.large-up-2(aria-describedby="chartHelpText")
+    #myChart.grid-x.xlarge-up-2(aria-describedby="chartHelpText")
       .cell(style='width:100%').callout
         //- a(href="#Chart_National").anchor
         //-   img(data-src="img/baseline_attach_file_black_18dp.png" alt="anchor")
