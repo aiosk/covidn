@@ -2,6 +2,7 @@ package prov
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -41,6 +42,31 @@ type FileItem struct {
 // GetTags ...
 func (v FileItem) GetTags(tag string) map[string]string {
 	return libs.StructGetTags(v, tag)
+}
+
+// Cleaning ...
+func (v FileItem) Cleaning() FileItem {
+	var newData FileItem
+
+	start := time.Date(2020, 3, 1, 0, 0, 0, 0, time.UTC)
+	end := time.Now()
+	for d := start; d.After(end) == false; d = d.AddDate(0, 0, 1) {
+		date := d.Unix() * 1000
+
+		idx := sort.Search(len(v.ListPerkembangan), func(i int) bool {
+			return v.ListPerkembangan[i].Date >= date
+		})
+		if idx < len(v.ListPerkembangan) && v.ListPerkembangan[idx].Date == date {
+			// log.Println("found", d.Format("2006-01-02"), v[idx])
+			newData.ListPerkembangan = append(newData.ListPerkembangan, v.ListPerkembangan[idx])
+		} else {
+			// log.Println("not found", d.Format("2006-01-02"))
+			item := Perkembangan{Date: date}
+			newData.ListPerkembangan = append(newData.ListPerkembangan, item)
+		}
+	}
+	newData.Provinsi = v.Provinsi
+	return newData
 }
 
 // ToCsv ...

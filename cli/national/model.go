@@ -2,6 +2,7 @@ package national
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"time"
 
@@ -41,6 +42,30 @@ type SrcFile struct {
 	Update struct {
 		Harian HarianList `json:"harian"`
 	} `json:"update"`
+}
+
+// Cleaning ...
+func (v HarianList) Cleaning() HarianList {
+	var newData HarianList
+	start := time.Date(2020, 3, 1, 0, 0, 0, 0, time.UTC)
+	end := time.Now()
+	for d := start; d.After(end) == false; d = d.AddDate(0, 0, 1) {
+		date := d.Unix() * 1000
+
+		idx := sort.Search(len(v), func(i int) bool {
+			return v[i].Date >= date
+		})
+		if idx < len(v) && v[idx].Date == date {
+			// log.Println("found", d.Format("2006-01-02"), v[idx])
+			newData = append(newData, v[idx])
+		} else {
+			// log.Println("not found", d.Format("2006-01-02"))
+			item := HarianItem{Date: date}
+			newData = append(newData, item)
+		}
+	}
+
+	return newData
 }
 
 // ToCsv ...
