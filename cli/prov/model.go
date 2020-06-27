@@ -137,7 +137,7 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 	var data libs.Chartjs
 	tags := v.ListPerkembangan[0].GetTags("json")
 
-	var item [6]libs.ChartjsDatasetsItem
+	var item [7]libs.ChartjsDatasetsItem
 
 	for _, v2 := range v.ListPerkembangan {
 		data.Labels = append(data.Labels, v2.DateStr)
@@ -147,25 +147,29 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 		item[3].Data = append(item[3].Data, float64(v2.Active))
 	}
 
-	item[4].Data = libs.MyRegression(item[2].Data)
-	item[5].Data = libs.MyRegression(item[3].Data)
+	item[4].Data = libs.MyRegression(item[1].Data)
+	item[5].Data = libs.MyRegression(item[2].Data)
+	item[6].Data = libs.MyRegression(item[3].Data)
 
 	item[0].Label = tags["Case"]
 	item[1].Label = tags["Recover"]
 	item[2].Label = tags["Death"]
 	item[3].Label = tags["Active"]
-	item[4].Label = tags["Death"]
-	item[5].Label = tags["Active"]
+	item[4].Label = tags["Recover"]
+	item[5].Label = tags["Death"]
+	item[6].Label = tags["Active"]
 
 	item[4].Type = "line"
 	item[5].Type = "line"
+	item[6].Type = "line"
 
 	item[0].BackgroundColor = libs.ChartjsColor["case"]
 	item[1].BackgroundColor = libs.ChartjsColor["recover"]
 	item[2].BackgroundColor = libs.ChartjsColor["death"]
 	item[3].BackgroundColor = libs.ChartjsColor["active"]
-	item[4].BorderColor = libs.ChartjsColor["death"]
-	item[5].BorderColor = libs.ChartjsColor["active"]
+	item[4].BorderColor = libs.ChartjsColor["recover"]
+	item[5].BorderColor = libs.ChartjsColor["death"]
+	item[6].BorderColor = libs.ChartjsColor["active"]
 
 	data.Datasets = append(data.Datasets, item[0])
 	data.Datasets = append(data.Datasets, item[1])
@@ -173,6 +177,7 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 	data.Datasets = append(data.Datasets, item[3])
 	data.Datasets = append(data.Datasets, item[4])
 	data.Datasets = append(data.Datasets, item[5])
+	data.Datasets = append(data.Datasets, item[6])
 	return data
 }
 

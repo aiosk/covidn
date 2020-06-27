@@ -130,8 +130,8 @@ func (v HarianList) ToChartjs() libs.Chartjs {
 	item[1].BackgroundColor = libs.ChartjsColor["recover"]
 	item[2].BackgroundColor = libs.ChartjsColor["death"]
 	item[3].BackgroundColor = libs.ChartjsColor["active"]
-	item[4].BorderColor = libs.ChartjsColor["death"]
-	item[5].BorderColor = libs.ChartjsColor["active"]
+	item[4].BorderColor = libs.ChartjsColor["recover"]
+	item[5].BorderColor = libs.ChartjsColor["death"]
 	item[6].BorderColor = libs.ChartjsColor["active"]
 
 	data.Datasets = append(data.Datasets, item[0])
