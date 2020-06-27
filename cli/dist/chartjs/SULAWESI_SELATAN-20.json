@@ -1,1 +1,86 @@
-{"labels":["Mar 19 - Apr 07","Apr 08 - Apr 27","Apr 28 - May 17","May 18 - Jun 06","Jun 07 - Jun 25"],"datasets":[{"label":"KASUS","data":[120,319,511,885,2461],"backgroundColor":"#000000"},{"label":"SEMBUH","data":[22,84,212,354,788],"backgroundColor":"#87ceeb"},{"label":"MENINGGAL","data":[10,25,16,41,62],"backgroundColor":"#A50026"},{"label":"DIRAWAT_OR_ISOLASI","data":[88,210,283,490,1611],"backgroundColor":"#ff6347"},{"label":"MENINGGAL","data":[11.371428571428535,19.514285714285705,24.22857142857142,35.514285714285705,63.37142857142857],"borderColor":"#A50026","type":"line"},{"label":"DIRAWAT_OR_ISOLASI","data":[79.47142857142578,244.11428571428587,231.82857142857165,524.114285714285,1602.4714285714272],"borderColor":"#ff6347","type":"line"}]}
+{
+  "labels": [
+    "Mar 01 - Mar 20",
+    "Mar 21 - Apr 09",
+    "Apr 10 - Apr 29",
+    "Apr 30 - May 19",
+    "May 20 - Jun 08",
+    "Jun 09 - Jun 27"
+  ],
+  "datasets": [
+    {
+      "label": "KASUS",
+      "data": [
+        1,
+        130,
+        333,
+        599,
+        944,
+        2461
+      ],
+      "backgroundColor": "#000000"
+    },
+    {
+      "label": "SEMBUH",
+      "data": [
+        0,
+        24,
+        94,
+        239,
+        315,
+        944
+      ],
+      "backgroundColor": "#87ceeb"
+    },
+    {
+      "label": "MENINGGAL",
+      "data": [
+        0,
+        11,
+        24,
+        19,
+        38,
+        64
+      ],
+      "backgroundColor": "#A50026"
+    },
+    {
+      "label": "DIRAWAT_OR_ISOLASI",
+      "data": [
+        1,
+        95,
+        215,
+        341,
+        591,
+        1453
+      ],
+      "backgroundColor": "#ff6347"
+    },
+    {
+      "label": "MENINGGAL",
+      "data": [
+        -0.5873015873016645,
+        13.722222222222156,
+        18.984126984126966,
+        23.58730158730161,
+        35.920634920634996,
+        64.37301587301596
+      ],
+      "borderColor": "#A50026",
+      "type": "line"
+    },
+    {
+      "label": "DIRAWAT_OR_ISOLASI",
+      "data": [
+        -16.2222222222235,
+        144.82539682539567,
+        187.9206349206347,
+        295.50793650793685,
+        650.0317460317469,
+        1433.9365079365098
+      ],
+      "borderColor": "#ff6347",
+      "type": "line"
+    }
+  ]
+}

@@ -1,1 +1,86 @@
-{"labels":["Mar 30 - Apr 19","Apr 20 - May 10","May 11 - May 31","Jun 01 - Jun 21","Jun 22 - Jun 23"],"datasets":[{"label":"KASUS","data":[7,56,33,15,2],"backgroundColor":"#000000"},{"label":"SEMBUH","data":[1,2,12,31,20],"backgroundColor":"#87ceeb"},{"label":"MENINGGAL","data":[0,0,0,0,0],"backgroundColor":"#A50026"},{"label":"DIRAWAT_OR_ISOLASI","data":[6,54,21,-16,-18],"backgroundColor":"#ff6347"},{"label":"MENINGGAL","data":[0,0,0,0,0],"borderColor":"#A50026","type":"line"},{"label":"DIRAWAT_OR_ISOLASI","data":[6.542857142856837,51.82857142857158,24.25714285714298,-18.17142857142869,-17.457142857143026],"borderColor":"#ff6347","type":"line"}]}
+{
+  "labels": [
+    "Mar 01 - Mar 21",
+    "Mar 22 - Apr 11",
+    "Apr 12 - May 02",
+    "May 03 - May 23",
+    "May 24 - Jun 13",
+    "Jun 14 - Jun 27"
+  ],
+  "datasets": [
+    {
+      "label": "KASUS",
+      "data": [
+        0,
+        3,
+        28,
+        59,
+        17,
+        6
+      ],
+      "backgroundColor": "#000000"
+    },
+    {
+      "label": "SEMBUH",
+      "data": [
+        0,
+        0,
+        1,
+        12,
+        24,
+        29
+      ],
+      "backgroundColor": "#87ceeb"
+    },
+    {
+      "label": "MENINGGAL",
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "backgroundColor": "#A50026"
+    },
+    {
+      "label": "DIRAWAT_OR_ISOLASI",
+      "data": [
+        0,
+        3,
+        27,
+        47,
+        -7,
+        -23
+      ],
+      "backgroundColor": "#ff6347"
+    },
+    {
+      "label": "MENINGGAL",
+      "data": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "borderColor": "#A50026",
+      "type": "line"
+    },
+    {
+      "label": "DIRAWAT_OR_ISOLASI",
+      "data": [
+        -3.9920634920634392,
+        13.174603174603146,
+        26.222222222222186,
+        28.206349206349202,
+        12.182539682539726,
+        -28.79365079365084
+      ],
+      "borderColor": "#ff6347",
+      "type": "line"
+    }
+  ]
+}

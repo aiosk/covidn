@@ -1,1 +1,86 @@
-{"labels":["Mar 02 - Mar 21","Mar 22 - Apr 10","Apr 11 - Apr 30","May 01 - May 20","May 21 - Jun 09","Jun 10 - Jun 26"],"datasets":[{"label":"jumlah_positif","data":[450,3062,6606,9071,13886,18352],"backgroundColor":"#000000"},{"label":"jumlah_sembuh","data":[20,262,1240,3053,6839,9919],"backgroundColor":"#87ceeb"},{"label":"jumlah_meninggal","data":[38,268,486,450,681,760],"backgroundColor":"#A50026"},{"label":"jumlah_dirawat","data":[392,2532,4880,5568,6366,7673],"backgroundColor":"#ff6347"},{"label":"jumlah_meninggal","data":[37.56349206349172,282.8253968253965,431.06349206349216,530.2222222222229,628.2460317460328,773.079365079366],"borderColor":"#A50026","type":"line"},{"label":"jumlah_dirawat","data":[291.15873015872427,2874.2777777777724,4519.301587301587,5604.841269841275,6509.507936507946,7611.912698412709],"borderColor":"#ff6347","type":"line"}]}
+{
+  "labels": [
+    "Mar 01 - Mar 20",
+    "Mar 21 - Apr 09",
+    "Apr 10 - Apr 29",
+    "Apr 30 - May 19",
+    "May 20 - Jun 08",
+    "Jun 09 - Jun 27"
+  ],
+  "datasets": [
+    {
+      "label": "jumlah_positif",
+      "data": [
+        369,
+        2924,
+        6478,
+        8725,
+        13537,
+        20779
+      ],
+      "backgroundColor": "#000000"
+    },
+    {
+      "label": "jumlah_sembuh",
+      "data": [
+        17,
+        235,
+        1139,
+        3076,
+        6437,
+        11005
+      ],
+      "backgroundColor": "#87ceeb"
+    },
+    {
+      "label": "jumlah_meninggal",
+      "data": [
+        32,
+        248,
+        504,
+        437,
+        662,
+        837
+      ],
+      "backgroundColor": "#A50026"
+    },
+    {
+      "label": "jumlah_dirawat",
+      "data": [
+        320,
+        2441,
+        4835,
+        5212,
+        6438,
+        8937
+      ],
+      "backgroundColor": "#ff6347"
+    },
+    {
+      "label": "",
+      "data": [
+        23.571428571427788,
+        288.6428571428564,
+        425.71428571428555,
+        512.2857142857149,
+        625.8571428571443,
+        843.928571428572
+      ],
+      "borderColor": "#A50026",
+      "type": "line"
+    },
+    {
+      "label": "",
+      "data": [
+        192.9206349206293,
+        2882.539682539676,
+        4339.6349206349205,
+        5319.6507936508,
+        6578.031746031753,
+        8870.22222222223
+      ],
+      "borderColor": "#ff6347",
+      "type": "line"
+    }
+  ]
+}

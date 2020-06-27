@@ -1,1 +1,86 @@
-{"labels":["Mar 19 - Apr 08","Apr 09 - Apr 29","Apr 30 - May 20","May 21 - Jun 10","Jun 11 - Jun 25"],"datasets":[{"label":"KASUS","data":[125,339,635,1273,1924],"backgroundColor":"#000000"},{"label":"SEMBUH","data":[24,94,248,389,705],"backgroundColor":"#87ceeb"},{"label":"MENINGGAL","data":[11,24,20,41,58],"backgroundColor":"#A50026"},{"label":"DIRAWAT_OR_ISOLASI","data":[90,221,367,843,1161],"backgroundColor":"#ff6347"},{"label":"MENINGGAL","data":[12.014285714285704,19.942857142857143,26.085714285714303,36.94285714285715,59.01428571428572],"borderColor":"#A50026","type":"line"},{"label":"DIRAWAT_OR_ISOLASI","data":[101.47142857142948,175.11428571428553,435.82857142857125,797.1142857142858,1172.4714285714283],"borderColor":"#ff6347","type":"line"}]}
+{
+  "labels": [
+    "Mar 01 - Mar 21",
+    "Mar 22 - Apr 11",
+    "Apr 12 - May 02",
+    "May 03 - May 23",
+    "May 24 - Jun 13",
+    "Jun 14 - Jun 27"
+  ],
+  "datasets": [
+    {
+      "label": "KASUS",
+      "data": [
+        1,
+        174,
+        401,
+        684,
+        1429,
+        1779
+      ],
+      "backgroundColor": "#000000"
+    },
+    {
+      "label": "SEMBUH",
+      "data": [
+        0,
+        24,
+        121,
+        277,
+        442,
+        752
+      ],
+      "backgroundColor": "#87ceeb"
+    },
+    {
+      "label": "MENINGGAL",
+      "data": [
+        0,
+        18,
+        21,
+        21,
+        48,
+        48
+      ],
+      "backgroundColor": "#A50026"
+    },
+    {
+      "label": "DIRAWAT_OR_ISOLASI",
+      "data": [
+        1,
+        132,
+        259,
+        386,
+        939,
+        979
+      ],
+      "backgroundColor": "#ff6347"
+    },
+    {
+      "label": "MENINGGAL",
+      "data": [
+        1.9523809523809232,
+        12.952380952380949,
+        21.66666666666667,
+        29.761904761904766,
+        38.90476190476192,
+        50.76190476190477
+      ],
+      "borderColor": "#A50026",
+      "type": "line"
+    },
+    {
+      "label": "DIRAWAT_OR_ISOLASI",
+      "data": [
+        27.587301587302022,
+        66.42063492063527,
+        255.44444444444434,
+        524.2698412698406,
+        802.5079365079353,
+        1019.7698412698401
+      ],
+      "borderColor": "#ff6347",
+      "type": "line"
+    }
+  ]
+}

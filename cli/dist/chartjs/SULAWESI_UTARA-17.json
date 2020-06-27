@@ -1,1 +1,93 @@
-{"labels":["Apr 01 - Apr 17","Apr 18 - May 04","May 05 - May 21","May 22 - Jun 07","Jun 08 - Jun 24","Jun 25 - Jun 25"],"datasets":[{"label":"KASUS","data":[16,27,135,315,397,46],"backgroundColor":"#000000"},{"label":"SEMBUH","data":[4,12,14,33,85,3],"backgroundColor":"#87ceeb"},{"label":"MENINGGAL","data":[3,1,15,32,18,1],"backgroundColor":"#A50026"},{"label":"DIRAWAT_OR_ISOLASI","data":[9,14,106,250,294,42],"backgroundColor":"#ff6347"},{"label":"MENINGGAL","data":[1.8650793650794535,3.7460317460317896,15.365079365079389,25.77777777777777,24.039682539682474,-0.7936507936508974],"borderColor":"#A50026","type":"line"},{"label":"DIRAWAT_OR_ISOLASI","data":[15.039682539682833,-4.698412698412625,120.3968253968253,258.603174603174,278.1984126984112,47.46031746031622],"borderColor":"#ff6347","type":"line"}]}
+{
+  "labels": [
+    "Mar 01 - Mar 17",
+    "Mar 18 - Apr 03",
+    "Apr 04 - Apr 20",
+    "Apr 21 - May 07",
+    "May 08 - May 24",
+    "May 25 - Jun 10",
+    "Jun 11 - Jun 27"
+  ],
+  "datasets": [
+    {
+      "label": "KASUS",
+      "data": [
+        0,
+        1,
+        17,
+        25,
+        185,
+        315,
+        439
+      ],
+      "backgroundColor": "#000000"
+    },
+    {
+      "label": "SEMBUH",
+      "data": [
+        0,
+        0,
+        4,
+        12,
+        17,
+        46,
+        91
+      ],
+      "backgroundColor": "#87ceeb"
+    },
+    {
+      "label": "MENINGGAL",
+      "data": [
+        0,
+        0,
+        3,
+        1,
+        22,
+        28,
+        19
+      ],
+      "backgroundColor": "#A50026"
+    },
+    {
+      "label": "DIRAWAT_OR_ISOLASI",
+      "data": [
+        0,
+        1,
+        10,
+        12,
+        146,
+        241,
+        329
+      ],
+      "backgroundColor": "#ff6347"
+    },
+    {
+      "label": "MENINGGAL",
+      "data": [
+        1.9047619047617772,
+        -3.6666666666667282,
+        0.4761904761904425,
+        9.666666666666643,
+        19.23809523809524,
+        24.52380952380952,
+        20.857142857142946
+      ],
+      "borderColor": "#A50026",
+      "type": "line"
+    },
+    {
+      "label": "DIRAWAT_OR_ISOLASI",
+      "data": [
+        8.857142857142573,
+        -16.76190476190481,
+        0.1666666666666643,
+        51.80952380952381,
+        130.3333333333333,
+        227.90476190476176,
+        336.69047619047615
+      ],
+      "borderColor": "#ff6347",
+      "type": "line"
+    }
+  ]
+}

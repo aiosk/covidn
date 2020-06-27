@@ -1,1 +1,86 @@
-{"labels":["Mar 23 - Apr 12","Apr 13 - May 03","May 04 - May 24","May 25 - Jun 14","Jun 15 - Jun 25"],"datasets":[{"label":"KASUS","data":[2,48,50,210,330],"backgroundColor":"#000000"},{"label":"SEMBUH","data":[1,5,7,35,41],"backgroundColor":"#87ceeb"},{"label":"MENINGGAL","data":[0,0,5,17,7],"backgroundColor":"#A50026"},{"label":"DIRAWAT_OR_ISOLASI","data":[1,43,38,158,282],"backgroundColor":"#ff6347"},{"label":"MENINGGAL","data":[0.44285714285723543,-1.7714285714285793,7.657142857142858,15.228571428571456,7.442857142857179],"borderColor":"#A50026","type":"line"},{"label":"DIRAWAT_OR_ISOLASI","data":[5.185714285714251,26.257142857142803,63.114285714285714,141.2571428571429,286.1857142857143],"borderColor":"#ff6347","type":"line"}]}
+{
+  "labels": [
+    "Mar 01 - Mar 21",
+    "Mar 22 - Apr 11",
+    "Apr 12 - May 02",
+    "May 03 - May 23",
+    "May 24 - Jun 13",
+    "Jun 14 - Jun 27"
+  ],
+  "datasets": [
+    {
+      "label": "KASUS",
+      "data": [
+        0,
+        2,
+        39,
+        58,
+        203,
+        359
+      ],
+      "backgroundColor": "#000000"
+    },
+    {
+      "label": "SEMBUH",
+      "data": [
+        0,
+        1,
+        3,
+        9,
+        27,
+        57
+      ],
+      "backgroundColor": "#87ceeb"
+    },
+    {
+      "label": "MENINGGAL",
+      "data": [
+        0,
+        0,
+        0,
+        4,
+        18,
+        9
+      ],
+      "backgroundColor": "#A50026"
+    },
+    {
+      "label": "DIRAWAT_OR_ISOLASI",
+      "data": [
+        0,
+        1,
+        36,
+        45,
+        158,
+        293
+      ],
+      "backgroundColor": "#ff6347"
+    },
+    {
+      "label": "MENINGGAL",
+      "data": [
+        1.1587301587301904,
+        -3.150793650793622,
+        1.0158730158730194,
+        8.269841269841223,
+        13.222222222222143,
+        10.484126984126931
+      ],
+      "borderColor": "#A50026",
+      "type": "line"
+    },
+    {
+      "label": "DIRAWAT_OR_ISOLASI",
+      "data": [
+        -0.809523809523796,
+        6.619047619047599,
+        21.61904761904762,
+        62.52380952380955,
+        147.66666666666674,
+        295.3809523809525
+      ],
+      "borderColor": "#ff6347",
+      "type": "line"
+    }
+  ]
+}
