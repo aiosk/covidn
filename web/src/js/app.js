@@ -25,12 +25,13 @@ if (Foundation.MediaQuery.atLeast("large")) {
   periods = 7;
   $slider.value = 7;
 }
+let lazyLoadCanvas;
 let lazyLoad;
 const onSliderReleaseUpdateLabel = (e) => {
   let { value } = e.target;
   periods = value;
   document.querySelector(`#periodsValue`).innerHTML = value;
-  lazyLoad.update();
+  lazyLoadCanvas.update();
 };
 $slider.addEventListener("input", onSliderReleaseUpdateLabel);
 // $slider.addEventListener("change", onSliderReleaseUpdateLabel);
@@ -48,7 +49,7 @@ provinces.forEach((v) => {
 });
 
 delay(() => {
-  lazyLoad = new LazyLoad({
+  lazyLoadCanvas = new LazyLoad({
     elements_selector: "canvas",
     unobserve_entered: true,
     callback_enter: onCanvasEnterViewport,
@@ -56,6 +57,7 @@ delay(() => {
     callback_loading: logEl,
     callback_loaded: logEl,
   });
+  lazyLoad = new LazyLoad();
 
   // myChart["Chart_NATIONAL"] = Chartjs.initChart(
   //   "Canvas_NATIONAL",

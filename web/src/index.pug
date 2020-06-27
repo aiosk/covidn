@@ -54,7 +54,7 @@ html(lang="en")
               | chart legend to show/hide chart data
     #top.clearfix
       a.float-right(href='https://github.com/aiosk/covidn')
-        img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
+        img.lazy(alt="GitHub stars" data-src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
     form.grid-x.callout
       .cell.large-3
         label(for='periods')
@@ -74,11 +74,11 @@ html(lang="en")
     #myChart.grid-x.large-up-2(aria-describedby="chartHelpText")
       .cell(style='width:100%').callout
         //- a(href="#Chart_National").anchor
-        //-   img(src="img/baseline_attach_file_black_18dp.png" alt="anchor")
+        //-   img(data-src="img/baseline_attach_file_black_18dp.png" alt="anchor")
         .loader
         canvas#Chart_NATIONAL
     a(href="#top")
-      img(src="img/baseline_vertical_align_top_black_18dp.png" alt="Scroll to top")
+      img.lazy(data-src="img/baseline_vertical_align_top_black_18dp.png" alt="Scroll to top")
 
     link(rel="stylesheet" href=`css/foundation-global.css`)
     link(rel="stylesheet" href=`css/foundation.css` media="print" onload="this.media='all'")
