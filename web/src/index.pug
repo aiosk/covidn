@@ -30,7 +30,7 @@ html(lang="en")
       small National and Provinces
     #chartHelpText.help-text.callout.warning
       ul
-        li Mobile
+        li#chartHelpTextMobile Mobile
           ul
             li For best results please view in&nbsp;
               strong landscape&nbsp;
@@ -38,7 +38,7 @@ html(lang="en")
             li
               strong Tap or Touch&nbsp;
               | chart bar to see case number
-        li Desktop
+        li#chartHelpTextDesktop Desktop
           ul
             li Click chart border to toggle chart&nbsp;
               strong full-width&nbsp;
@@ -69,21 +69,23 @@ html(lang="en")
       .cell(style='width:100%').callout
         //- a(href="#Chart_National").anchor
         //-   img(src="img/baseline_attach_file_black_18dp.png" alt="anchor")
+        .loader
         canvas#Chart_NATIONAL
     a(href="#top")
       img(src="img/baseline_vertical_align_top_black_18dp.png" alt="Scroll to top")
 
     link(rel="stylesheet" href=`css/app.css` media="print" onload="this.media='all'")
-    link(rel="stylesheet" href=`css/foundation.css` media="print" onload="this.media='all'")
+    link(rel="stylesheet" href=`css/foundation.css`)
+    //- link(rel="stylesheet" href=`css/foundation.css` media="print" onload="this.media='all'")
     script(defer src="https://cdn.jsdelivr.net/npm/intersection-observer@0.7.0/intersection-observer.js")
     script(defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.min.js")
 
     //- script(defer src="https://cdnjs.cloudflare.com/ajax/libs/regression/1.4.0/regression.min.js")
     script(defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js")
 
-    //- script(defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
-    //- script(defer src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/plugins/foundation.core.min.js")
+    script(defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
+    script(defer src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/plugins/foundation.core.min.js")
+    script(defer src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/plugins/foundation.util.mediaQuery.min.js")
     //- script(defer src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/plugins/foundation.smoothScroll.min.js")
-    //- script(defer src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/plugins/foundation.util.mediaQuery.min.js")
     script(defer src="js/app.js")
 

@@ -1,3 +1,5 @@
+@import "_foundation";
+
 // html {
 //   scroll-behavior: smooth;
 // }
@@ -26,9 +28,41 @@ a[href="#top"] {
     margin: $size/3;
   }
 
-  background: rgba(192, 192, 192, 0.5);
+  background: $medium-gray;
+  // background: rgba(192, 192, 192, 0.5);
   border-radius: 50%;
 }
 #top {
   margin-bottom: 0.5rem;
+}
+
+canvas {
+  // min-height: 19rem;
+  // max-width: calc(100vw - 6rem);
+}
+
+.loader {
+  border: 16px solid $light-gray;
+  $border-primary: map-get($foundation-palette, "primary");
+  border-top: 16px solid $border-primary;
+  border-bottom: 16px solid $border-primary;
+  border-radius: 50%;
+  $size: 2rem;
+  width: $size;
+  height: $size;
+  animation: spin 2s linear infinite;
+  @include horizontal-center;
+  // top: 25%;
+  right: 0.5rem;
+  top: 0.5rem;
+  left: unset;
+  transform: none;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

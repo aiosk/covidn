@@ -9,10 +9,22 @@ let periods = 7;
 const $slider = document.querySelector("form input[type='range']");
 
 // console.log(Foundation.MediaQuery.atLeast("large"));
-// if (Foundation.MediaQuery.atLeast("large")) {
-//   periods = 7;
-//   $slider.value = 7;
-// }
+
+$(window)
+  .on("changed.zf.mediaquery", function (event, newSize, oldSize) {
+    if (Foundation.MediaQuery.atLeast("large")) {
+      document.querySelector("#chartHelpTextMobile").style.display = "none";
+      document.querySelector("#chartHelpTextDesktop").style.display = "";
+    } else {
+      document.querySelector("#chartHelpTextMobile").style.display = "";
+      document.querySelector("#chartHelpTextDesktop").style.display = "none";
+    }
+  })
+  .trigger("changed.zf.mediaquery");
+if (Foundation.MediaQuery.atLeast("large")) {
+  periods = 7;
+  $slider.value = 7;
+}
 let lazyLoad;
 const onSliderReleaseUpdateLabel = (e) => {
   let { value } = e.target;
@@ -25,43 +37,6 @@ $slider.addEventListener("input", onSliderReleaseUpdateLabel);
 
 initChartHtmlProv(document.querySelector("#myChart.grid-x"), provinces);
 
-delay(() => {
-  lazyLoad = new LazyLoad({
-    elements_selector: "canvas",
-    unobserve_entered: true,
-    callback_enter: onCanvasEnterViewport,
-    callback_exit: logEl,
-    callback_loading: logEl,
-    callback_loaded: logEl,
-  });
-}, 9);
-const logEl = (el) => {
-  // myChart[el.id].destroy();
-  // console.log(myChart[el.id]);
-  console.log(el);
-};
-
-const $cellChart = document.querySelectorAll("#myChart.grid-x .cell");
-$cellChart.forEach((v) => {
-  v.addEventListener("click", (e) => {
-    let $this = e.target.closest(".cell");
-    let $thisCanvas = $this.querySelector("canvas");
-
-    let chartId = $thisCanvas.id;
-
-    if ($this.style.width == "100%") {
-      $this.style.width = "";
-    } else {
-      $this.style.width = "100%";
-    }
-
-    myChart[chartId].resize();
-  });
-  v.querySelector("canvas").addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-});
-
 let myChart = {};
 let myChartData = {};
 let myChartDataDefault = { datasets: [], labels: [] };
@@ -72,8 +47,53 @@ provinces.forEach((v) => {
   myChartData[`Chart_${v}`] = cloneDeep(myChartDataDefault);
 });
 
+delay(() => {
+  lazyLoad = new LazyLoad({
+    elements_selector: "canvas",
+    unobserve_entered: true,
+    callback_enter: onCanvasEnterViewport,
+    callback_exit: logEl,
+    callback_loading: logEl,
+    callback_loaded: logEl,
+  });
+
+  // myChart["Chart_NATIONAL"] = Chartjs.initChart(
+  //   "Canvas_NATIONAL",
+  //   myChartData["Chart_NATIONAL"]
+  // );
+}, 9);
+const logEl = (el) => {
+  // myChart[el.id].destroy();
+  // console.log(myChart[el.id]);
+  console.log(el);
+};
+
+if (Foundation.MediaQuery.atLeast("large")) {
+  const $cellChart = document.querySelectorAll("#myChart.grid-x .cell");
+  $cellChart.forEach((v) => {
+    v.addEventListener("click", (e) => {
+      let $this = e.target.closest(".cell");
+      let $thisCanvas = $this.querySelector("canvas");
+
+      let chartId = $thisCanvas.id;
+
+      if ($this.style.width == "100%") {
+        $this.style.width = "";
+      } else {
+        $this.style.width = "100%";
+      }
+
+      myChart[chartId].resize();
+    });
+    v.querySelector("canvas").addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+  });
+}
+
 const updateChart = (elementId) => {
   const dataId = elementId.split("_").slice(1).join("_");
+  myChart[elementId].canvas.previousElementSibling.style.display = "";
 
   (async () => {
     const data = await Chartjs.getFile(dataId, periods);
@@ -82,6 +102,8 @@ const updateChart = (elementId) => {
     myChartData[elementId].labels = data.labels;
     myChartData[elementId].datasets = data.datasets;
     myChart[elementId].update();
+    myChart[elementId].canvas.previousElementSibling.style.display = "none";
+    console.log();
   })();
 };
 
@@ -89,33 +111,7 @@ const onCanvasEnterViewport = (el) => {
   // console.log("enter", el, i, i2);
   if (isUndefined(myChart[el.id])) {
     // console.log(el.id, myChartData[el.id]);
-    myChart[el.id] = new Chart(el.id, {
-      type: "bar",
-      data: myChartData[el.id],
-      options: {
-        title: {
-          display: true,
-          text: el.id.split("_").slice(1).join(" "),
-        },
-        tooltips: {
-          filter: function (tooltipItem, data) {
-            // console.log(
-            //   data.datasets[tooltipItem.datasetIndex].label,
-            //   data.datasets[tooltipItem.datasetIndex].type
-            // );
-
-            return isUndefined(data.datasets[tooltipItem.datasetIndex].type);
-          },
-        },
-        animation: {
-          duration: 0,
-        },
-        hover: {
-          animationDuration: 0,
-        },
-        responsiveAnimationDuration: 0,
-      },
-    });
+    myChart[el.id] = Chartjs.initChart(el.id, myChartData);
   }
 
   delay(() => {
