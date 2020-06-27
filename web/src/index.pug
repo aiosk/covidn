@@ -38,6 +38,9 @@ html(lang="en")
             li
               strong Tap or Touch&nbsp;
               | chart bar to see case number
+            li
+              strong Tap or Touch&nbsp;
+              | chart legend to show/hide chart data
         li#chartHelpTextDesktop Desktop
           ul
             li Click chart border to toggle chart&nbsp;
@@ -46,6 +49,9 @@ html(lang="en")
             li
               strong Hover mouse&nbsp;
               | on chart bar to see case number
+            li
+              strong Click&nbsp;
+              | chart legend to show/hide chart data
     #top.clearfix
       a.float-right(href='https://github.com/aiosk/covidn')
         img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
@@ -74,18 +80,16 @@ html(lang="en")
     a(href="#top")
       img(src="img/baseline_vertical_align_top_black_18dp.png" alt="Scroll to top")
 
+    link(rel="stylesheet" href=`css/foundation-global.css`)
+    link(rel="stylesheet" href=`css/foundation.css` media="print" onload="this.media='all'")
     link(rel="stylesheet" href=`css/app.css` media="print" onload="this.media='all'")
-    link(rel="stylesheet" href=`css/foundation.css`)
-    //- link(rel="stylesheet" href=`css/foundation.css` media="print" onload="this.media='all'")
     script(defer src="https://cdn.jsdelivr.net/npm/intersection-observer@0.7.0/intersection-observer.js")
     script(defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.min.js")
 
-    //- script(defer src="https://cdnjs.cloudflare.com/ajax/libs/regression/1.4.0/regression.min.js")
     script(defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js")
 
     script(defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
     script(defer src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/plugins/foundation.core.min.js")
     script(defer src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/plugins/foundation.util.mediaQuery.min.js")
-    //- script(defer src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.6.3/js/plugins/foundation.smoothScroll.min.js")
     script(defer src="js/app.js")
 

@@ -99,6 +99,7 @@ const updateChart = (elementId) => {
     const data = await Chartjs.getFile(dataId, periods);
     // console.log(elementId, dataId, data, data.labels);
     data.datasets[0].hidden = true;
+    // data.datasets[4].hidden = true;
     myChartData[elementId].labels = data.labels;
     myChartData[elementId].datasets = data.datasets;
     myChart[elementId].update();
