@@ -31,14 +31,14 @@
 // Grids
 @import "../../node_modules/foundation-sites/scss/grid/grid";
 @import "../../node_modules/foundation-sites/scss/xy-grid/xy-grid";
-// // Generic components
-// @import 'components/button';
+// Generic components
+@import "../../node_modules/foundation-sites/scss/components/button";
 // @import 'components/button-group';
 // @import 'components/close-button';
 // @import 'components/label';
 // @import 'components/progress-bar';
 // @import 'components/slider';
-// @import 'components/switch';
+// @import "../../node_modules/foundation-sites/scss/components/switch";
 // @import 'components/table';
 // Basic components
 // @import 'components/badge';
@@ -73,7 +73,7 @@
 // Helpers
 @import "../../node_modules/foundation-sites/scss/components/float";
 @import "../../node_modules/foundation-sites/scss/components/flex";
-// @import 'components/visibility';
+@import "../../node_modules/foundation-sites/scss/components/visibility";
 // @import 'prototype/prototype';
 
 @mixin foundation-everything(
@@ -106,13 +106,13 @@
   }
 
   //   // Generic components
-  //   @include foundation-button;
+  @include foundation-button;
   //   @include foundation-button-group;
   //   @include foundation-close-button;
   //   @include foundation-label;
   //   @include foundation-progress-bar;
   //   @include foundation-slider;
-  //   @include foundation-switch;
+  // @include foundation-switch;
   //   @include foundation-table;
   //   // Basic components
   //   @include foundation-badge;
@@ -149,6 +149,6 @@
   @if $flex {
     @include foundation-flex-classes;
   }
-  //   @include foundation-visibility-classes;
+  @include foundation-visibility-classes;
   //   @if $prototype { @include foundation-prototype-classes; }
 }

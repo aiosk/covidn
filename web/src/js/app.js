@@ -1,70 +1,125 @@
 import delay from "lodash/delay";
 import isUndefined from "lodash/isUndefined";
 import cloneDeep from "lodash/cloneDeep";
+
 import Chartjs from "./libs/chartjs.js";
 import Prov from "./libs/prov.js";
-const { provinces, initChartHtml: initChartHtmlProv } = Prov;
+import Page from "./libs/page.js";
 
 let periods = 14;
-const $slider = document.querySelector("form input[type='range']");
-const $sliderHtml = document.querySelector(`#periodsValue`);
 let lazyLoadCanvas;
 
-const updatePeriods = (
-  newPeriods,
-  options = { updateSlider: false, updateCanvas: false }
-) => {
-  periods = newPeriods;
-  $sliderHtml.innerHTML = newPeriods;
-  // console.log("updateSlider", options.updateSlider);
-  if (options.updateSlider) {
-    $slider.value = newPeriods;
-  }
-  // console.log("lazyLoadCanvas.update()", lazyLoadCanvas);
-  if (!!lazyLoadCanvas && options.updateCanvas) {
-    lazyLoadCanvas.update();
-  }
-};
+(() => {
+  const $sliderInput = document.querySelector("form input[type='range']");
+  const $sliderLabel = document.querySelector(`#periodsLabel`);
 
-$(window)
-  .on("changed.zf.mediaquery", function (event, newSize, oldSize) {
-    // console.log("MediaQuery.current", Foundation.MediaQuery.current);
-    if (Foundation.MediaQuery.atLeast("xlarge")) {
-      document.querySelector("#chartHelpTextMobile").style.display = "none";
-      document.querySelector("#chartHelpTextDesktop").style.display = "";
-      updatePeriods(7, { updateSlider: true, updateCanvas: true });
-    } else {
-      document.querySelector("#chartHelpTextMobile").style.display = "";
-      document.querySelector("#chartHelpTextDesktop").style.display = "none";
-      updatePeriods(14, { updateSlider: true, updateCanvas: true });
+  const $buttonZone = document.querySelector(`button#zoneButton`);
+  const $selectZone = document.querySelector(`select#zone`);
+
+  const updatePeriods = (
+    newPeriods,
+    options = { updateSlider: false, updateCanvas: false }
+  ) => {
+    periods = newPeriods;
+    $sliderLabel.innerHTML = newPeriods;
+    if (options.updateSlider) {
+      $sliderInput.value = newPeriods;
     }
-  })
-  .trigger("changed.zf.mediaquery");
+    if (!!lazyLoadCanvas && options.updateCanvas) {
+      lazyLoadCanvas.update();
+    }
+  };
 
-let lazyLoad;
-const onSliderReleaseUpdateLabel = (e, onChange = false) => {
-  let { value } = e.target;
-  if (onChange) {
-    updatePeriods(value, { updateCanvas: true });
-  } else {
-    updatePeriods(value);
-  }
-};
-$slider.addEventListener("input", onSliderReleaseUpdateLabel);
-$slider.addEventListener("change", (e) => {
-  onSliderReleaseUpdateLabel(e, true);
-});
+  $(window)
+    .on("changed.zf.mediaquery", function (event, newSize, oldSize) {
+      // console.log("MediaQuery.current", Foundation.MediaQuery.current);
+      Page.showHelpMobileOrDesktop(
+        Foundation.MediaQuery.atLeast("xlarge"),
+        document.querySelectorAll("#chartHelpText .mobile"),
+        document.querySelectorAll("#chartHelpText .desktop")
+      );
+      if (Foundation.MediaQuery.atLeast("xlarge")) {
+        updatePeriods(7, { updateSlider: true, updateCanvas: true });
+      } else {
+        updatePeriods(14, { updateSlider: true, updateCanvas: true });
+      }
+    })
+    .trigger("changed.zf.mediaquery");
+
+  const onSliderReleaseUpdateLabel = (e, onChange = false) => {
+    let { value } = e.target;
+    if (onChange) {
+      updatePeriods(value, { updateCanvas: true });
+    } else {
+      updatePeriods(value);
+    }
+  };
+  $sliderInput.addEventListener("input", onSliderReleaseUpdateLabel);
+  $sliderInput.addEventListener("change", (e) => {
+    onSliderReleaseUpdateLabel(e, true);
+  });
+
+  $buttonZone.addEventListener("click", (e) => {
+    $selectZone.classList.toggle("hide");
+  });
+  const allValues = [...$selectZone.querySelectorAll("option")].map(
+    (v) => v.value
+  );
+  const allChart = allValues.map((v) => `#Chart_${v}`).join(", ");
+  $selectZone.addEventListener("change", (e) => {
+    const selectedValues = [...e.target.querySelectorAll("option:checked")].map(
+      (v) => v.value
+    );
+    if (selectedValues.length) {
+      Page.domShowOrHide(
+        [...document.querySelectorAll(allChart)].map((v) => v.closest(".cell")),
+        false
+      );
+      Page.domShowOrHide(
+        [
+          ...document.querySelectorAll(
+            selectedValues.map((v) => `#Chart_${v}`).join(", ")
+          ),
+        ].map((v) => v.closest(".cell")),
+        true
+      );
+    } else {
+      Page.domShowOrHide(
+        [...document.querySelectorAll(allChart)].map((v) => v.closest(".cell")),
+        true
+      );
+    }
+  });
+
+  document.querySelectorAll("a.download").forEach((v) => {
+    v.addEventListener("click", (e) => {
+      e.stopPropagation();
+      Page.domSpin(e.target);
+
+      const $cell = e.target.closest(".cell");
+      const $canvas = $cell.querySelector("canvas");
+      const image = $canvas.toDataURL("image/jpeg");
+      const $anchor = $cell.querySelector("a.download");
+      $anchor.href = image;
+      $anchor.download = `${$canvas.id}.jpg`;
+    });
+  });
+
+  document.querySelector("button#top").addEventListener("click", (e) => {
+    Page.domSpin(e.target.closest("button"));
+    window.scroll({ top: 0, left: 0, behavior: "smooth" });
+  });
+})();
 
 let myChart = {};
 (() => {
   const $chartGrid = document.querySelector("#myChart.grid-x");
-  initChartHtmlProv($chartGrid, provinces);
-  const $cellChart = $chartGrid.querySelectorAll(".cell");
+  const $cellChart = $chartGrid.querySelectorAll(".cell.callout");
 
   const onClickCb = (e) => {
     // console.log("t");
 
-    let $this = e.target.closest(".cell");
+    let $this = e.target.closest(".cell.callout");
     let $thisCanvas = $this.querySelector("canvas");
 
     let chartId = $thisCanvas.id;
@@ -88,12 +143,11 @@ let myChart = {};
 
 (() => {
   let myChartData = {};
-  let myChartDataDefault = { datasets: [], labels: [] };
 
-  /* init dataDefault myChartDataDefault */
-  myChartData["Chart_NATIONAL"] = cloneDeep(myChartDataDefault);
-  provinces.forEach((v) => {
-    myChartData[`Chart_${v}`] = cloneDeep(myChartDataDefault);
+  /* init dataDefault */
+  myChartData["Chart_NATIONAL"] = cloneDeep(Chartjs.dataDefault);
+  Prov.provinces.forEach((v) => {
+    myChartData[`Chart_${v}`] = cloneDeep(Chartjs.dataDefault);
   });
 
   delay(() => {
@@ -105,7 +159,8 @@ let myChart = {};
       callback_loading: logElement,
       callback_loaded: logElement,
     });
-    lazyLoad = new LazyLoad();
+
+    let lazyLoad = new LazyLoad();
 
     // myChart["Chart_NATIONAL"] = Chartjs.initChart(
     //   "Canvas_NATIONAL",
@@ -120,7 +175,10 @@ let myChart = {};
 
   const updateChart = (elementId) => {
     const dataId = elementId.split("_").slice(1).join("_");
-    myChart[elementId].canvas.previousElementSibling.style.display = "";
+    const $canvasLoader = myChart[elementId].canvas
+      .closest(".cell")
+      .querySelector(".loader");
+    Page.domShowOrHide($canvasLoader, true);
 
     (async () => {
       // console.log("updateChart", periods);
@@ -132,7 +190,7 @@ let myChart = {};
       myChartData[elementId].labels = data.labels;
       myChartData[elementId].datasets = data.datasets;
       myChart[elementId].update();
-      myChart[elementId].canvas.previousElementSibling.style.display = "none";
+      Page.domShowOrHide($canvasLoader, false);
     })();
   };
 

@@ -1,5 +1,3 @@
-import chunk from "lodash/chunk";
-
 const provinces = [
   "DKI_JAKARTA",
   "JAWA_BARAT",
@@ -37,19 +35,4 @@ const provinces = [
   "NUSA_TENGGARA_TIMUR",
 ];
 
-const initChartHtml = ($dom, prov, size = 2) => {
-  let provChunk = chunk(prov, size);
-  let html = "";
-  provChunk.forEach((v) => {
-    v.forEach((v2) => {
-      html += `<div class="cell callout">`;
-      // html += `<a class='anchor' href="#Chart_${v2}"><img src="baseline_attach_file_black_18dp.png" alt="anchor"></a>`;
-      html += `<div class="loader"></div>`;
-      html += `<canvas id='Chart_${v2}'></canvas>`;
-      html += "</div>";
-    });
-  });
-  $dom.innerHTML += html;
-};
-
-export default { provinces, initChartHtml };
+export default { provinces };

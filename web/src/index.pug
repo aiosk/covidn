@@ -6,76 +6,87 @@ html(lang="en")
     meta(http-equiv="x-ua-compatible" content="ie=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
-    title Covidn - Indonesia COVID-19 cases
-    meta(name="description" content="Indonesia COVID-19 cases, National and Provinces")
-    meta(name="keywords" content="Indonesia covid-19 covid19 national provinces")
+    title Daily Indonesia COVID-19 Cases - Covidn
+    meta(name="description" content="Daily Indonesia COVID-19 cases, National and Provinces")
+    meta(name="keywords" content="Daily Indonesia COVID-19 Cases, National and Provinces")
     meta(name="author" content="andry.yosua@gmail.com")
 
-    meta(property="og:title" content="Covidn - Indonesia COVID-19 cases")
+    meta(property="og:title" content="Daily Indonesia COVID-19 Cases - Covidn")
     meta(property="og:type" content="website")
-    meta(property="og:description" content="Indonesia COVID-19 cases, National and Provinces")
+    meta(property="og:description" content="Daily Indonesia COVID-19 Cases, National and Provinces")
     meta(property="og:url" content="https://aiosk.github.io/covidn/")
-    meta(property="og:image" content="https://aiosk.github.io/covidn/img/covidn-img-min.png")
+    meta(property="og:image" content="https://aiosk.github.io/covidn/img/Chart_NATIONAL.jpg")
 
     meta(name="twitter:card" content="summary_large_image")
-    meta(name="twitter:title" content="Covidn - Indonesia COVID-19 cases")
-    meta(name="twitter:description" content="Indonesia COVID-19 cases, National and Provinces")
+    meta(name="twitter:title" content="Daily Indonesia COVID-19 Cases - Covidn")
+    meta(name="twitter:description" content="Indonesia COVID-19 Cases, National and Provinces")
     meta(name="twitter:type" content="website")
     meta(name="twitter:site" content="@andry_yosua")
     meta(name="twitter:creator" content="@andry_yosua")
-    meta(name="twitter:image" content="https://aiosk.github.io/covidn/img/covidn-img-min.png")
+    meta(name="twitter:image" content="https://aiosk.github.io/covidn/img/Chart_NATIONAL.jpg")
   body.grid-container.fluid
-    h4.text-center Indonesia COVID-19 cases&nbsp;
-      br
-      small National and Provinces
+    h4.text-center Daily Indonesia COVID-19 cases
+    h5.text-center National and Provinces
+      .clearfix
+        a.float-right(href='https://github.com/aiosk/covidn')
+          img.lazy(alt="GitHub stars" data-src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
     #chartHelpText.help-text.callout.warning
-      ul
-        li#chartHelpTextMobile Mobile
-          ul
-            li For best results please view in&nbsp;
-              strong landscape&nbsp;
-              | mode
-            li
-              strong Tap or Touch&nbsp;
-              | chart bar to see case number
-            li
-              strong Tap or Touch&nbsp;
-              | chart legend to show/hide chart data
-        li#chartHelpTextDesktop Desktop
-          ul
-            li Click chart border to toggle chart&nbsp;
-              strong full-width&nbsp;
-              | mode
-            li
-              strong Hover mouse&nbsp;
-              | on chart bar to see case number
-            li
-              strong Click&nbsp;
-              | chart legend to show/hide chart data
-    #top.clearfix
-      a.float-right(href='https://github.com/aiosk/covidn')
-        img.lazy(alt="GitHub stars" data-src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
-    form.grid-x.callout
-      .cell.xlarge-3
-        label(for='periods')
-          span#periodsValue 14
-          | &nbsp;days period
-      .cell.xlarge-9
-        input#periods(type='range' min='1' max='21' step='1' value='14')
-        p#periodsHelpText.help-text Try smaller or larger data periods by sliding (tap/click => hold => move) slider to change days period.
-          br
-          strong Smaller&nbsp;
-          | day periods will generate complicated chart data, while&nbsp;
-          strong larger&nbsp;
-          | day periods will generate simplified chart data. Use wisely.
+      ul#chartHelpText
+        li.mobile For best results please view in&nbsp;
+          strong landscape&nbsp;
+          | mode
+        li.mobile
+          strong Tap or Touch&nbsp;
+          | chart bar to see case number
+        li.mobile
+          strong Tap or Touch&nbsp;
+          | chart legend to show/hide chart data
+
+        li.desktop Click chart border to toggle chart&nbsp;
+          strong full-width&nbsp;
+          | mode
+        li.desktop
+          strong Hover mouse&nbsp;
+          | on chart bar to see case number
+        li.desktop
+          strong Click&nbsp;
+          | chart legend to show/hide chart data
+    - const zone = [ "NATIONAL", "DKI_JAKARTA", "JAWA_BARAT", "JAWA_TIMUR", "JAWA_TENGAH", "SULAWESI_SELATAN", "BANTEN", "NUSA_TENGGARA_BARAT", "BALI", "PAPUA", "KALIMANTAN_SELATAN", "SUMATERA_BARAT", "SUMATERA_SELATAN", "KALIMANTAN_TENGAH", "KALIMANTAN_TIMUR", "SUMATERA_UTARA", "DAERAH_ISTIMEWA_YOGYAKARTA", "KALIMANTAN_UTARA", "KEPULAUAN_RIAU", "KALIMANTAN_BARAT", "SULAWESI_TENGGARA", "LAMPUNG", "SULAWESI_UTARA", "SULAWESI_TENGAH", "RIAU", "PAPUA_BARAT", "SULAWESI_BARAT", "JAMBI", "MALUKU_UTARA", "MALUKU", "GORONTALO", "KEPULAUAN_BANGKA_BELITUNG", "ACEH", "BENGKULU", "NUSA_TENGGARA_TIMUR", ]
+    form.callout
+      .grid-x
+        .cell.xlarge-3
+          label(for='periods')
+            span#periodsLabel 14
+            | &nbsp;days period
+        .cell.xlarge-9
+          input#periods(type='range' min='1' max='21' step='1' value='14' aria-describedby="periodsHelpText")
+          p#periodsHelpText.help-text Try smaller or larger data periods by sliding (tap/click => hold => move) slider to change days period.
+            br
+            strong Smaller&nbsp;
+            | day periods will generate complicated chart data, while&nbsp;
+            strong larger&nbsp;
+            | day periods will generate simplified chart data. Use wisely.
+      .grid-x
+        .cell.xlarge-3
+          label(for='zone') Zone
+        .cell.xlarge-9
+          button.button.small.expanded#zoneButton(type='button') i don't like to scroll, I want to select some chart
+          select(multiple aria-describedby="zoneHelpText")#zone.hide
+            each val in zone
+              option(value=val)= val.split("_").join(" ")
 
     #myChart.grid-x.xlarge-up-2(aria-describedby="chartHelpText")
-      .cell(style='width:100%').callout
-        //- a(href="#Chart_National").anchor
-        //-   img(data-src="img/baseline_attach_file_black_18dp.png" alt="anchor")
-        .loader
-        canvas#Chart_NATIONAL
-    a(href="#top")
+      each val in zone
+        .cell.callout(style={width:val=='NATIONAL'?'100%':''})
+          .clearfix.chart-action
+            .float-right
+              a.download: img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download")
+            //- .float-right
+            //-   a(href=`#Chart_${val}`).anchor: img(data-src="img/baseline_link_black_18dp.png" alt="anchor")
+            .float-right: .loader
+          canvas(id=`Chart_${val}`)
+
+    button.button.small#top
       img.lazy(data-src="img/baseline_vertical_align_top_black_18dp.png" alt="Scroll to top")
 
     link(rel="stylesheet" href=`css/foundation-global.css`)
