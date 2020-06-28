@@ -5,25 +5,28 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(http-equiv="x-ua-compatible" content="ie=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-
-    title Daily Indonesia COVID-19 Cases - Covidn
-    meta(name="description" content="Daily Indonesia COVID-19 cases, National and Provinces")
+    - const title = 'Daily Indonesia COVID-19 Cases  - Covidn';
+    - const description = `${title}, National and Provinces`;
+    title= title
+    meta(name="description" content=description)
     meta(name="keywords" content="Daily Indonesia COVID-19 Cases, National and Provinces")
     meta(name="author" content="andry.yosua@gmail.com")
 
-    meta(property="og:title" content="Daily Indonesia COVID-19 Cases - Covidn")
+    meta(property="og:title" content=title)
     meta(property="og:type" content="website")
-    meta(property="og:description" content="Daily Indonesia COVID-19 Cases, National and Provinces")
+    meta(property="og:description" content=description)
     meta(property="og:url" content="https://aiosk.github.io/covidn/")
     meta(property="og:image" content="https://aiosk.github.io/covidn/img/Chart_NATIONAL.jpg")
+    meta(property="og:image" content="https://aiosk.github.io/covidn/img/Chart_DKI_JAKARTA.jpg")
+    meta(property="og:image" content="https://aiosk.github.io/covidn/img/Chart_JAWA_TIMUR.jpg")
 
     meta(name="twitter:card" content="summary_large_image")
-    meta(name="twitter:title" content="Daily Indonesia COVID-19 Cases - Covidn")
-    meta(name="twitter:description" content="Indonesia COVID-19 Cases, National and Provinces")
+    meta(name="twitter:title" content=title)
+    meta(name="twitter:description" content=description)
     meta(name="twitter:type" content="website")
     meta(name="twitter:site" content="@andry_yosua")
     meta(name="twitter:creator" content="@andry_yosua")
-    meta(name="twitter:image" content="https://aiosk.github.io/covidn/img/Chart_NATIONAL.jpg")
+    //- meta(name="twitter:image" content="https://aiosk.github.io/covidn/img/Chart_NATIONAL.jpg")
   body.grid-container.fluid
     h4.text-center Daily Indonesia COVID-19 cases
     h5.text-center National and Provinces
