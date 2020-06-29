@@ -25,3 +25,12 @@ see [**instructions**](https://github.com/aiosk/covidn/blob/master/cli)
   Mari bersatu lawan COVID-19. Oleh `GUGUS TUGAS PERCEPATAN PENANGANAN COVID-19`
 - [github.com/cahyadsn/wilayah](https://github.com/cahyadsn/wilayah)
   Kode dan Data Wilayah Administarsi Indonesia sesuai Permendagri No 72 Tahun 2019
+
+<!-- Yet another grafik.
+- Data resmi http://covid19.go.id
+- Kasus harian (bisa diatur per 1 hari sampai per 21 hari)
+- Grafik nasional dan provinsi (bisa dipilih)
+- Dataset kasus konfirmasi harian, sembuh harian, meninggal harian, dirawat / diisolasi harian (bisa dipilih)
+- Unduh grafik
+
+https://aiosk.github.io/covidn/ -->
