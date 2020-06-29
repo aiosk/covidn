@@ -30,12 +30,16 @@ form {
 }
 
 #myChart {
-  .cell .cell {
-    width: 2rem;
+  .cell {
+    transition: width 1s;
   }
 }
-a.download {
-  display: block;
+.chart-action {
+  position: absolute;
+  right: 1rem;
+}
+a.download,
+a.fullscreen {
   $size: 1.5rem;
   height: $size;
   width: $size;
@@ -68,7 +72,6 @@ a.download {
   }
 }
 
-.chart-action {
-  position: absolute;
-  right: 1rem;
+.width-100 {
+  width: 100% !important;
 }

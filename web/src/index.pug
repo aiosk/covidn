@@ -41,55 +41,50 @@ html(lang="en")
           img.lazy(alt="GitHub stars" data-src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
     #chartHelpText.help-text.callout.warning
       ul#chartHelpText
-        li.mobile For best results please view in&nbsp;
-          strong landscape&nbsp;
-          | mode
-        li.mobile
-          strong Tap or Touch&nbsp;
-          | chart bar to see case number
-        li.mobile
-          strong Tap or Touch&nbsp;
-          | chart legend to show/hide chart data
-
-        li.desktop Click chart border to toggle chart&nbsp;
-          strong full-width&nbsp;
-          | mode
-        li.desktop
-          strong Hover mouse&nbsp;
-          | on chart bar to see case number
-        li.desktop
-          strong Click&nbsp;
-          | chart legend to show/hide chart data
-    - const zone = [ "NATIONAL", "DKI_JAKARTA", "JAWA_BARAT", "JAWA_TIMUR", "JAWA_TENGAH", "SULAWESI_SELATAN", "BANTEN", "NUSA_TENGGARA_BARAT", "BALI", "PAPUA", "KALIMANTAN_SELATAN", "SUMATERA_BARAT", "SUMATERA_SELATAN", "KALIMANTAN_TENGAH", "KALIMANTAN_TIMUR", "SUMATERA_UTARA", "DAERAH_ISTIMEWA_YOGYAKARTA", "KALIMANTAN_UTARA", "KEPULAUAN_RIAU", "KALIMANTAN_BARAT", "SULAWESI_TENGGARA", "LAMPUNG", "SULAWESI_UTARA", "SULAWESI_TENGAH", "RIAU", "PAPUA_BARAT", "SULAWESI_BARAT", "JAMBI", "MALUKU_UTARA", "MALUKU", "GORONTALO", "KEPULAUAN_BANGKA_BELITUNG", "ACEH", "BENGKULU", "NUSA_TENGGARA_TIMUR", ]
+        li.mobile For best results please view in #[strong landscape] mode
+        li.mobile Click #[img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download")] to save chart as image
+        li.mobile #[strong Tap or Touch] chart bar to see case number
+        li.mobile #[strong Tap or Touch] chart legend to show/hide chart data
+        li.desktop Click #[img.lazy(data-src="img/baseline_fullscreen_black_18dp.png" alt="fullscreen")] to toggle chart #[strong full-width] mode
+        li.desktop Click #[img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download")] to save chart as image
+        li.desktop #[strong Hover mouse] on chart bar to see case number
+        li.desktop #[strong Click] chart legend to show/hide chart data
+    - const zones = [ "NATIONAL", "DKI_JAKARTA", "JAWA_BARAT", "JAWA_TIMUR", "JAWA_TENGAH", "SULAWESI_SELATAN", "BANTEN", "NUSA_TENGGARA_BARAT", "BALI", "PAPUA", "KALIMANTAN_SELATAN", "SUMATERA_BARAT", "SUMATERA_SELATAN", "KALIMANTAN_TENGAH", "KALIMANTAN_TIMUR", "SUMATERA_UTARA", "DAERAH_ISTIMEWA_YOGYAKARTA", "KALIMANTAN_UTARA", "KEPULAUAN_RIAU", "KALIMANTAN_BARAT", "SULAWESI_TENGGARA", "LAMPUNG", "SULAWESI_UTARA", "SULAWESI_TENGAH", "RIAU", "PAPUA_BARAT", "SULAWESI_BARAT", "JAMBI", "MALUKU_UTARA", "MALUKU", "GORONTALO", "KEPULAUAN_BANGKA_BELITUNG", "ACEH", "BENGKULU", "NUSA_TENGGARA_TIMUR", ]
     form.callout
       .grid-x
         .cell.xlarge-3
-          label(for='periods')
-            span#periodsLabel 14
-            | &nbsp;days period
+          label(for='periods') #[span#periodsLabel 14] days period
         .cell.xlarge-9
           input#periods(type='range' min='1' max='21' step='1' value='14' aria-describedby="periodsHelpText")
-          p#periodsHelpText.help-text Try smaller or larger data periods by sliding (tap/click => hold => move) slider to change days period.
-            br
-            strong Smaller&nbsp;
-            | day periods will generate complicated chart data, while&nbsp;
-            strong larger&nbsp;
-            | day periods will generate simplified chart data. Use wisely.
+          p#periodsHelpText.help-text Try smaller or larger data periods by sliding (tap/click => hold => move) slider to change days period.#[br]#[strong Smaller] day periods will generate complicated chart data, while #[strong larger] day periods will generate simplified chart data. Use wisely.
       .grid-x
         .cell.xlarge-3
-          label(for='zone') Zone
+          label(for='zone') Chart
         .cell.xlarge-9
-          button.button.small.expanded#zoneButton(type='button') i don't like to scroll, I want to select some chart
-          select(multiple aria-describedby="zoneHelpText")#zone.hide
-            each val in zone
+          button.button.small.expanded#zoneBtn(type='button') Select Chart
+          select(multiple)#zone.hide
+            each val in zones
               option(value=val)= val.split("_").join(" ")
+          p.help-text i don't like to scroll, i want to select some chart
+      .grid-x
+        .cell.xlarge-3
+          label(for='zone') Datasets
+        .cell.xlarge-9
+          button.button.small.expanded#datasetsBtn(type='button') Select Datasets
+          - let datasets = ["Daily Confirmed Case","Daily Recover Case","Daily Death Case","Daily Active Case", "Daily Recover Line","Daily Death Line","Daily Active Line"]
+          select(multiple)#datasets.hide
+            each val,idx in datasets
+              option(value=idx)= val
+          p.help-text i don't like this chart, i want to select some datasets
+
 
     #myChart.grid-x.xlarge-up-2(aria-describedby="chartHelpText")
-      each val in zone
-        .cell.callout(style={width:val=='NATIONAL'?'100%':''})
+      each val in zones
+        .cell.callout(class=val=='NATIONAL'?'width-100':'')
           .clearfix.chart-action
             .float-right
               a.download: img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download")
+              a.fullscreen.show-for-xlarge: img.lazy(data-src="img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
             //- .float-right
             //-   a(href=`#Chart_${val}`).anchor: img(data-src="img/baseline_link_black_18dp.png" alt="anchor")
             .float-right: .loader

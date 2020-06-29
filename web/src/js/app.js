@@ -1,6 +1,7 @@
 import delay from "lodash/delay";
 import isUndefined from "lodash/isUndefined";
 import cloneDeep from "lodash/cloneDeep";
+import range from "lodash/range";
 
 import Chartjs from "./libs/chartjs.js";
 import Prov from "./libs/prov.js";
@@ -9,21 +10,25 @@ import Page from "./libs/page.js";
 let periods = 14;
 let lazyLoadCanvas;
 
+const $zoneInput = document.querySelector(`select#zone`);
+let selectedDatasets;
 (() => {
-  const $sliderInput = document.querySelector("form input[type='range']");
-  const $sliderLabel = document.querySelector(`#periodsLabel`);
+  const $periodsInput = document.querySelector("form input[type='range']");
+  const $periodsLabel = document.querySelector(`#periodsLabel`);
 
-  const $buttonZone = document.querySelector(`button#zoneButton`);
-  const $selectZone = document.querySelector(`select#zone`);
+  const $zoneBtn = document.querySelector(`button#zoneBtn`);
+
+  const $datasetsBtn = document.querySelector(`button#datasetsBtn`);
+  const $datasetsInput = document.querySelector(`select#datasets`);
 
   const updatePeriods = (
     newPeriods,
     options = { updateSlider: false, updateCanvas: false }
   ) => {
     periods = newPeriods;
-    $sliderLabel.innerHTML = newPeriods;
+    $periodsLabel.innerHTML = newPeriods;
     if (options.updateSlider) {
-      $sliderInput.value = newPeriods;
+      $periodsInput.value = newPeriods;
     }
     if (!!lazyLoadCanvas && options.updateCanvas) {
       lazyLoadCanvas.update();
@@ -54,42 +59,96 @@ let lazyLoadCanvas;
       updatePeriods(value);
     }
   };
-  $sliderInput.addEventListener("input", onSliderReleaseUpdateLabel);
-  $sliderInput.addEventListener("change", (e) => {
+  $periodsInput.addEventListener("input", onSliderReleaseUpdateLabel);
+  $periodsInput.addEventListener("change", (e) => {
     onSliderReleaseUpdateLabel(e, true);
   });
-
-  $buttonZone.addEventListener("click", (e) => {
-    $selectZone.classList.toggle("hide");
-  });
-  const allValues = [...$selectZone.querySelectorAll("option")].map(
-    (v) => v.value
-  );
-  const allChart = allValues.map((v) => `#Chart_${v}`).join(", ");
-  $selectZone.addEventListener("change", (e) => {
-    const selectedValues = [...e.target.querySelectorAll("option:checked")].map(
+  (() => {
+    $zoneBtn.addEventListener("click", (e) => {
+      $zoneInput.classList.toggle("hide");
+    });
+    const allVal = [...$zoneInput.querySelectorAll("option")].map(
       (v) => v.value
     );
-    if (selectedValues.length) {
-      Page.domShowOrHide(
-        [...document.querySelectorAll(allChart)].map((v) => v.closest(".cell")),
-        false
+    const allChart = allVal.map((v) => `#Chart_${v}`).join(", ");
+    $zoneInput.addEventListener("change", (e) => {
+      const selectedVal = [...e.target.querySelectorAll("option:checked")].map(
+        (v) => v.value
       );
-      Page.domShowOrHide(
-        [
-          ...document.querySelectorAll(
-            selectedValues.map((v) => `#Chart_${v}`).join(", ")
+      if (selectedVal.length) {
+        Page.domShowOrHide(
+          [...document.querySelectorAll(allChart)].map((v) =>
+            v.closest(".cell")
           ),
-        ].map((v) => v.closest(".cell")),
-        true
+          false
+        );
+        Page.domShowOrHide(
+          [
+            ...document.querySelectorAll(
+              selectedVal.map((v) => `#Chart_${v}`).join(", ")
+            ),
+          ].map((v) => v.closest(".cell")),
+          true
+        );
+      } else {
+        Page.domShowOrHide(
+          [...document.querySelectorAll(allChart)].map((v) =>
+            v.closest(".cell")
+          ),
+          true
+        );
+      }
+    });
+  })();
+
+  (() => {
+    $datasetsBtn.addEventListener("click", (e) => {
+      $datasetsInput.classList.toggle("hide");
+    });
+    // const allVal = [...$datasetsInput.querySelectorAll("option")].map(
+    //   (v) => v.value
+    // );
+    $datasetsInput.addEventListener("change", (e) => {
+      selectedDatasets = [...e.target.querySelectorAll("option:checked")].map(
+        (v) => v.value
       );
-    } else {
-      Page.domShowOrHide(
-        [...document.querySelectorAll(allChart)].map((v) => v.closest(".cell")),
-        true
-      );
-    }
-  });
+      // console.log(selectedVal, range(7));
+      if (selectedDatasets.length) {
+        Object.entries(myChartData).forEach((v) => {
+          range(7).forEach((v2) => {
+            if (!!v[1].datasets[v2]) {
+              myChartData[v[0]].datasets[v2].hidden = true;
+            }
+          });
+        });
+        Object.entries(myChartData).forEach((v) => {
+          selectedDatasets.forEach((v2) => {
+            if (!!v[1].datasets[v2]) {
+              myChartData[v[0]].datasets[v2].hidden = false;
+            }
+          });
+
+          if (!!myChart[v[0]]) {
+            myChart[v[0]].update();
+          }
+        });
+      } else {
+        Object.entries(myChartData).forEach((v) => {
+          if (!!v[1].datasets[0]) {
+            v[1].datasets[0].hidden = true;
+          }
+          range(1, 7).forEach((v2) => {
+            if (!!v[1].datasets[v2]) {
+              v[1].datasets[v2].hidden = false;
+            }
+          });
+          if (!!myChart[v[0]]) {
+            myChart[v[0]].update();
+          }
+        });
+      }
+    });
+  })();
 
   document.querySelectorAll("a.download").forEach((v) => {
     v.addEventListener("click", (e) => {
@@ -104,6 +163,13 @@ let lazyLoadCanvas;
       $anchor.download = `${$canvas.id}.jpg`;
     });
   });
+  document.querySelectorAll("a.fullscreen").forEach((v) => {
+    v.addEventListener("click", (e) => {
+      Page.domSpin(e.target);
+      const $cell = e.target.closest(".cell");
+      $cell.classList.toggle("width-100");
+    });
+  });
 
   document.querySelector("button#top").addEventListener("click", (e) => {
     Page.domSpin(e.target.closest("button"));
@@ -112,38 +178,9 @@ let lazyLoadCanvas;
 })();
 
 let myChart = {};
-(() => {
-  const $chartGrid = document.querySelector("#myChart.grid-x");
-  const $cellChart = $chartGrid.querySelectorAll(".cell.callout");
-
-  const onClickCb = (e) => {
-    // console.log("t");
-
-    let $this = e.target.closest(".cell.callout");
-    let $thisCanvas = $this.querySelector("canvas");
-
-    let chartId = $thisCanvas.id;
-
-    if ($this.style.width == "100%") {
-      $this.style.width = "";
-    } else {
-      $this.style.width = "100%";
-    }
-
-    myChart[chartId].resize();
-  };
-  $cellChart.forEach((v) => {
-    v.removeEventListener("click", onClickCb);
-    v.addEventListener("click", onClickCb);
-    v.querySelector("canvas").addEventListener("click", (e) => {
-      e.stopPropagation();
-    });
-  });
-})();
+let myChartData = {};
 
 (() => {
-  let myChartData = {};
-
   /* init dataDefault */
   myChartData["Chart_NATIONAL"] = cloneDeep(Chartjs.dataDefault);
   Prov.provinces.forEach((v) => {
@@ -185,8 +222,23 @@ let myChart = {};
 
       const data = await Chartjs.getFile(dataId, periods);
       // console.log(elementId, dataId, data, data.labels);
-      data.datasets[0].hidden = true;
+      // data.datasets[0].hidden = true;
       // data.datasets[4].hidden = true;
+      console.log(selectedDatasets);
+      if (!!selectedDatasets && selectedDatasets.length) {
+        range(7).forEach((v) => {
+          data.datasets[v].hidden = true;
+        });
+
+        selectedDatasets.forEach((v) => {
+          data.datasets[v].hidden = false;
+        });
+      } else {
+        data.datasets[0].hidden = true;
+        range(1, 7).forEach((v) => {
+          data.datasets[v].hidden = false;
+        });
+      }
       myChartData[elementId].labels = data.labels;
       myChartData[elementId].datasets = data.datasets;
       myChart[elementId].update();
