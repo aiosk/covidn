@@ -42,11 +42,13 @@ html(lang="en")
     #chartHelpText.help-text.callout.warning
       ul#chartHelpText
         li.mobile For best results please view in #[strong landscape] mode
-        li.mobile Click #[img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download")] to save chart as image
+        li.mobile Click #[img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download chart")] to save chart as image
+        li.mobile Click #[img.lazy(data-src="img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")] to save chart raw data
         li.mobile #[strong Tap or Touch] chart bar to see case number
         li.mobile #[strong Tap or Touch] chart legend to show/hide chart data
         li.desktop Click #[img.lazy(data-src="img/baseline_fullscreen_black_18dp.png" alt="fullscreen")] to toggle chart #[strong full-width] mode
         li.desktop Click #[img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download")] to save chart as image
+        li.desktop Click #[img.lazy(data-src="img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")] to save chart raw data
         li.desktop #[strong Hover mouse] on chart bar to see case number
         li.desktop #[strong Click] chart legend to show/hide chart data
     - const zones = [ "NATIONAL", "DKI_JAKARTA", "JAWA_BARAT", "JAWA_TIMUR", "JAWA_TENGAH", "SULAWESI_SELATAN", "BANTEN", "NUSA_TENGGARA_BARAT", "BALI", "PAPUA", "KALIMANTAN_SELATAN", "SUMATERA_BARAT", "SUMATERA_SELATAN", "KALIMANTAN_TENGAH", "KALIMANTAN_TIMUR", "SUMATERA_UTARA", "DAERAH_ISTIMEWA_YOGYAKARTA", "KALIMANTAN_UTARA", "KEPULAUAN_RIAU", "KALIMANTAN_BARAT", "SULAWESI_TENGGARA", "LAMPUNG", "SULAWESI_UTARA", "SULAWESI_TENGAH", "RIAU", "PAPUA_BARAT", "SULAWESI_BARAT", "JAMBI", "MALUKU_UTARA", "MALUKU", "GORONTALO", "KEPULAUAN_BANGKA_BELITUNG", "ACEH", "BENGKULU", "NUSA_TENGGARA_TIMUR", ]
@@ -83,7 +85,8 @@ html(lang="en")
         .cell.callout(class=val=='NATIONAL'?'width-100':'')
           .clearfix.chart-action
             .float-right
-              a.download: img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download")
+              a.download-raw(href=`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${val}.csv` download=`${val}.csv`): img.lazy(data-src="img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
+              a.download-chart: img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
               a.fullscreen.show-for-xlarge: img.lazy(data-src="img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
             //- .float-right
             //-   a(href=`#Chart_${val}`).anchor: img(data-src="img/baseline_link_black_18dp.png" alt="anchor")

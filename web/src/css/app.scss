@@ -38,7 +38,8 @@ form {
   position: absolute;
   right: 1rem;
 }
-a.download,
+a.download-chart,
+a.download-raw,
 a.fullscreen {
   $size: 1.5rem;
   height: $size;

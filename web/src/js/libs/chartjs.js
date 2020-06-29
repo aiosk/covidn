@@ -2,7 +2,7 @@ import isUndefined from "lodash/isUndefined";
 
 var image = new Image();
 // http://www.picturetopeople.org/p2p/text_effects_generator.p2p/transparent_text_effect
-image.src = "/covidn/img/watermark2.png";
+image.src = "img/watermark2.png";
 
 let dataDefault = { datasets: [], labels: [] };
 
