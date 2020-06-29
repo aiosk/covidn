@@ -157,6 +157,7 @@ let selectedDatasets;
 
       const $cell = e.target.closest(".cell");
       const $canvas = $cell.querySelector("canvas");
+
       const image = $canvas.toDataURL("image/jpeg");
       const $anchor = $cell.querySelector("a.download");
       $anchor.href = image;
@@ -222,9 +223,7 @@ let myChartData = {};
 
       const data = await Chartjs.getFile(dataId, periods);
       // console.log(elementId, dataId, data, data.labels);
-      // data.datasets[0].hidden = true;
-      // data.datasets[4].hidden = true;
-      console.log(selectedDatasets);
+      // console.log(selectedDatasets);
       if (!!selectedDatasets && selectedDatasets.length) {
         range(7).forEach((v) => {
           data.datasets[v].hidden = true;
