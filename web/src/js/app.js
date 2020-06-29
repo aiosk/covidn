@@ -150,7 +150,7 @@ let selectedDatasets;
     });
   })();
 
-  document.querySelectorAll("a.download").forEach((v) => {
+  document.querySelectorAll("a.download-chart").forEach((v) => {
     v.addEventListener("click", (e) => {
       e.stopPropagation();
       Page.domSpin(e.target);
@@ -159,7 +159,7 @@ let selectedDatasets;
       const $canvas = $cell.querySelector("canvas");
 
       const image = $canvas.toDataURL("image/jpeg");
-      const $anchor = $cell.querySelector("a.download");
+      const $anchor = $cell.querySelector("a.download-chart");
       $anchor.href = image;
       $anchor.download = `${$canvas.id}.jpg`;
     });
