@@ -23,10 +23,10 @@ type Chartjs struct {
 
 // ChartjsColor ...
 var ChartjsColor = map[string]string{
-	"case":    "#000000",
+	"case":    "#F46D43",
 	"death":   "#A50026",
-	"recover": "#87ceeb",
-	"active":  "#ff6347",
+	"recover": "#87CEEB",
+	"active":  "#FFC000",
 }
 
 // MyRegression ...
