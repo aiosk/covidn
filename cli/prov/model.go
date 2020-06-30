@@ -159,7 +159,7 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 	item[1].Data = libs.MyRegression(item[0].Data)
 	item[3].Data = libs.MyRegression(item[2].Data)
 	item[5].Data = libs.MyRegression(item[4].Data)
-	item[7].Data = libs.MyRegression(item[5].Data)
+	item[7].Data = libs.MyRegression(item[6].Data)
 
 	item[1].Label = fmt.Sprintf("%s-fitted_line", tags["Case"])
 	item[3].Label = fmt.Sprintf("%s-fitted_line", tags["Recover"])
