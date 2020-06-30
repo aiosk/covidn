@@ -154,7 +154,7 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 	item[0].BackgroundColor = libs.ChartjsColor["case"]
 	item[2].BackgroundColor = libs.ChartjsColor["recover"]
 	item[4].BackgroundColor = libs.ChartjsColor["active"]
-	item[3].BackgroundColor = libs.ChartjsColor["death"]
+	item[6].BackgroundColor = libs.ChartjsColor["death"]
 
 	item[1].Data = libs.MyRegression(item[0].Data)
 	item[3].Data = libs.MyRegression(item[2].Data)
@@ -170,8 +170,8 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 	item[5].Type = "line"
 	item[7].Type = "line"
 	item[1].BorderColor = libs.ChartjsColor["case"]
-	item[5].BorderColor = libs.ChartjsColor["recover"]
-	item[6].BorderColor = libs.ChartjsColor["death"]
+	item[3].BorderColor = libs.ChartjsColor["recover"]
+	item[5].BorderColor = libs.ChartjsColor["death"]
 	item[7].BorderColor = libs.ChartjsColor["active"]
 
 	data.Datasets = append(data.Datasets, item[0])
