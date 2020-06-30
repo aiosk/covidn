@@ -135,7 +135,6 @@ func (v FileItem) Chunk(size int) FileItem {
 // ToChartjs ...
 func (v FileItem) ToChartjs() libs.Chartjs {
 	var data libs.Chartjs
-	tags := v.ListPerkembangan[0].GetTags("json")
 
 	var item [8]libs.ChartjsDatasetsItem
 
@@ -147,32 +146,32 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 		item[6].Data = append(item[6].Data, float64(v2.Active))
 	}
 
-	item[0].Label = tags["Case"]
-	item[2].Label = tags["Recover"]
-	item[4].Label = tags["Death"]
-	item[6].Label = tags["Active"]
-	item[0].BackgroundColor = libs.ChartjsColor["case"]
-	item[2].BackgroundColor = libs.ChartjsColor["recover"]
-	item[4].BackgroundColor = libs.ChartjsColor["death"]
-	item[6].BackgroundColor = libs.ChartjsColor["active"]
+	item[0].Label = libs.ChartjsLabel.Confirmed
+	item[2].Label = libs.ChartjsLabel.Recover
+	item[4].Label = libs.ChartjsLabel.Death
+	item[6].Label = libs.ChartjsLabel.Active
+	item[0].BackgroundColor = libs.ChartjsColor.Confirmed
+	item[2].BackgroundColor = libs.ChartjsColor.Recover
+	item[4].BackgroundColor = libs.ChartjsColor.Death
+	item[6].BackgroundColor = libs.ChartjsColor.Active
 
 	item[1].Data = libs.MyRegression(item[0].Data)
 	item[3].Data = libs.MyRegression(item[2].Data)
 	item[5].Data = libs.MyRegression(item[4].Data)
 	item[7].Data = libs.MyRegression(item[6].Data)
 
-	item[1].Label = fmt.Sprintf("%s-fitted_line", tags["Case"])
-	item[3].Label = fmt.Sprintf("%s-fitted_line", tags["Recover"])
-	item[5].Label = fmt.Sprintf("%s-fitted_line", tags["Death"])
-	item[7].Label = fmt.Sprintf("%s-fitted_line", tags["Active"])
+	item[1].Label = fmt.Sprintf("%s-fitted", libs.ChartjsLabel.Confirmed)
+	item[3].Label = fmt.Sprintf("%s-fitted", libs.ChartjsLabel.Recover)
+	item[5].Label = fmt.Sprintf("%s-fitted", libs.ChartjsLabel.Death)
+	item[7].Label = fmt.Sprintf("%s-fitted", libs.ChartjsLabel.Active)
 	item[1].Type = "line"
 	item[3].Type = "line"
 	item[5].Type = "line"
 	item[7].Type = "line"
-	item[1].BorderColor = libs.ChartjsColor["case"]
-	item[3].BorderColor = libs.ChartjsColor["recover"]
-	item[5].BorderColor = libs.ChartjsColor["death"]
-	item[7].BorderColor = libs.ChartjsColor["active"]
+	item[1].BorderColor = libs.ChartjsColor.Confirmed
+	item[3].BorderColor = libs.ChartjsColor.Recover
+	item[5].BorderColor = libs.ChartjsColor.Death
+	item[7].BorderColor = libs.ChartjsColor.Active
 
 	data.Datasets = append(data.Datasets, item[0])
 	data.Datasets = append(data.Datasets, item[1])

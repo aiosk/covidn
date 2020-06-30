@@ -21,12 +21,27 @@ type Chartjs struct {
 	Datasets []ChartjsDatasetsItem `json:"datasets"`
 }
 
+type datasets struct {
+	Confirmed string
+	Death     string
+	Recover   string
+	Active    string
+}
+
 // ChartjsColor ...
-var ChartjsColor = map[string]string{
-	"case":    "#FFC000",
-	"death":   "#A50026",
-	"recover": "#87CEEB",
-	"active":  "#F46D43",
+var ChartjsColor = datasets{
+	Confirmed: "#FFC000",
+	Death:     "#A50026",
+	Recover:   "#87CEEB",
+	Active:    "#F46D43",
+}
+
+// ChartjsLabel ...
+var ChartjsLabel = datasets{
+	Confirmed: "Confirmed",
+	Death:     "Death",
+	Recover:   "Recover",
+	Active:    "Active",
 }
 
 // MyRegression ...
