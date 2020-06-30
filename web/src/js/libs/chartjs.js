@@ -6,9 +6,18 @@ var image = new Image();
 // http://www.picturetopeople.org/p2p/text_effects_generator.p2p/transparent_text_effect
 image.src = "img/watermark2.png";
 
+Chart.plugins.register({
+  beforeDraw: function (chartInstance) {
+    var ctx = chartInstance.chart.ctx;
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+  },
+});
+
 let dataDefault = { datasets: [], labels: [] };
 
-const getFile = async (zone, periods = 14) => {
+const getFile = async (elementId, periods) => {
+  const zone = elementId.split("_").slice(1).join("_");
   let res = await fetch(
     `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/chartjs/${zone}-${periods}.json?_=${Date.now()}`
   );
@@ -17,23 +26,10 @@ const getFile = async (zone, periods = 14) => {
   return resJson;
 };
 
-const chartUpdate = (chartInstance) => {
-  if (!!chartInstance) {
-    chartInstance.update();
-  }
-};
-
 const initChart = (elementId, myChartData) => {
-  Chart.plugins.register({
-    beforeDraw: function (chartInstance) {
-      var ctx = chartInstance.chart.ctx;
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
-    },
-  });
   const myChart = new Chart(elementId, {
     type: "bar",
-    data: myChartData[elementId],
+    data: myChartData,
     options: {
       title: {
         display: true,
@@ -52,11 +48,29 @@ const initChart = (elementId, myChartData) => {
       },
       legend: {
         // position: "right",
-        display: MyFoundation.mqAtleastLarge(),
+        display: false,
+      },
+      legendCallback: (chart) => {
+        const chartLegendHtml = chart.legend.legendItems
+          .map((v) => {
+            return `<div class='cell item ${v.text}'>
+  <div class='grid-x'>
+    <div class='cell small-2 color' style="background-color:${
+      v.fillStyle
+    };border-color:${v.strokeStyle};"></div>
+    <div class='cell small-10 text' style="text-decoration:${
+      v.hidden ? "line-through" : "none"
+    };">${v.text}</div>
+  </div>
+</div>`;
+          })
+          .join("\n");
+
+        return chartLegendHtml;
       },
       scales: {
-        xAxes: [{ ticks: { display: MyFoundation.mqAtleastLarge() } }],
-        yAxes: [{ ticks: { display: MyFoundation.mqAtleastLarge() } }],
+        xAxes: [{ ticks: { display: MyFoundation.mqAtleast("medium") } }],
+        yAxes: [{ ticks: { display: MyFoundation.mqAtleast("medium") } }],
       },
       animation: { duration: 0 },
       hover: { animationDuration: 0 },
@@ -97,7 +111,8 @@ const initChart = (elementId, myChartData) => {
       },
     },
   });
+
   return myChart;
 };
 
-export default { dataDefault, getFile, initChart, chartUpdate };
+export default { dataDefault, getFile, initChart };

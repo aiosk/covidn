@@ -37,9 +37,10 @@ form {
   .callout {
     padding: 0.5rem;
   }
-  .chart-action {
-    position: absolute;
-    right: 1rem;
+  .action {
+    // position: absolute;
+    // right: 1rem;
+    text-align: right;
     a.icon {
       $size: 1.25rem;
       height: $size;
@@ -50,8 +51,38 @@ form {
       }
     }
   }
+  .legend {
+    font-size: 0.75rem;
+    text-align: left;
+    .item {
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+      .color {
+        $size: 0.75rem;
+        width: $size;
+        height: $size;
+        display: inline-block;
+        border: {
+          width: 0.125rem;
+          style: solid;
+        }
+      }
+      .text {
+        // padding: 0.125rem;
+        line-height: 0.75rem;
+      }
+    }
+  }
 }
 
 .width-100 {
   width: 100% !important;
 }
+
+// $breakpoints: (
+//   small: 0,
+//   medium: 640px,
+//   large: 1024px,
+//   xlarge: 1200px,
+//   xxlarge: 1440px,
+// );
