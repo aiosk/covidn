@@ -153,8 +153,8 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 	item[6].Label = tags["Active"]
 	item[0].BackgroundColor = libs.ChartjsColor["case"]
 	item[2].BackgroundColor = libs.ChartjsColor["recover"]
-	item[4].BackgroundColor = libs.ChartjsColor["active"]
-	item[6].BackgroundColor = libs.ChartjsColor["death"]
+	item[4].BackgroundColor = libs.ChartjsColor["death"]
+	item[6].BackgroundColor = libs.ChartjsColor["active"]
 
 	item[1].Data = libs.MyRegression(item[0].Data)
 	item[3].Data = libs.MyRegression(item[2].Data)
