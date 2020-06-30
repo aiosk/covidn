@@ -1,4 +1,5 @@
 @import "_foundation";
+@import "_preloader";
 
 // html {
 //   scroll-behavior: smooth;
@@ -33,43 +34,21 @@ form {
   .cell {
     transition: width 1s;
   }
-}
-.chart-action {
-  position: absolute;
-  right: 1rem;
-}
-a.download-chart,
-a.download-raw,
-a.fullscreen {
-  $size: 1.5rem;
-  height: $size;
-  width: $size;
-  img {
-    height: $size;
-    width: $size;
+  .callout {
+    padding: 0.5rem;
   }
-}
-
-.loader {
-  $size: 0.75rem;
-  border: $size solid $light-gray;
-  $border-primary: map-get($foundation-palette, "primary");
-  border-top: $size solid $border-primary;
-  border-bottom: $size solid $border-primary;
-  border-radius: 50%;
-  width: $size;
-  height: $size;
-  animation: spin 2s linear infinite;
-}
-.spin {
-  animation: spin 2s linear infinite;
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
+  .chart-action {
+    position: absolute;
+    right: 1rem;
+    a.icon {
+      $size: 1.25rem;
+      height: $size;
+      width: $size;
+      img {
+        height: $size;
+        width: $size;
+      }
+    }
   }
 }
 

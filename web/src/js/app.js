@@ -6,6 +6,7 @@ import range from "lodash/range";
 import Chartjs from "./libs/chartjs.js";
 import Prov from "./libs/prov.js";
 import Page from "./libs/page.js";
+import MyFoundation from "./libs/foundation.js";
 
 let periods = 14;
 let lazyLoadCanvas;
@@ -13,12 +14,10 @@ let lazyLoadCanvas;
 const $zoneInput = document.querySelector(`select#zone`);
 let selectedDatasets;
 (() => {
+  const $form = document.querySelector("form");
   const $periodsInput = document.querySelector("form input[type='range']");
   const $periodsLabel = document.querySelector(`#periodsLabel`);
 
-  const $zoneBtn = document.querySelector(`button#zoneBtn`);
-
-  const $datasetsBtn = document.querySelector(`button#datasetsBtn`);
   const $datasetsInput = document.querySelector(`select#datasets`);
 
   const updatePeriods = (
@@ -39,11 +38,11 @@ let selectedDatasets;
     .on("changed.zf.mediaquery", function (event, newSize, oldSize) {
       // console.log("MediaQuery.current", Foundation.MediaQuery.current);
       Page.showHelpMobileOrDesktop(
-        Foundation.MediaQuery.atLeast("xlarge"),
+        MyFoundation.mqAtleastLarge(),
         document.querySelectorAll("#chartHelpText .mobile"),
         document.querySelectorAll("#chartHelpText .desktop")
       );
-      if (Foundation.MediaQuery.atLeast("xlarge")) {
+      if (MyFoundation.mqAtleastLarge()) {
         updatePeriods(7, { updateSlider: true, updateCanvas: true });
       } else {
         updatePeriods(14, { updateSlider: true, updateCanvas: true });
@@ -64,13 +63,9 @@ let selectedDatasets;
     onSliderReleaseUpdateLabel(e, true);
   });
   (() => {
-    $zoneBtn.addEventListener("click", (e) => {
-      $zoneInput.classList.toggle("hide");
-    });
-    const allVal = [...$zoneInput.querySelectorAll("option")].map(
-      (v) => v.value
-    );
-    const allChart = allVal.map((v) => `#Chart_${v}`).join(", ");
+    const allChart = [...$zoneInput.querySelectorAll("option")]
+      .map((v) => `#Chart_${v.value}`)
+      .join(", ");
     $zoneInput.addEventListener("change", (e) => {
       const selectedVal = [...e.target.querySelectorAll("option:checked")].map(
         (v) => v.value
@@ -102,12 +97,6 @@ let selectedDatasets;
   })();
 
   (() => {
-    $datasetsBtn.addEventListener("click", (e) => {
-      $datasetsInput.classList.toggle("hide");
-    });
-    // const allVal = [...$datasetsInput.querySelectorAll("option")].map(
-    //   (v) => v.value
-    // );
     $datasetsInput.addEventListener("change", (e) => {
       selectedDatasets = [...e.target.querySelectorAll("option:checked")].map(
         (v) => v.value
@@ -115,7 +104,7 @@ let selectedDatasets;
       // console.log(selectedVal, range(7));
       if (selectedDatasets.length) {
         Object.entries(myChartData).forEach((v) => {
-          range(7).forEach((v2) => {
+          range(8).forEach((v2) => {
             if (!!v[1].datasets[v2]) {
               myChartData[v[0]].datasets[v2].hidden = true;
             }
@@ -127,24 +116,19 @@ let selectedDatasets;
               myChartData[v[0]].datasets[v2].hidden = false;
             }
           });
-
-          if (!!myChart[v[0]]) {
-            myChart[v[0]].update();
-          }
+          Chartjs.chartUpdate(myChart[v[0]]);
         });
       } else {
         Object.entries(myChartData).forEach((v) => {
           if (!!v[1].datasets[0]) {
             v[1].datasets[0].hidden = true;
           }
-          range(1, 7).forEach((v2) => {
+          range(2, 8).forEach((v2) => {
             if (!!v[1].datasets[v2]) {
               v[1].datasets[v2].hidden = false;
             }
           });
-          if (!!myChart[v[0]]) {
-            myChart[v[0]].update();
-          }
+          Chartjs.chartUpdate(myChart[v[0]]);
         });
       }
     });
@@ -225,7 +209,7 @@ let myChartData = {};
       // console.log(elementId, dataId, data, data.labels);
       // console.log(selectedDatasets);
       if (!!selectedDatasets && selectedDatasets.length) {
-        range(7).forEach((v) => {
+        range(8).forEach((v) => {
           data.datasets[v].hidden = true;
         });
 
@@ -234,13 +218,15 @@ let myChartData = {};
         });
       } else {
         data.datasets[0].hidden = true;
-        range(1, 7).forEach((v) => {
+        data.datasets[1].hidden = true;
+        range(2, 8).forEach((v) => {
           data.datasets[v].hidden = false;
         });
       }
       myChartData[elementId].labels = data.labels;
       myChartData[elementId].datasets = data.datasets;
-      myChart[elementId].update();
+
+      Chartjs.chartUpdate(myChart[elementId]);
       Page.domShowOrHide($canvasLoader, false);
     })();
   };

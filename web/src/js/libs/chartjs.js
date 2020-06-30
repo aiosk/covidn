@@ -1,5 +1,7 @@
 import isUndefined from "lodash/isUndefined";
 
+import MyFoundation from "./foundation.js";
+
 var image = new Image();
 // http://www.picturetopeople.org/p2p/text_effects_generator.p2p/transparent_text_effect
 image.src = "img/watermark2.png";
@@ -13,6 +15,12 @@ const getFile = async (zone, periods = 14) => {
   let resJson = await res.json();
 
   return resJson;
+};
+
+const chartUpdate = (chartInstance) => {
+  if (!!chartInstance) {
+    chartInstance.update();
+  }
 };
 
 const initChart = (elementId, myChartData) => {
@@ -32,6 +40,7 @@ const initChart = (elementId, myChartData) => {
         text: elementId.split("_").slice(1).join(" "),
       },
       tooltips: {
+        mode: "index",
         filter: function (tooltipItem, data) {
           // console.log(
           //   data.datasets[tooltipItem.datasetIndex].label,
@@ -41,12 +50,16 @@ const initChart = (elementId, myChartData) => {
           return isUndefined(data.datasets[tooltipItem.datasetIndex].type);
         },
       },
-      animation: {
-        duration: 0,
+      legend: {
+        // position: "right",
+        display: MyFoundation.mqAtleastLarge(),
       },
-      hover: {
-        animationDuration: 0,
+      scales: {
+        xAxes: [{ ticks: { display: MyFoundation.mqAtleastLarge() } }],
+        yAxes: [{ ticks: { display: MyFoundation.mqAtleastLarge() } }],
       },
+      animation: { duration: 0 },
+      hover: { animationDuration: 0 },
       responsiveAnimationDuration: 0,
       watermark: {
         // the image you would like to show
@@ -87,4 +100,4 @@ const initChart = (elementId, myChartData) => {
   return myChart;
 };
 
-export default { dataDefault, getFile, initChart };
+export default { dataDefault, getFile, initChart, chartUpdate };

@@ -16,12 +16,6 @@ html(lang="en")
     meta(property="og:type" content="website")
     meta(property="og:description" content=description)
     meta(property="og:url" content="https://aiosk.github.io/covidn/")
-    meta(property="og:image" content="https://aiosk.github.io/covidn/img/Chart_JAWA_TIMUR.jpg")
-    meta(property="og:image:width" content="1200")
-    meta(property="og:image:height" content="600")
-    meta(property="og:image" content="https://aiosk.github.io/covidn/img/Chart_DKI_JAKARTA.jpg")
-    meta(property="og:image:width" content="1200")
-    meta(property="og:image:height" content="600")
     meta(property="og:image" content="https://aiosk.github.io/covidn/img/Chart_NATIONAL.jpg")
     meta(property="og:image:width" content="1200")
     meta(property="og:image:height" content="600")
@@ -33,7 +27,7 @@ html(lang="en")
     meta(name="twitter:site" content="@andry_yosua")
     meta(name="twitter:creator" content="@andry_yosua")
     //- meta(name="twitter:image" content="https://aiosk.github.io/covidn/img/Chart_NATIONAL.jpg")
-  body.grid-container.fluid
+  body.grid-container
     h4.text-center Daily Indonesia COVID-19 cases
     h5.text-center National and Provinces
       .clearfix
@@ -52,7 +46,7 @@ html(lang="en")
         li.desktop #[strong Hover mouse] on chart bar to see case number
         li.desktop #[strong Click] chart legend to show/hide chart data
     - const zones = [ "NATIONAL", "DKI_JAKARTA", "JAWA_BARAT", "JAWA_TIMUR", "JAWA_TENGAH", "SULAWESI_SELATAN", "BANTEN", "NUSA_TENGGARA_BARAT", "BALI", "PAPUA", "KALIMANTAN_SELATAN", "SUMATERA_BARAT", "SUMATERA_SELATAN", "KALIMANTAN_TENGAH", "KALIMANTAN_TIMUR", "SUMATERA_UTARA", "DAERAH_ISTIMEWA_YOGYAKARTA", "KALIMANTAN_UTARA", "KEPULAUAN_RIAU", "KALIMANTAN_BARAT", "SULAWESI_TENGGARA", "LAMPUNG", "SULAWESI_UTARA", "SULAWESI_TENGAH", "RIAU", "PAPUA_BARAT", "SULAWESI_BARAT", "JAMBI", "MALUKU_UTARA", "MALUKU", "GORONTALO", "KEPULAUAN_BANGKA_BELITUNG", "ACEH", "BENGKULU", "NUSA_TENGGARA_TIMUR", ]
-    form.callout
+    form.callout.secondary
       .grid-x
         .cell.xlarge-3
           label(for='periods') #[span#periodsLabel 14] days period
@@ -63,8 +57,8 @@ html(lang="en")
         .cell.xlarge-3
           label(for='zone') Chart
         .cell.xlarge-9
-          button.button.small.expanded#zoneBtn(type='button') Select Chart
-          select(multiple)#zone.hide
+
+          select(multiple)#zone
             each val in zones
               option(value=val)= val.split("_").join(" ")
           p.help-text i don't like to scroll, i want to select some chart
@@ -72,25 +66,28 @@ html(lang="en")
         .cell.xlarge-3
           label(for='zone') Datasets
         .cell.xlarge-9
-          button.button.small.expanded#datasetsBtn(type='button') Select Datasets
-          - let datasets = ["Daily Confirmed Case","Daily Recover Case","Daily Death Case","Daily Active Case", "Daily Recover Line","Daily Death Line","Daily Active Line"]
-          select(multiple)#datasets.hide
+          - let datasets = ["Confirmed Case","Confirmed Fitted Line","Recover Case","Recover Fitted Line","Death Case","Death Fitted Line","Active Case","Active Fitted Line"]
+          select(multiple)#datasets
             each val,idx in datasets
               option(value=idx)= val
           p.help-text i don't like this chart, i want to select some datasets
+      .grid-x.align-right
+        .cell
+          button.button(type='submit') Submit
 
 
     #myChart.grid-x.xlarge-up-2(aria-describedby="chartHelpText")
       each val in zones
         .cell.callout(class=val=='NATIONAL'?'width-100':'')
-          .clearfix.chart-action
+          .chart-action.clearfix
             .float-right
-              a.download-raw(href=`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${val}.csv` download=`${val}.csv`): img.lazy(data-src="img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
-              a.download-chart: img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
-              a.fullscreen.show-for-xlarge: img.lazy(data-src="img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
+              a.icon.download-raw(href=`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${val}.csv` download=`${val}.csv`): img.lazy(data-src="img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
+              a.icon.download-chart: img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
+              a.icon.fullscreen.show-for-xlarge: img.lazy(data-src="img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
             //- .float-right
             //-   a(href=`#Chart_${val}`).anchor: img(data-src="img/baseline_link_black_18dp.png" alt="anchor")
-            .float-right: .loader
+            .float-right
+              .loader
           canvas(id=`Chart_${val}`)
 
     button.button.small#top
