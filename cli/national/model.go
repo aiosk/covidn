@@ -105,9 +105,9 @@ func (v HarianList) ToChartjs() libs.Chartjs {
 	for _, v2 := range v {
 		data.Labels = append(data.Labels, v2.DateStr)
 		item[0].Data = append(item[0].Data, float64(v2.Case.Value))
-		item[2].Data = append(item[1].Data, float64(v2.Recover.Value))
-		item[4].Data = append(item[2].Data, float64(v2.Death.Value))
-		item[6].Data = append(item[3].Data, float64(v2.Active.Value))
+		item[2].Data = append(item[2].Data, float64(v2.Recover.Value))
+		item[4].Data = append(item[4].Data, float64(v2.Death.Value))
+		item[6].Data = append(item[6].Data, float64(v2.Active.Value))
 	}
 	item[0].Label = tags["Case"]
 	item[2].Label = tags["Recover"]
