@@ -105,36 +105,36 @@ func (v HarianList) ToChartjs() libs.Chartjs {
 	for _, v2 := range v {
 		data.Labels = append(data.Labels, v2.DateStr)
 		item[0].Data = append(item[0].Data, float64(v2.Case.Value))
-		item[1].Data = append(item[1].Data, float64(v2.Recover.Value))
-		item[2].Data = append(item[2].Data, float64(v2.Death.Value))
-		item[3].Data = append(item[3].Data, float64(v2.Active.Value))
+		item[2].Data = append(item[1].Data, float64(v2.Recover.Value))
+		item[4].Data = append(item[2].Data, float64(v2.Death.Value))
+		item[6].Data = append(item[3].Data, float64(v2.Active.Value))
 	}
-	// log.Println(item[0].Data)
-	item[4].Data = libs.MyRegression(item[1].Data)
-	item[5].Data = libs.MyRegression(item[2].Data)
-	item[6].Data = libs.MyRegression(item[3].Data)
-
 	item[0].Label = tags["Case"]
-	item[1].Label = tags["Recover"]
-	item[2].Label = tags["Death"]
-	item[3].Label = tags["Active"]
-	item[4].Label = fmt.Sprintf("%s-fitted_line", tags["Case"])
-	item[5].Label = fmt.Sprintf("%s-fitted_line", tags["Recover"])
-	item[6].Label = fmt.Sprintf("%s-fitted_line", tags["Death"])
-	item[7].Label = fmt.Sprintf("%s-fitted_line", tags["Active"])
-
-	item[4].Type = "line"
-	item[5].Type = "line"
-	item[6].Type = "line"
-	item[7].Type = "line"
-
+	item[2].Label = tags["Recover"]
+	item[4].Label = tags["Death"]
+	item[6].Label = tags["Active"]
 	item[0].BackgroundColor = libs.ChartjsColor["case"]
-	item[1].BackgroundColor = libs.ChartjsColor["recover"]
-	item[2].BackgroundColor = libs.ChartjsColor["death"]
-	item[3].BackgroundColor = libs.ChartjsColor["active"]
-	item[4].BorderColor = libs.ChartjsColor["case"]
-	item[5].BorderColor = libs.ChartjsColor["recover"]
-	item[6].BorderColor = libs.ChartjsColor["death"]
+	item[2].BackgroundColor = libs.ChartjsColor["recover"]
+	item[4].BackgroundColor = libs.ChartjsColor["death"]
+	item[6].BackgroundColor = libs.ChartjsColor["active"]
+
+	// log.Println(item[0].Data)
+	item[1].Data = libs.MyRegression(item[0].Data)
+	item[3].Data = libs.MyRegression(item[2].Data)
+	item[5].Data = libs.MyRegression(item[4].Data)
+	item[7].Data = libs.MyRegression(item[6].Data)
+
+	item[1].Label = fmt.Sprintf("%s-fitted_line", tags["Case"])
+	item[3].Label = fmt.Sprintf("%s-fitted_line", tags["Recover"])
+	item[5].Label = fmt.Sprintf("%s-fitted_line", tags["Death"])
+	item[7].Label = fmt.Sprintf("%s-fitted_line", tags["Active"])
+	item[1].Type = "line"
+	item[3].Type = "line"
+	item[5].Type = "line"
+	item[7].Type = "line"
+	item[1].BorderColor = libs.ChartjsColor["case"]
+	item[3].BorderColor = libs.ChartjsColor["recover"]
+	item[5].BorderColor = libs.ChartjsColor["death"]
 	item[7].BorderColor = libs.ChartjsColor["active"]
 
 	data.Datasets = append(data.Datasets, item[0])
