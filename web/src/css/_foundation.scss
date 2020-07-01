@@ -32,7 +32,7 @@
 @import "../../node_modules/foundation-sites/scss/grid/grid";
 @import "../../node_modules/foundation-sites/scss/xy-grid/xy-grid";
 // Generic components
-@import "../../node_modules/foundation-sites/scss/components/button";
+// @import "../../node_modules/foundation-sites/scss/components/button";
 // @import 'components/button-group';
 // @import 'components/close-button';
 // @import 'components/label';
@@ -106,7 +106,7 @@
   }
 
   // Generic components
-  @include foundation-button;
+  // @include foundation-button;
   //   @include foundation-button-group;
   //   @include foundation-close-button;
   //   @include foundation-label;

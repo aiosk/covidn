@@ -69,24 +69,18 @@ let myDataGlobal = ObservableSlim.create(
 
           break;
         case "mediaQuery.atLeastLarge":
-          if (change.newValue) {
-            myDataGlobal.periods = 7;
-          } else {
-            myDataGlobal.periods = 14;
-          }
+          myDataGlobal.periods = change.newValue ? 7 : 14;
           // console.log(change.newValue);
-          if (change.newValue) {
-            Page.domShowOrHide($chartHelpTextMobile, false);
-            Page.domShowOrHide($chartHelpTextDesktop, true);
-          } else {
-            Page.domShowOrHide($chartHelpTextMobile, true);
-            Page.domShowOrHide($chartHelpTextDesktop, false);
-          }
+
+          Page.domShowOrHide($chartHelpTextMobile, !change.newValue);
+          Page.domShowOrHide($chartHelpTextDesktop, change.newValue);
+
           break;
         case "mediaQuery.atLeastMedium":
           for (const k in myChart) {
             myChart[k].options.scales.xAxes[0].ticks.display = change.newValue;
             myChart[k].options.scales.yAxes[0].ticks.display = change.newValue;
+            myChart[k].update();
           }
 
           break;
@@ -138,6 +132,19 @@ let myChartData = {};
       const image = myChart[$canvas.id].toBase64Image();
       $anchor.href = image;
       $anchor.download = `${$canvas.id}.jpg`;
+    });
+  });
+  document.querySelectorAll("a.download-raw").forEach((v) => {
+    v.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const $anchor = e.target.closest("a.download-raw");
+      Page.domSpin(e.target);
+
+      const $cell = e.target.closest(".cell.callout");
+      const $canvas = $cell.querySelector("canvas");
+      const dataId = $canvas.id.split("_").slice(1).join("_");
+      $anchor.href = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${dataId}.csv`;
+      $anchor.download = `${dataId}.csv`;
     });
   });
 
