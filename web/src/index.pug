@@ -72,13 +72,13 @@ html(lang="en")
       each val in zones
         .cell.callout(class=val=='NATIONAL'?'width-100':'')
           .action.grid-x
-            .cell.small-10
-              .legend.grid-x.small-up-4
-            .cell.small-2
+            .cell.small-12.medium-4
               .loader
               a.icon.download-raw(href=`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${val}.csv` download=`${val}.csv`): img.lazy(data-src="img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
               a.icon.download-chart: img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
               a.icon.fullscreen.show-for-xlarge: img.lazy(data-src="img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
+            .cell.small-12.medium-8
+              .legend.grid-x.small-up-2
           canvas(id=`Chart_${val}`)
             //- .float-right
             //-   a(href=`#Chart_${val}`).anchor: img(data-src="img/baseline_link_black_18dp.png" alt="anchor")
