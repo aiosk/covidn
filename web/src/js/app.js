@@ -22,7 +22,7 @@ let myDataDefault = {
 };
 
 let myData = ObservableSlim.create(myDataDefault, true, (changes) => {
-  console.log(changes);
+  // console.log(changes);
 });
 
 const $zoneInput = document.querySelector(`select#zone`);
@@ -37,7 +37,7 @@ let myDataGlobal = ObservableSlim.create(
   myDataDefault.GLOBAL,
   true,
   (changes) => {
-    console.log(changes);
+    // console.log(changes);
     changes.forEach((change) => {
       switch (change.currentPath) {
         case "periods":
@@ -74,7 +74,7 @@ let myDataGlobal = ObservableSlim.create(
           } else {
             myDataGlobal.periods = 14;
           }
-          console.log(change.newValue);
+          // console.log(change.newValue);
           if (change.newValue) {
             Page.domShowOrHide($chartHelpTextMobile, false);
             Page.domShowOrHide($chartHelpTextDesktop, true);
@@ -91,23 +91,9 @@ let myDataGlobal = ObservableSlim.create(
 
           break;
         case "hiddenDatasets":
-          for (const k in myChartData) {
-            myDataGlobal.hiddenDatasets.forEach((v, i) => {
-              if (!!myChartData[k].datasets.length)
-                myChartData[k].datasets[i].hidden = v;
-            });
+          if (!!lazyLoadCanvas) {
+            lazyLoadCanvas.update();
           }
-          // if (!!lazyLoadCanvas) {
-          //   lazyLoadCanvas.update();
-          // }
-          for (const k in myChart) {
-            myChart[k].update();
-            document
-              .querySelector(`#${k}`)
-              .closest(".cell")
-              .querySelector(".legend").innerHTML = myChart[k].generateLegend();
-          }
-
           break;
       }
     });
@@ -170,6 +156,26 @@ let myChartData = {};
 })();
 
 (() => {
+  document.querySelectorAll(".legend").forEach((v) => {
+    const $legend = v;
+    // $legend.innerHTML = myChart[k].generateLegend();
+    const $legendOnClick = (e) => {
+      // console.log("legendOnClick");
+      if (e.target.style.textDecoration == "none") {
+        e.target.style.textDecoration = "line-through";
+      } else {
+        e.target.style.textDecoration = "none";
+      }
+      myDataGlobal.hiddenDatasets = [...$legend.querySelectorAll(".text")].map(
+        (v) => v.style.textDecoration != "none"
+      );
+    };
+    $legend.removeEventListener("click", $legendOnClick);
+    $legend.addEventListener("click", $legendOnClick);
+  });
+})();
+
+(() => {
   // const $form = document.querySelector("form");
 
   $(window)
@@ -189,7 +195,7 @@ const logElement = (el) => {
   delay(() => {
     lazyLoadCanvas = new LazyLoad({
       elements_selector: "canvas",
-      unobserve_entered: true,
+      // unobserve_entered: true,
       callback_enter: onCanvasEnterViewport,
       callback_exit: logElement,
       callback_loading: logElement,
@@ -223,24 +229,11 @@ const logElement = (el) => {
 
         myChart[el.id].update();
         Page.domShowOrHide($canvasLoader, false);
-
         const $legend = document
           .querySelector(`#${el.id}`)
           .closest(".cell")
           .querySelector(".legend");
         $legend.innerHTML = myChart[el.id].generateLegend();
-        const $legendOnClick = (e) => {
-          if (e.target.style.textDecoration == "none") {
-            e.target.style.textDecoration = "line-through";
-          } else {
-            e.target.style.textDecoration = "none";
-          }
-          myDataGlobal.hiddenDatasets = [
-            ...$legend.querySelectorAll(".text"),
-          ].map((v) => v.style.textDecoration != "none");
-        };
-        $legend.removeEventListener("click", $legendOnClick);
-        $legend.addEventListener("click", $legendOnClick);
       })();
     }, 99);
   };
