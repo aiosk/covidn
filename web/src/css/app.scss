@@ -17,9 +17,10 @@ form {
 
 #top {
   // margin-bottom: 0.5rem;
+  $position: 1rem;
   position: fixed;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: $position;
+  right: $position;
   margin: 0;
   img {
     $size: 1.5rem;
@@ -29,6 +30,7 @@ form {
 
   background: $medium-gray;
   // background: rgba(192, 192, 192, 0.5);
+  padding: 0.5rem;
   border-radius: 50%;
 }
 
@@ -57,13 +59,11 @@ form {
       }
     }
 
-    @include breakpoint(medium up) {
-      & > .cell:nth-child(1) {
-        order: 2;
-      }
-      & > .cell:nth-child(2) {
-        order: 1;
-      }
+    & > .cell:nth-child(1) {
+      order: 2;
+    }
+    & > .cell:nth-child(2) {
+      order: 1;
     }
   }
   .legend {
@@ -94,6 +94,11 @@ form {
 
 .width-100 {
   width: 100% !important;
+  .legend {
+    @include breakpoint(xlarge up) {
+      @include xy-grid-layout(4, ".cell");
+    }
+  }
 }
 
 // $breakpoints: (

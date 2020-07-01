@@ -62,7 +62,7 @@ html(lang="en")
           select(multiple)#zone
             each val in zones
               option(value=val)= val.split("_").join(" ")
-          p.help-text i don't like to scroll, i want to select some chart
+          p.help-text Too many charts, i don't like to scroll, i want to select some chart
       .grid-x.align-right.hide
         .cell
           button.button(type='submit') Submit
@@ -72,13 +72,13 @@ html(lang="en")
       each val in zones
         .cell.callout(class=val=='NATIONAL'?'width-100':'')
           .action.grid-x
-            .cell.small-12.medium-4
+            .cell.small-2.xlarge-3
               .loader
               a.icon.download-raw(target='_blank'): img.lazy(data-src="img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
               a.icon.download-chart: img.lazy(data-src="img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
               a.icon.fullscreen.show-for-xlarge: img.lazy(data-src="img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
-            .cell.small-12.medium-8
-              .legend.grid-x.small-up-2
+            .cell.small-10.xlarge-9
+              .legend.grid-x.small-up-2.medium-up-3.large-up-4.xlarge-up-2
           canvas(id=`Chart_${val}`)
             //- .float-right
             //-   a(href=`#Chart_${val}`).anchor: img(data-src="img/baseline_link_black_18dp.png" alt="anchor")
