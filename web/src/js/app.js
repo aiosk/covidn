@@ -7,104 +7,140 @@ import Prov from "./libs/prov.js";
 import Page from "./libs/page.js";
 import MyFoundation from "./libs/foundation.js";
 
+let myDataDefault = {
+  GLOBAL: {
+    periods: 14,
+    zones: [],
+    hiddenDatasets: [true, true, false, false, false, false, false, false],
+    mediaQuery: {
+      atLeastLarge: undefined,
+      atLeastMedium: undefined,
+    },
+  },
+  CHART: {},
+  CHARTDATA: {},
+};
+
+let myData = ObservableSlim.create(myDataDefault, true, (changes) => {
+  console.log(changes);
+});
+
+const $zoneInput = document.querySelector(`select#zone`);
+const $chartHelpTextMobile = document.querySelectorAll(
+  "#chartHelpText .mobile"
+);
+const $chartHelpTextDesktop = document.querySelectorAll(
+  "#chartHelpText .desktop"
+);
+let lazyLoadCanvas;
+let myDataGlobal = ObservableSlim.create(
+  myDataDefault.GLOBAL,
+  true,
+  (changes) => {
+    console.log(changes);
+    changes.forEach((change) => {
+      switch (change.currentPath) {
+        case "periods":
+          if (!!lazyLoadCanvas) {
+            lazyLoadCanvas.update();
+          }
+
+          break;
+        case "zones":
+          const allChart = [...$zoneInput.querySelectorAll("option")]
+            .map((v) => `#Chart_${v.value}`)
+            .join(", ");
+          const allChartCell = [
+            ...document.querySelectorAll(allChart),
+          ].map((v) => v.closest(".cell"));
+          if (change.newValue.length) {
+            Page.domShowOrHide(allChartCell, false);
+            Page.domShowOrHide(
+              [
+                ...document.querySelectorAll(
+                  change.newValue.map((v) => `#Chart_${v}`).join(", ")
+                ),
+              ].map((v) => v.closest(".cell")),
+              true
+            );
+          } else {
+            Page.domShowOrHide(allChartCell, true);
+          }
+
+          break;
+        case "mediaQuery.atLeastLarge":
+          if (change.newValue) {
+            myDataGlobal.periods = 7;
+          } else {
+            myDataGlobal.periods = 14;
+          }
+          console.log(change.newValue);
+          if (change.newValue) {
+            Page.domShowOrHide($chartHelpTextMobile, false);
+            Page.domShowOrHide($chartHelpTextDesktop, true);
+          } else {
+            Page.domShowOrHide($chartHelpTextMobile, true);
+            Page.domShowOrHide($chartHelpTextDesktop, false);
+          }
+          break;
+        case "mediaQuery.atLeastMedium":
+          for (const k in myChart) {
+            myChart[k].options.scales.xAxes[0].ticks.display = change.newValue;
+            myChart[k].options.scales.yAxes[0].ticks.display = change.newValue;
+          }
+
+          break;
+        case "hiddenDatasets":
+          for (const k in myChartData) {
+            myDataGlobal.hiddenDatasets.forEach((v, i) => {
+              if (!!myChartData[k].datasets.length)
+                myChartData[k].datasets[i].hidden = v;
+            });
+          }
+          // if (!!lazyLoadCanvas) {
+          //   lazyLoadCanvas.update();
+          // }
+          for (const k in myChart) {
+            myChart[k].update();
+            document
+              .querySelector(`#${k}`)
+              .closest(".cell")
+              .querySelector(".legend").innerHTML = myChart[k].generateLegend();
+          }
+
+          break;
+      }
+    });
+  }
+);
+
 let myChart = {};
 let myChartData = {};
-myChartData["Chart_NATIONAL"] = cloneDeep(MyChartjs.dataDefault);
-Prov.provinces.forEach((v) => {
+["NATIONAL"].concat(Prov.provinces).forEach((v) => {
   myChartData[`Chart_${v}`] = cloneDeep(MyChartjs.dataDefault);
 });
 
-let hiddenDatasets = [true, true, false, false, false, false, false, false];
-
-let periods = 14;
-let lazyLoadCanvas;
-
-const $zoneInput = document.querySelector(`select#zone`);
-(() => {
-  // const $form = document.querySelector("form");
+((_) => {
   const $periodsInput = document.querySelector("form input[type='range']");
-  const $periodsLabel = document.querySelector(`#periodsLabel`);
-
-  const updatePeriods = (newPeriods) => {
-    periods = newPeriods;
-    $periodsLabel.innerHTML = newPeriods;
-    if ($periodsInput.value != newPeriods) {
-      $periodsInput.value = newPeriods;
-    }
-  };
-
-  $(window)
-    .on("changed.zf.mediaquery", function (event, newSize, oldSize) {
-      // console.log("MediaQuery.current", Foundation.MediaQuery.current);
-      Page.showHelpMobileOrDesktop(
-        MyFoundation.mqAtleastLarge(),
-        document.querySelectorAll("#chartHelpText .mobile"),
-        document.querySelectorAll("#chartHelpText .desktop")
-      );
-      if (MyFoundation.mqAtleastLarge()) {
-        updatePeriods(7);
-      } else {
-        updatePeriods(14);
-      }
-
-      for (const k in myChart) {
-        if (MyFoundation.mqAtleast("medium")) {
-          myChart[k].options.scales.xAxes[0].ticks.display = true;
-          myChart[k].options.scales.yAxes[0].ticks.display = true;
-        } else {
-          myChart[k].options.scales.xAxes[0].ticks.display = false;
-          myChart[k].options.scales.yAxes[0].ticks.display = false;
-        }
-      }
-    })
-    .trigger("changed.zf.mediaquery");
-
-  const onSliderReleaseUpdateLabel = (e, onChange = false) => {
-    let { value } = e.target;
-
-    updatePeriods(value);
-  };
-  $periodsInput.addEventListener("input", onSliderReleaseUpdateLabel);
-  $periodsInput.addEventListener("change", (e) => {
-    onSliderReleaseUpdateLabel(e);
-    if (!!lazyLoadCanvas) {
-      lazyLoadCanvas.update();
-    }
+  $periodsInput.addEventListener("input", (e) => {
+    const $label = e.target.closest(".grid-x").querySelector(`label span`);
+    $label.innerHTML = e.target.value;
   });
-  (() => {
-    const allChart = [...$zoneInput.querySelectorAll("option")]
-      .map((v) => `#Chart_${v.value}`)
-      .join(", ");
-    $zoneInput.addEventListener("change", (e) => {
-      const selectedVal = [...e.target.querySelectorAll("option:checked")].map(
-        (v) => v.value
-      );
-      if (selectedVal.length) {
-        Page.domShowOrHide(
-          [...document.querySelectorAll(allChart)].map((v) =>
-            v.closest(".cell")
-          ),
-          false
-        );
-        Page.domShowOrHide(
-          [
-            ...document.querySelectorAll(
-              selectedVal.map((v) => `#Chart_${v}`).join(", ")
-            ),
-          ].map((v) => v.closest(".cell")),
-          true
-        );
-      } else {
-        Page.domShowOrHide(
-          [...document.querySelectorAll(allChart)].map((v) =>
-            v.closest(".cell")
-          ),
-          true
-        );
-      }
-    });
-  })();
+  $periodsInput.addEventListener("change", (e) => {
+    myDataGlobal.periods = e.target.value;
+  });
+})();
 
+(() => {
+  $zoneInput.addEventListener("change", (e) => {
+    const selectedVal = [...e.target.querySelectorAll("option:checked")].map(
+      (v) => v.value
+    );
+    myDataGlobal.zones = selectedVal;
+  });
+})();
+
+(() => {
   document.querySelectorAll("a.download-chart").forEach((v) => {
     v.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -118,6 +154,7 @@ const $zoneInput = document.querySelector(`select#zone`);
       $anchor.download = `${$canvas.id}.jpg`;
     });
   });
+
   document.querySelectorAll("a.fullscreen").forEach((v) => {
     v.addEventListener("click", (e) => {
       Page.domSpin(e.target);
@@ -133,6 +170,22 @@ const $zoneInput = document.querySelector(`select#zone`);
 })();
 
 (() => {
+  // const $form = document.querySelector("form");
+
+  $(window)
+    .on("changed.zf.mediaquery", function (event, newSize, oldSize) {
+      // console.log("MediaQuery.current", Foundation.MediaQuery.current);
+
+      myDataGlobal.mediaQuery.atLeastLarge = MyFoundation.mqAtleast("xlarge");
+      myDataGlobal.mediaQuery.atLeastMedium = MyFoundation.mqAtleast("medium");
+    })
+    .trigger("changed.zf.mediaquery");
+})();
+
+const logElement = (el) => {
+  console.log(el);
+};
+(() => {
   delay(() => {
     lazyLoadCanvas = new LazyLoad({
       elements_selector: "canvas",
@@ -143,13 +196,8 @@ const $zoneInput = document.querySelector(`select#zone`);
       callback_loaded: logElement,
     });
 
-    let lazyLoad = new LazyLoad();
+    let _ = new LazyLoad();
   }, 9);
-  const logElement = (el) => {
-    // myChart[el.id].destroy();
-    // console.log(myChart[el.id]);
-    console.log(el);
-  };
 
   const onCanvasEnterViewport = (el) => {
     // console.log("enter", el, i, i2);
@@ -165,9 +213,9 @@ const $zoneInput = document.querySelector(`select#zone`);
       Page.domShowOrHide($canvasLoader, true);
 
       (async () => {
-        const data = await MyChartjs.getFile(el.id, periods);
+        const data = await MyChartjs.getFile(el.id, myDataGlobal.periods);
 
-        hiddenDatasets.forEach((v, i) => {
+        myDataGlobal.hiddenDatasets.forEach((v, i) => {
           data.datasets[i].hidden = v;
         });
         myChartData[el.id].labels = data.labels;
@@ -181,31 +229,18 @@ const $zoneInput = document.querySelector(`select#zone`);
           .closest(".cell")
           .querySelector(".legend");
         $legend.innerHTML = myChart[el.id].generateLegend();
-
-        $legend.addEventListener("click", (e) => {
+        const $legendOnClick = (e) => {
           if (e.target.style.textDecoration == "none") {
             e.target.style.textDecoration = "line-through";
           } else {
             e.target.style.textDecoration = "none";
           }
-          hiddenDatasets = [...$legend.querySelectorAll(".text")].map(
-            (v) => v.style.textDecoration != "none"
-          );
-          // console.log(myChartData, myChart);
-          for (const k in myChartData) {
-            hiddenDatasets.forEach((v, i) => {
-              if (!!myChartData[k].datasets.length)
-                myChartData[k].datasets[i].hidden = v;
-            });
-          }
-          for (const k in myChart) {
-            myChart[k].update();
-            document
-              .querySelector(`#${k}`)
-              .closest(".cell")
-              .querySelector(".legend").innerHTML = myChart[k].generateLegend();
-          }
-        });
+          myDataGlobal.hiddenDatasets = [
+            ...$legend.querySelectorAll(".text"),
+          ].map((v) => v.style.textDecoration != "none");
+        };
+        $legend.removeEventListener("click", $legendOnClick);
+        $legend.addEventListener("click", $legendOnClick);
       })();
     }, 99);
   };

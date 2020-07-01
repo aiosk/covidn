@@ -1,9 +1,6 @@
 const mqAtleast = (size) => {
   return Foundation.MediaQuery.atLeast(size);
 };
-const mqAtleastLarge = () => {
-  return mqAtleast("xlarge");
-};
 
 const parseStyleToObject = (str) => {
   var styleObject = {};
@@ -58,4 +55,4 @@ const parseStyleToObject = (str) => {
 // }
 // console.log(queries);
 
-export default { mqAtleast, mqAtleastLarge };
+export default { mqAtleast };

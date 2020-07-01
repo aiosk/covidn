@@ -5,11 +5,13 @@
 //   scroll-behavior: smooth;
 // }
 form {
-  input[type="range"] {
-    width: 100%;
-  }
-  span#periodsLabel {
-    font-weight: bold;
+  .periods {
+    input[type="range"] {
+      width: 100%;
+    }
+    label span {
+      font-weight: bold;
+    }
   }
 }
 
