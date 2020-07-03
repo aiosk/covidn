@@ -12,44 +12,53 @@
 <script>
 import _delay from "lodash/delay";
 import _isUndefined from "lodash/isUndefined";
+import _cloneDeep from "lodash/cloneDeep";
 
 // http://www.picturetopeople.org/p2p/text_effects_generator.p2p/transparent_text_effect
 var image = new Image();
 image.src = "img/watermark2.png";
 
-const getData = async (zone, periods) => {
-  // const zone = zone.split("_").slice(1).join("_");
-  let res = await fetch(
-    `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/chartjs/${zone}-${periods}.json?_=${Date.now()}`
-  );
-  let resJson = await res.json();
-
-  return resJson;
-};
-
 export default {
   name: "MyChart",
-  props: ["zone", "periods", "hiddenDatasets"],
+  props: ["zone", "value"],
   computed: {
     isNational() {
       return this.zone == "NATIONAL";
     },
+    urlData() {
+      return `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/chartjs/${
+        this.zone
+      }-${this.periods}.json?_=${Date.now()}`;
+    }
   },
   data() {
     return {
+      periods: this.value.periods,
+      hiddenDatasets: this.value.hiddenDatasets,
+
       chartInstance: null,
-      data: { datasets: [], labels: [] },
+      data: { datasets: [], labels: [] }
     };
   },
   watch: {
-    hiddenDatasets(newData, oldData) {
-      console.log(newData);
-      this.chartInstance.data.datasets.forEach((v, i) => {
-        this.chartInstance.data.datasets[i].hidden = newData[i];
-      });
-      // console.log(newData, this.chartInstance.data.datasets);
-      this.chartInstance.update();
-    },
+    value(newData, oldData) {
+      if (newData.periods != oldData.periods) {
+        this.periods = newData.periods;
+        this.updateChartData();
+      }
+      if (newData.hiddenDatasets != oldData.hiddenDatasets) {
+        newData.hiddenDatasets.forEach((v, i) => {
+          this.$set(this.hiddenDatasets, i, v);
+        });
+        // this.hiddenDatasets = newData.hiddenDatasets;
+        this.updateChartData();
+        //   // this.updateChartData();
+        //   this.chartInstance.data.datasets.forEach((v, i) => {
+        //     this.chartInstance.data.datasets[i].hidden = newData[i];
+        //   });
+        //   this.chartInstance.update();
+      }
+    }
   },
   methods: {
     onClickFullscreen(e) {
@@ -63,6 +72,20 @@ export default {
       $anchor.href = image;
       $anchor.download = `Chart_${this.zone}.jpg`;
     },
+    updateChartData() {
+      (async () => {
+        let res = await fetch(this.urlData);
+        let newData = await res.json();
+        if (!!this.hiddenDatasets && !!this.hiddenDatasets.length) {
+          this.hiddenDatasets.forEach((v, i) => {
+            newData.datasets[i].hidden = v;
+          });
+        }
+        this.data.datasets = newData.datasets;
+        this.data.labels = newData.labels;
+        this.chartInstance.update();
+      })();
+    }
   },
   created() {},
   mounted() {
@@ -80,7 +103,7 @@ export default {
             chartInstance.chart.width,
             chartInstance.chart.height
           );
-        },
+        }
       });
 
       this.chartInstance = new Chart(`Chart_${this.zone}`, {
@@ -89,7 +112,7 @@ export default {
         options: {
           title: {
             display: true,
-            text: this.zone.split("_").join(" "),
+            text: this.zone.split("_").join(" ")
           },
           tooltips: {
             mode: "index",
@@ -99,7 +122,7 @@ export default {
               //   data.datasets[tooltipItem.datasetIndex].type
               // );
               return _isUndefined(data.datasets[tooltipItem.datasetIndex].type);
-            },
+            }
           },
           legend: {
             // position: "right",
@@ -107,16 +130,20 @@ export default {
             onClick(e, legendItem) {
               var index = legendItem.datasetIndex;
               var ci = this.chart;
-              var meta = ci.getDatasetMeta(index);
+              // var meta = ci.getDatasetMeta(index);
 
               // See controller.isDatasetVisible comment
-              meta.hidden =
-                meta.hidden === null ? !ci.data.datasets[index].hidden : null;
+              // meta.hidden =
+              //   meta.hidden === null ? !ci.data.datasets[index].hidden : null;
+              ci.data.datasets[index].hidden = !ci.data.datasets[index].hidden;
 
               // We hid a dataset ... rerender the chart
-              _this.$emit("legendOnClick", [index, !!meta.hidden]);
+
+              const propValue = _cloneDeep(_this.value);
+              propValue.hiddenDatasets = ci.data.datasets.map(v => v.hidden);
+              _this.$emit("input", propValue);
               ci.update();
-            },
+            }
           },
           scales: {
             // xAxes: [{ ticks: { display: MyFoundation.mqAtleast("medium") } }],
@@ -151,24 +178,16 @@ export default {
             // alignToChartArea: false,
             // determines whether the watermark is drawn on top of or behind the chart
             // valid values: "front", "back"
-            position: "front",
-          },
-        },
+            position: "front"
+          }
+        }
       });
     }, 499);
 
-    _delay(async () => {
-      const newData = await getData(this.zone, this.periods);
-
-      this.hiddenDatasets.forEach((v, i) => {
-        newData.datasets[i].hidden = v;
-      });
-      this.data.datasets = newData.datasets;
-      this.data.labels = newData.labels;
-
-      this.chartInstance.update();
+    _delay(() => {
+      this.updateChartData();
     }, 699);
-  },
+  }
 };
 </script>
 

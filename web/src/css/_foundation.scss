@@ -146,12 +146,12 @@ $breakpoint-classes: (small medium large xlarge);
   //   @include foundation-title-bar;
   //   @include foundation-top-bar;
 
-  //   // Helpers
+  // Helpers
   //   @include foundation-float-classes;
   //   @if $flex {
   //     @include foundation-flex-classes;
   //   }
-  //   @include foundation-visibility-classes;
+  @include foundation-visibility-classes;
   //   @if $prototype {
   //     @include foundation-prototype-classes;
   //   }
