@@ -27,10 +27,12 @@ see [**instructions**](https://github.com/aiosk/covidn/blob/master/cli)
   Kode dan Data Wilayah Administarsi Indonesia sesuai Permendagri No 72 Tahun 2019
 
 <!-- Yet another grafik.
-- Data resmi http://covid19.go.id
-- Kasus harian (bisa diatur per 1 hari sampai per 21 hari)
-- Grafik nasional dan provinsi (bisa dipilih)
-- Dataset kasus konfirmasi harian, sembuh harian, meninggal harian, dirawat / diisolasi harian (bisa dipilih)
+- Data resmi covid19.go.id
+- Mobile friendly
+- Kasus harian / periode
+- Grafik nasional / provinsi
+- Dataset kasus harian konfirmasi, sembuh, meninggal, dirawat / diisolasi
 - Unduh grafik
+- Unduh data CSV
 
 https://aiosk.github.io/covidn/ -->
