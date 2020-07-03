@@ -1,65 +1,24 @@
 {
-  "name": "covidn",
-  "version": "3.0.0",
-  "description": "Indonesia COVID-19 cases, National and Provinces",
-  "main": "index.js",
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:server": "lite-server --baseDir='dist'",
-    "dev:watch:html": "pug --out dist --pretty --watch src/index.pug",
-    "dev:watch:css": "sass --watch src/css/:dist/css",
-    "dev:watch:js": "npx rollup --config --watch --sourcemap",
-    "dev:watch": "concurrently --kill-others 'npm:dev:watch:*'",
-    "build:html": "pug --out dist src/index.pug",
-    "build:css": "sass src/css/:dist/css/ --style compressed --no-source-map",
-    "build:js": "npx rollup --config --environment BUILD:prod",
-    "build:clean": "rimraf 'dist/**/*.map'",
-    "build": "concurrently 'npm:build:*'"
-  },
-  "author": "andry.yosua@gmail.com",
-  "license": "MIT",
-  "devDependencies": {
-    "@babel/core": "^7.10.3",
-    "@babel/preset-env": "^7.10.3",
-    "@rollup/plugin-babel": "^5.0.3",
-    "@rollup/plugin-commonjs": "^13.0.0",
-    "@rollup/plugin-node-resolve": "^8.0.1",
-    "@rollup/plugin-url": "^5.0.1",
-    "concurrently": "^5.2.0",
-    "foundation-sites": "^6.6.3",
-    "lite-server": "^2.5.4",
-    "lodash": "^4.17.15",
-    "pug-cli": "^1.0.0-alpha6",
-    "rimraf": "^3.0.2",
-    "rollup-plugin-terser": "^6.1.0",
-    "sass": "^1.26.8"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.10.1",
-    "core-js": "^3.6.5"
+    "core-js": "^3.6.5",
+    "vue": "^2.6.11"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+github.com/aiosk/covidn.git"
-  },
-  "keywords": [
-    "indonesia",
-    "icalendar",
-    "ics",
-    "csv",
-    "covid-19",
-    "covid19",
-    "covid",
-    "provinsi",
-    "harian",
-    "rawan",
-    "provinces",
-    "national",
-    "daily",
-    "ical"
-  ],
-  "bugs": {
-    "url": "https://github.com/aiosk/covidn/issues"
-  },
-  "homepage": "https://github.com/aiosk/covidn#readme"
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-service": "~4.4.0",
+    "foundation-sites": "^6.6.3",
+    "lodash": "^4.17.15",
+    "pug": "^3.0.0",
+    "pug-plain-loader": "^1.0.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
+  }
 }
