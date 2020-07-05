@@ -10,9 +10,9 @@
         li.hide-for-xlarge For best results please view in #[strong landscape] mode
         li #[strong.show-for-xlarge Hover]#[strong.hide-for-xlarge Tap / Touch] chart bar to see case number
         li #[strong.show-for-xlarge Click]#[strong.hide-for-xlarge Tap / Touch] chart legend to show/hide chart data
-        li Click #[img(data-src="/img/baseline_get_app_black_18dp.png" alt="download chart")] to save chart as image
-        li Click #[img(data-src="/img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")] to save chart raw data
-        li.show-for-xlarge Click #[img(data-src="/img/baseline_fullscreen_black_18dp.png" alt="fullscreen")] to toggle chart #[strong full-width] mode
+        li Click #[img(data-src="./img/baseline_get_app_black_18dp.png" alt="download chart")] to save chart as image
+        li Click #[img(data-src="./img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")] to save chart raw data
+        li.show-for-xlarge Click #[img(data-src="./img/baseline_fullscreen_black_18dp.png" alt="fullscreen")] to toggle chart #[strong full-width] mode
 
     MyForm('v-model'="myModel")
     #myChart.grid-x.xlarge-up-2(aria-describedby="chartHelpText")

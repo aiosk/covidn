@@ -2,9 +2,9 @@
   .my-chart
     .action(v-lazy-container="{ selector: 'img' }")
       .loader
-      a.icon.download-raw(':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): img.lazy(data-src="/img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
-      a.icon.download-chart('@click'='onClickDownloadChart'): img(data-src="/img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
-      a.icon.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): img(data-src="/img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
+      a.icon.download-raw(':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): img.lazy(data-src="./img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
+      a.icon.download-chart('@click'='onClickDownloadChart'): img(data-src="./img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
+      a.icon.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): img(data-src="./img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
 
     canvas(:id="`Chart_${zone}`")
 </template>
