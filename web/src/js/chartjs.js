@@ -22,14 +22,14 @@ const initChart = (params = { zone: null, data: null, legendOnClick: null, mqIsA
     type: "bar",
     data: params.data,
     options: {
-      title: {
-        display: true,
-        text: params.zone.split("_").join(" "),
-        fontSize: 16,
-      },
+      // title: {
+      //   display: true,
+      //   text: params.zone.split("_").join(" "),
+      //   fontSize: 16,
+      // },
       tooltips: {
         mode: "index",
-        intersect: false,
+        // intersect: false,
         // filter: function(tooltipItem, data) {
         //   // console.log(
         //   //   data.datasets[tooltipItem.datasetIndex].label,
