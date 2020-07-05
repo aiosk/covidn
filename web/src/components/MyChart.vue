@@ -6,7 +6,12 @@
       a.icon.download-chart('@click'='onClickDownloadChart'): img(data-src="./img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
       a.icon.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): img(data-src="./img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
 
-    canvas(:id="`Chart_${zone}`")
+    canvas(:id="`Chart_${zone}`" ':aria-describedby'="`chartHelpText_${zone}`")
+    .help-text.callout.secondary(':id'='`chartHelpText_${zone}`')
+      ul(v-lazy-container="{ selector: 'img' }")
+        li #[strong.show-for-xlarge Click]#[strong.hide-for-xlarge Tap / Touch] chart legend to show/hide chart data
+        li #[strong.show-for-xlarge Hover]#[strong.hide-for-xlarge Tap / Touch] chart to show case number
+        li.hide-for-xlarge #[strong Tap / Touch outside] chart to hide case number
 </template>
 
 <script>
@@ -25,6 +30,9 @@ export default {
     },
     hiddenDatasets() {
       return this.value.hiddenDatasets;
+    },
+    mqIsAtLeastMedium() {
+      return this.value.mediaQuery.isAtLeastMedium;
     }
   },
   data() {
@@ -39,6 +47,15 @@ export default {
     },
     hiddenDatasets(val, oldVal) {
       this.updateChartDatasets();
+    },
+    mqIsAtLeastMedium(val, oldVal) {
+      if (!this.chartInstance) {
+        return;
+      }
+      this.chartInstance.options.legend.display = val;
+      this.chartInstance.options.scales.xAxes[0].ticks.display = val;
+      this.chartInstance.options.scales.yAxes[0].ticks.display = true;
+      this.chartInstance.update();
     }
   },
   methods: {
@@ -60,6 +77,8 @@ export default {
         }-${this.periods}.json?_=${Date.now()}`;
         let res = await fetch(url);
         let resJSON = await res.json();
+        resJSON.datasets[1].borderDash = [5, 5];
+
         this.$set(this.data, "datasets", resJSON.datasets);
         this.$set(this.data, "labels", resJSON.labels);
         this.updateChartDatasets();
@@ -82,6 +101,7 @@ export default {
       this.chartInstance = initChart({
         zone: this.zone,
         data: this.data,
+        mqIsAtLeastMedium: this.mqIsAtLeastMedium,
         legendOnClick(e, legendItem) {
           var index = legendItem.datasetIndex;
           var ci = this.chart;
@@ -117,8 +137,21 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+@import "../css/_foundation";
+@include foundation-form-helptext;
+
 .my-chart {
-  position: relative;
+}
+canvas {
+  // margin-top: 0.5rem;
+}
+.help-text {
+  margin: {
+    top: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0rem;
+  }
 }
 .action {
   position: absolute;
@@ -133,7 +166,7 @@ export default {
     display: inline-block;
     padding: 0.5rem;
     img {
-      $size: 2rem;
+      $size: $size - 1rem;
       height: $size;
       width: $size;
     }

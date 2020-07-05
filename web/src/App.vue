@@ -5,11 +5,9 @@
       .clearfix(v-lazy-container="{ selector: 'img' }")
         a.float-right(href='https://github.com/aiosk/covidn')
           img.lazy(alt="GitHub stars" data-src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
-    #chartHelpText.help-text.callout.warning
+    #chartHelpText.help-text.callout.secondary
       ul(v-lazy-container="{ selector: 'img' }")
         li.hide-for-xlarge For best results please view in #[strong landscape] mode
-        li #[strong.show-for-xlarge Hover]#[strong.hide-for-xlarge Tap / Touch] chart bar to see case number
-        li #[strong.show-for-xlarge Click]#[strong.hide-for-xlarge Tap / Touch] chart legend to show/hide chart data
         li Click #[img(data-src="./img/baseline_get_app_black_18dp.png" alt="download chart")] to save chart as image
         li Click #[img(data-src="./img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")] to save chart raw data
         li.show-for-xlarge Click #[img(data-src="./img/baseline_fullscreen_black_18dp.png" alt="fullscreen")] to toggle chart #[strong full-width] mode
@@ -29,6 +27,7 @@ import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 import _isEqual from "lodash/isEqual";
 import _sortBy from "lodash/sortBy";
+
 const zones = [
   "NATIONAL",
   "DKI_JAKARTA",
@@ -69,7 +68,7 @@ const zones = [
 const logElement = el => {
   console.log(el);
 };
-const defaultPeriods = 13;
+const defaultPeriods = 8;
 const defaultHiddenDatasets = [
   true,
   false,
@@ -94,6 +93,7 @@ const defaultSelectedZones = [
   "MALUKU_UTARA",
   "PAPUA"
 ];
+let MediaQuery;
 
 export default {
   name: "App",
@@ -104,6 +104,9 @@ export default {
   data() {
     return {
       myModel: {
+        mediaQuery: {
+          isAtLeastMedium: false
+        },
         periods: defaultPeriods,
         zones,
         selectedZones: _cloneDeep(defaultSelectedZones),
@@ -139,9 +142,19 @@ export default {
   methods: {
     handler(component) {
       console.log(component);
+    },
+    windowOnResize(e) {
+      // _delay
+      this.$set(
+        this.myModel.mediaQuery,
+        "isAtLeastMedium",
+        MediaQuery.atLeast("medium")
+      );
     }
   },
   created() {
+    window.addEventListener("resize", this.windowOnResize);
+
     let urlParams = new URLSearchParams(window.location.search);
     let selectedZones = urlParams.get("zones");
     let hiddenDatasets = urlParams.get("hidden");
@@ -164,6 +177,18 @@ export default {
     }
     const periods = urlParams.get("periods");
     this.myModel.periods = !!periods ? periods : defaultPeriods;
+  },
+  mounted() {
+    ({ MediaQuery } = require("./js/mediaQuery"));
+    MediaQuery._init();
+    this.$set(
+      this.myModel.mediaQuery,
+      "isAtLeastMedium",
+      MediaQuery.atLeast("medium")
+    );
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.windowOnResize);
   }
 };
 </script>
@@ -171,16 +196,27 @@ export default {
 <style lang="scss">
 @import "css/_foundation";
 @include foundation-everything;
+@include foundation-form-helptext;
 
-#chartHelpText {
+.help-text {
   img {
-    $size: 1.5rem;
+    $size: 1.25rem;
     width: $size;
     height: $size;
+  }
+
+  ul {
+    margin: 0;
+  }
+  li {
+    // display: inline-block;
+    // list-style-type: none;
+    margin: 0 1rem;
   }
 }
 .cell {
   transition: width 1s;
+  position: relative;
 }
 .callout {
   padding: 0.5rem;

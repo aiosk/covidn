@@ -1,6 +1,7 @@
 import _isUndefined from "lodash/isUndefined";
 import _sum from "lodash/sum";
 import _take from "lodash/take";
+
 const Chart = require("chartjs");
 
 Chart.plugins.register({
@@ -15,7 +16,8 @@ Chart.plugins.register({
 var image = new Image();
 image.src = "img/watermark2.png";
 
-const initChart = (params = { zone: null, data: null, legendOnClick: null }) => {
+const initChart = (params = { zone: null, data: null, legendOnClick: null, mqIsAtLeastMedium: false }) => {
+  // console.log(params.mqIsAtLeastMedium);
   const chartInstance = new Chart(`Chart_${params.zone}`, {
     type: "bar",
     data: params.data,
@@ -23,6 +25,7 @@ const initChart = (params = { zone: null, data: null, legendOnClick: null }) => 
       title: {
         display: true,
         text: params.zone.split("_").join(" "),
+        fontSize: 16,
       },
       tooltips: {
         mode: "index",
@@ -56,11 +59,20 @@ const initChart = (params = { zone: null, data: null, legendOnClick: null }) => 
         },
       },
       legend: {
+        display: params.mqIsAtLeastMedium,
         onClick: params.legendOnClick,
       },
       scales: {
-        // xAxes: [{ ticks: { display: MyFoundation.mqAtleast("medium") } }],
-        // yAxes: [{ ticks: { display: MyFoundation.mqAtleast("medium") } }],
+        xAxes: [
+          {
+            ticks: {
+              // display: params.mqIsAtLeastMedium,
+              display: params.mqIsAtLeastMedium,
+              // min: 0,
+              maxRotation: 23,
+            },
+          },
+        ],
       },
       animation: { duration: 0 },
       hover: { animationDuration: 0 },
