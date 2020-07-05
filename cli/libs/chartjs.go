@@ -30,10 +30,10 @@ type datasets struct {
 
 // ChartjsColor ...
 var ChartjsColor = datasets{
-	Confirmed: "#FFC000",
-	Death:     "#A50026",
-	Recover:   "#87CEEB",
-	Active:    "#F46D43",
+	Confirmed: "#2C347C",
+	Death:     "#ec6f58",
+	Recover:   "#3c928c",
+	Active:    "#ceb546",
 }
 
 // ChartjsLabel ...
