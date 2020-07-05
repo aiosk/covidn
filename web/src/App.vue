@@ -64,36 +64,51 @@ const zones = [
   "KEPULAUAN_BANGKA_BELITUNG",
   "ACEH",
   "BENGKULU",
-  "NUSA_TENGGARA_TIMUR",
+  "NUSA_TENGGARA_TIMUR"
 ];
-const logElement = (el) => {
+const logElement = el => {
   console.log(el);
 };
-const defaultHiddenDatasets = [true, false, true, false, true, false, true, false];
+const defaultPeriods = 13;
+const defaultHiddenDatasets = [
+  true,
+  false,
+  true,
+  false,
+  true,
+  false,
+  true,
+  false
+];
 const defaultSelectedZones = [
   "NATIONAL",
   "DKI_JAKARTA",
   "JAWA_BARAT",
   "JAWA_TENGAH",
   "JAWA_TIMUR",
+  "SUMATERA_SELATAN",
+  "SUMATERA_UTARA",
   "SULAWESI_SELATAN",
   "KALIMANTAN_SELATAN",
+  "KALIMANTAN_TENGAH",
+  "MALUKU_UTARA",
+  "PAPUA"
 ];
 
 export default {
   name: "App",
   components: {
     MyForm,
-    MyChart,
+    MyChart
   },
   data() {
     return {
       myModel: {
-        periods: 14,
+        periods: defaultPeriods,
         zones,
         selectedZones: _cloneDeep(defaultSelectedZones),
-        hiddenDatasets: _cloneDeep(defaultHiddenDatasets),
-      },
+        hiddenDatasets: _cloneDeep(defaultHiddenDatasets)
+      }
     };
   },
   watch: {
@@ -119,12 +134,12 @@ export default {
         urlParams.set(`zones`, val.join("+"));
       }
       window.history.replaceState({}, "", `${location.pathname}?${urlParams}`);
-    },
+    }
   },
   methods: {
     handler(component) {
       console.log(component);
-    },
+    }
   },
   created() {
     let urlParams = new URLSearchParams(window.location.search);
@@ -135,7 +150,7 @@ export default {
     if (!!hiddenDatasets) {
       hiddenDatasets = hiddenDatasets.split("+");
       hiddenDatasets
-        .map((v) => JSON.parse(v.toLowerCase() == "true"))
+        .map(v => JSON.parse(v.toLowerCase() == "true"))
         .forEach((v, i) => {
           _this.$set(this.myModel.hiddenDatasets, i, v);
         });
@@ -143,11 +158,13 @@ export default {
 
     if (!!selectedZones) {
       selectedZones = selectedZones.split("+");
-      this.myModel.selectedZones = !!selectedZones.length ? selectedZones : defaultSelectedZones;
+      this.myModel.selectedZones = !!selectedZones.length
+        ? selectedZones
+        : defaultSelectedZones;
     }
     const periods = urlParams.get("periods");
-    this.myModel.periods = !!periods ? periods : 14;
-  },
+    this.myModel.periods = !!periods ? periods : defaultPeriods;
+  }
 };
 </script>
 
