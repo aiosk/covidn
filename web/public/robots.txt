@@ -1,0 +1,4 @@
+User-Agent: *
+Disallow: 
+
+Sitemap: https://aiosk.github.io/covidn/sitemap.xml
