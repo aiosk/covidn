@@ -1,10 +1,10 @@
 <template lang="pug">
-  .my-chart.cell.callout(':class'='{"width-100":isNational}')
-    .action
+  .my-chart
+    .action(v-lazy-container="{ selector: 'img' }")
       .loader
       a.icon.download-raw(':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): img.lazy(data-src="/img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
-      a.icon.download-chart('@click'='onClickDownloadChart'): img.lazy(data-src="/img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
-      a.icon.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): img.lazy(data-src="/img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
+      a.icon.download-chart('@click'='onClickDownloadChart'): img(data-src="/img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
+      a.icon.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): img(data-src="/img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
 
     canvas(:id="`Chart_${zone}`")
 </template>
@@ -20,45 +20,33 @@ image.src = "img/watermark2.png";
 
 export default {
   name: "MyChart",
-  props: ["zone", "value"],
+  props: {
+    zone: String,
+    value: Object,
+  },
   computed: {
-    isNational() {
-      return this.zone == "NATIONAL";
-    },
     urlData() {
-      return `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/chartjs/${
-        this.zone
-      }-${this.periods}.json?_=${Date.now()}`;
-    }
+      return `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/chartjs/${this.zone}-${
+        this.periods
+      }.json?_=${Date.now()}`;
+    },
+    periods() {
+      return this.value.periods;
+    },
+    hiddenDatasets() {
+      return this.value.hiddenDatasets;
+    },
   },
   data() {
     return {
-      periods: this.value.periods,
-      hiddenDatasets: this.value.hiddenDatasets,
-
       chartInstance: null,
-      data: { datasets: [], labels: [] }
+      data: { datasets: [], labels: [] },
     };
   },
   watch: {
-    value(newData, oldData) {
-      if (newData.periods != oldData.periods) {
-        this.periods = newData.periods;
-        this.updateChartData();
-      }
-      if (newData.hiddenDatasets != oldData.hiddenDatasets) {
-        newData.hiddenDatasets.forEach((v, i) => {
-          this.$set(this.hiddenDatasets, i, v);
-        });
-        // this.hiddenDatasets = newData.hiddenDatasets;
-        this.updateChartData();
-        //   // this.updateChartData();
-        //   this.chartInstance.data.datasets.forEach((v, i) => {
-        //     this.chartInstance.data.datasets[i].hidden = newData[i];
-        //   });
-        //   this.chartInstance.update();
-      }
-    }
+    value(val, oldVal) {
+      this.updateChartData();
+    },
   },
   methods: {
     onClickFullscreen(e) {
@@ -76,35 +64,23 @@ export default {
       (async () => {
         let res = await fetch(this.urlData);
         let newData = await res.json();
-        if (!!this.hiddenDatasets && !!this.hiddenDatasets.length) {
-          this.hiddenDatasets.forEach((v, i) => {
-            newData.datasets[i].hidden = v;
-          });
-        }
+
+        // if (!!this.hiddenDatasets && !!this.hiddenDatasets.length) {
+        this.hiddenDatasets.forEach((v, i) => {
+          newData.datasets[i].hidden = v;
+        });
+        // }
         this.data.datasets = newData.datasets;
         this.data.labels = newData.labels;
         this.chartInstance.update();
       })();
-    }
+    },
   },
-  created() {},
   mounted() {
     const _this = this;
-    // this.$emit("on-click-legend", "a");
+
     _delay(() => {
-      const Chart = require("chartjs");
-      Chart.plugins.register({
-        beforeDraw: function(chartInstance) {
-          var ctx = chartInstance.chart.ctx;
-          ctx.fillStyle = "white";
-          ctx.fillRect(
-            0,
-            0,
-            chartInstance.chart.width,
-            chartInstance.chart.height
-          );
-        }
-      });
+      const { default: Chart } = require("../js/chartjs");
 
       this.chartInstance = new Chart(`Chart_${this.zone}`, {
         type: "bar",
@@ -112,7 +88,7 @@ export default {
         options: {
           title: {
             display: true,
-            text: this.zone.split("_").join(" ")
+            text: this.zone.split("_").join(" "),
           },
           tooltips: {
             mode: "index",
@@ -122,7 +98,7 @@ export default {
               //   data.datasets[tooltipItem.datasetIndex].type
               // );
               return _isUndefined(data.datasets[tooltipItem.datasetIndex].type);
-            }
+            },
           },
           legend: {
             // position: "right",
@@ -139,11 +115,13 @@ export default {
 
               // We hid a dataset ... rerender the chart
 
-              const propValue = _cloneDeep(_this.value);
-              propValue.hiddenDatasets = ci.data.datasets.map(v => v.hidden);
-              _this.$emit("input", propValue);
+              const propsValue = _cloneDeep(_this.value);
+              _this.$set(propsValue.hiddenDatasets, index, ci.data.datasets[index].hidden);
+              // propsValue.hiddenDatasets = ci.data.datasets.map((v) => v.hidden);
+
+              _this.$emit("input", propsValue);
               ci.update();
-            }
+            },
           },
           scales: {
             // xAxes: [{ ticks: { display: MyFoundation.mqAtleast("medium") } }],
@@ -178,32 +156,23 @@ export default {
             // alignToChartArea: false,
             // determines whether the watermark is drawn on top of or behind the chart
             // valid values: "front", "back"
-            position: "front"
-          }
-        }
+            position: "front",
+          },
+        },
       });
     }, 499);
 
     _delay(() => {
       this.updateChartData();
     }, 699);
-  }
+  },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.width-100 {
-  width: 100% !important;
-}
 .my-chart {
   position: relative;
-}
-.cell {
-  transition: width 1s;
-}
-.callout {
-  padding: 0.5rem;
 }
 .action {
   position: absolute;
@@ -231,28 +200,4 @@ export default {
     order: 1;
   }
 }
-// .legend {
-//   padding: 0.5rem;
-//   font-size: 1rem;
-//   text-align: left;
-//   .item {
-//     cursor: pointer;
-//     margin-bottom: 0.5rem;
-//     .color {
-//       $size: 1rem;
-//       width: $size;
-//       height: $size;
-//       display: inline-block;
-//       border: {
-//         width: 0.125rem;
-//         style: solid;
-//       }
-//     }
-//     .text {
-//       // padding: 0.125rem;
-//       padding-left: 0.5rem;
-//       line-height: 1rem;
-//     }
-//   }
-// }
 </style>

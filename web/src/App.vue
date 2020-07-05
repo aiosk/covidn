@@ -2,23 +2,23 @@
   #app.grid-container
     h4.text-center Daily Indonesia COVID-19 cases
     h5.text-center National and Provinces
-      .clearfix
+      .clearfix(v-lazy-container="{ selector: 'img' }")
         a.float-right(href='https://github.com/aiosk/covidn')
           img.lazy(alt="GitHub stars" data-src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
     #chartHelpText.help-text.callout.warning
-      ul
-        li.mobile For best results please view in #[strong landscape] mode
-        li.mobile Click #[img.lazy(data-src="/img/baseline_get_app_black_18dp.png" alt="download chart")] to save chart as image
-        li.mobile Click #[img.lazy(data-src="/img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")] to save chart raw data
-        li.mobile #[strong Hover / Tap / Touch] chart bar to see case number
-        li.mobile #[strong Click / Tap / Touch] chart legend to show/hide chart data
-        li.desktop.show-for-xlarge Click #[img.lazy(data-src="/img/baseline_fullscreen_black_18dp.png" alt="fullscreen")] to toggle chart #[strong full-width] mode
-        li.desktop.show-for-xlarge Click #[img.lazy(data-src="/img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")] to save chart raw data
+      ul(v-lazy-container="{ selector: 'img' }")
+        li.hide-for-xlarge For best results please view in #[strong landscape] mode
+        li #[strong.show-for-xlarge Hover]#[strong.hide-for-xlarge Tap / Touch] chart bar to see case number
+        li #[strong.show-for-xlarge Click]#[strong.hide-for-xlarge Tap / Touch] chart legend to show/hide chart data
+        li Click #[img(data-src="/img/baseline_get_app_black_18dp.png" alt="download chart")] to save chart as image
+        li Click #[img(data-src="/img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")] to save chart raw data
+        li.show-for-xlarge Click #[img(data-src="/img/baseline_fullscreen_black_18dp.png" alt="fullscreen")] to toggle chart #[strong full-width] mode
 
     MyForm('v-model'="myModel")
-
     #myChart.grid-x.xlarge-up-2(aria-describedby="chartHelpText")
-      MyChart(v-for="v in myModel.selectedZones" ':key'="v" ':zone'='v' 'v-model'="myModel")
+      .cell.callout('@show'="handler" v-for="v in myModel.selectedZones" ':key'="v" ':class'='{"width-100":v=="NATIONAL"}')
+        MyChart(':zone'='v' 'v-model'="myModel")
+      //- MyChart.cell.callout(v-for="v in myModel.selectedZones" ':key'="v" ':class'='{"width-100":v=="NATIONAL"}' ':zone'='v' 'v-model'="myModel")
 </template>
 
 <script>
@@ -28,6 +28,7 @@ import MyChart from "./components/MyChart.vue";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 import _isEqual from "lodash/isEqual";
+import _sortBy from "lodash/sortBy";
 const zones = [
   "NATIONAL",
   "DKI_JAKARTA",
@@ -63,99 +64,90 @@ const zones = [
   "KEPULAUAN_BANGKA_BELITUNG",
   "ACEH",
   "BENGKULU",
-  "NUSA_TENGGARA_TIMUR"
+  "NUSA_TENGGARA_TIMUR",
 ];
-const logElement = el => {
+const logElement = (el) => {
   console.log(el);
 };
-const defaultHiddenDatasets = [
-  true,
-  false,
-  true,
-  false,
-  true,
-  false,
-  true,
-  false
+const defaultHiddenDatasets = [true, false, true, false, true, false, true, false];
+const defaultSelectedZones = [
+  "NATIONAL",
+  "DKI_JAKARTA",
+  "JAWA_BARAT",
+  "JAWA_TENGAH",
+  "JAWA_TIMUR",
+  "SULAWESI_SELATAN",
+  "KALIMANTAN_SELATAN",
 ];
 
 export default {
   name: "App",
   components: {
     MyForm,
-    MyChart
+    MyChart,
   },
   data() {
     return {
-      lazyload: null,
       myModel: {
         periods: 14,
         zones,
-        selectedZones: [],
-        hiddenDatasets: _cloneDeep(defaultHiddenDatasets)
-      }
+        selectedZones: _cloneDeep(defaultSelectedZones),
+        hiddenDatasets: _cloneDeep(defaultHiddenDatasets),
+      },
     };
   },
   watch: {
-    myModel(newData, oldData) {
-      _delay(() => {
-        this.lazyload.update();
-      }, 99);
-
-      if (
-        newData.hiddenDatasets != oldData.hiddenDatasets ||
-        newData.periods != oldData.periods
-      ) {
-        let urlParams = new URLSearchParams(window.location.search);
-        urlParams.delete("hidden");
-        if (!_isEqual(newData.hiddenDatasets, defaultHiddenDatasets)) {
-          newData.hiddenDatasets.forEach((v, i) => {
-            urlParams.append(`hidden`, v);
-          });
-        }
-        urlParams.set("periods", newData.periods);
-
-        window.history.replaceState(
-          {},
-          "",
-          `${location.pathname}?${urlParams}`
-        );
+    "myModel.hiddenDatasets": (val, oldVal) => {
+      let urlParams = new URLSearchParams(window.location.search);
+      urlParams.delete("hidden");
+      if (!_isEqual(val, defaultHiddenDatasets)) {
+        urlParams.set(`hidden`, val.join("+"));
       }
-    }
+
+      window.history.replaceState({}, "", `${location.pathname}?${urlParams}`);
+    },
+    "myModel.periods": (val, oldVal) => {
+      let urlParams = new URLSearchParams(window.location.search);
+      urlParams.set("periods", val);
+      window.history.replaceState({}, "", `${location.pathname}?${urlParams}`);
+    },
+    "myModel.selectedZones": (val, oldVal) => {
+      let urlParams = new URLSearchParams(window.location.search);
+      urlParams.delete("zones");
+
+      if (!_isEqual(_sortBy(val), _sortBy(defaultSelectedZones))) {
+        urlParams.set(`zones`, val.join("+"));
+      }
+      window.history.replaceState({}, "", `${location.pathname}?${urlParams}`);
+    },
+  },
+  methods: {
+    handler(component) {
+      console.log(component);
+    },
   },
   created() {
     let urlParams = new URLSearchParams(window.location.search);
-    const selectedZones = urlParams.getAll("zones");
-    let hiddenDatasets = urlParams.getAll("hidden");
+    let selectedZones = urlParams.get("zones");
+    let hiddenDatasets = urlParams.get("hidden");
+    const _this = this;
 
-    if (!!hiddenDatasets.length) {
+    if (!!hiddenDatasets) {
+      hiddenDatasets = hiddenDatasets.split("+");
       hiddenDatasets
-        .map(v => JSON.parse(v.toLowerCase() == "true"))
+        .map((v) => JSON.parse(v.toLowerCase() == "true"))
         .forEach((v, i) => {
-          this.$set(this.myModel.hiddenDatasets, i, v);
+          _this.$set(this.myModel.hiddenDatasets, i, v);
         });
     }
 
-    this.myModel.selectedZones = !!selectedZones.length ? selectedZones : zones;
+    if (!!selectedZones) {
+      selectedZones = selectedZones.split("+");
+      this.myModel.selectedZones = !!selectedZones.length ? selectedZones : defaultSelectedZones;
+    }
     const periods = urlParams.get("periods");
     this.myModel.periods = !!periods ? periods : 14;
   },
-  mounted() {
-    _delay(() => {
-      const LazyLoad = require("lazyload");
-      this.lazyload = new LazyLoad();
-
-      // let lazyLoadCanvas = new LazyLoad({
-      //   elements_selector: "canvas",
-      //   // unobserve_entered: true,
-      //   callback_enter: onCanvasEnterViewport,
-      //   callback_exit: logElement,
-      //   callback_loading: logElement,
-      //   callback_loaded: logElement,
-      // });
-    }, 299);
-    const onCanvasEnterViewport = el => {};
-  }
 };
 </script>
 
@@ -169,5 +161,14 @@ export default {
     width: $size;
     height: $size;
   }
+}
+.cell {
+  transition: width 1s;
+}
+.callout {
+  padding: 0.5rem;
+}
+.width-100 {
+  width: 100% !important;
 }
 </style>
