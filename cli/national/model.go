@@ -136,9 +136,9 @@ func (v HarianList) ToChartjs() libs.Chartjs {
 
 	// log.Println(item[0].Data)
 	item[2].Data = libs.MyRegression(item[0].Data)
-	item[5].Data = libs.MyRegression(item[2].Data)
-	item[8].Data = libs.MyRegression(item[4].Data)
-	item[11].Data = libs.MyRegression(item[6].Data)
+	item[5].Data = libs.MyRegression(item[3].Data)
+	item[8].Data = libs.MyRegression(item[6].Data)
+	item[11].Data = libs.MyRegression(item[9].Data)
 
 	item[2].Type = "line"
 	item[5].Type = "line"
