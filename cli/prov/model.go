@@ -160,10 +160,10 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 	item[5].Data = libs.MyRegression(item[4].Data)
 	item[7].Data = libs.MyRegression(item[6].Data)
 
-	item[1].Label = fmt.Sprintf("%s-fitted", libs.ChartjsLabel.Confirmed)
-	item[3].Label = fmt.Sprintf("%s-fitted", libs.ChartjsLabel.Recover)
-	item[5].Label = fmt.Sprintf("%s-fitted", libs.ChartjsLabel.Death)
-	item[7].Label = fmt.Sprintf("%s-fitted", libs.ChartjsLabel.Active)
+	item[1].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Confirmed)
+	item[3].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Recover)
+	item[5].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Death)
+	item[7].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Active)
 	item[1].Type = "line"
 	item[3].Type = "line"
 	item[5].Type = "line"
