@@ -1,10 +1,11 @@
 <template lang="pug">
   .my-chart.card
-    .card-divider.title
-      h1 {{zone.split('_').join(' ')}}
-    .card-section.legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
-    .card-image
-      canvas(:id="`Chart_${zone}`" ':aria-describedby'="`chartHelpText_${zone}`")
+    .capture
+      .card-divider.title
+        h1 {{zone.split('_').join(' ')}}
+      .card-section.legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
+      .card-image
+        canvas(:id="`Chart_${zone}`" ':aria-describedby'="`chartHelpText_${zone}`")
     .card-section.action
       a.icon.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): img.lazy(data-src="./img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
       a.icon.download-chart('@click'='onClickDownloadChart'): img.lazy(data-src="./img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
@@ -64,12 +65,37 @@ export default {
       if (!this.chartInstance) {
         return;
       }
+      const html2canvas = require("html2canvas");
       const $anchor = e.target.closest("a.download-chart");
+      const _this = this;
+
+      (async () => {
+        const canvas = await html2canvas(
+          e.target.closest(".card").querySelector(".capture"),
+          { backgroundColor: "#fff" }
+        );
+
+        var a = document.createElement("a");
+        // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
+        a.href = canvas.toDataURL("image/jpeg");
+        a.download = `Chart_${this.zone}.jpg`;
+        a.click();
+      })();
+      // html2canvas(e.target.closest(".card").querySelector(".capture"), {
+      //   background: "#fff",
+      //   onrendered(canvas) {
+      //     var a = document.createElement("a");
+      //     // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
+      //     a.href = canvas.toDataURL("image/jpeg");
+      //     // .replace("image/jpeg", "image/octet-stream");
+      //     a.download = `Chart_${_this.zone}.jpg`;
+      //     a.click();
+      //   }
+      // });
       // Page.domSpin(e.target);
 
-      const image = this.chartInstance.toBase64Image();
-      $anchor.href = image;
-      $anchor.download = `Chart_${this.zone}.jpg`;
+      // $anchor.href = image;
+      // $anchor.download = `Chart_${this.zone}.jpg`;
     },
     legendOnClick(e) {
       const $item = e.target.closest(".item");
@@ -155,6 +181,9 @@ export default {
 
 .my-chart {
   margin: 0.5rem;
+}
+.capture {
+  background-color: white;
 }
 .card-divider.title {
   background-color: map-get($foundation-palette, "primary");

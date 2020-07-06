@@ -4,6 +4,7 @@ module.exports = {
     externals: {
       lazyload: "LazyLoad",
       chartjs: "Chart",
+      html2canvas: "html2canvas",
     },
   },
 };
