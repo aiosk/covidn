@@ -43,10 +43,10 @@ export default {
   },
   watch: {
     periods(val, oldVal) {
-      this.updateData();
+      // this.updateData();
     },
     hiddenDatasets(val, oldVal) {
-      this.updateDatasets();
+      // this.updateDatasets();
     },
     mqIsAtLeastMedium(val, oldVal) {
       if (!this.chartInstance) {
@@ -133,24 +133,20 @@ export default {
       this.legendHTML = this.chartInstance.generateLegend();
     },
     init() {
+      if (!this.chartInstance) {
+        const { initChart } = require("../js/chartjs");
+        this.chartInstance = initChart({
+          zone: this.zone,
+          data: this.data,
+          mqIsAtLeastMedium: this.mqIsAtLeastMedium
+        });
+      }
       _delay(() => {
-        if (!this.chartInstance) {
-          const { initChart } = require("../js/chartjs");
-          this.chartInstance = initChart({
-            zone: this.zone,
-            data: this.data,
-            mqIsAtLeastMedium: this.mqIsAtLeastMedium
-          });
-        }
-        _delay(() => {
-          this.updateData();
-        }, 9);
-      }, 499);
+        this.updateData();
+      }, 9);
     }
   },
-  mounted() {
-    // this.init();
-  },
+  mounted() {},
   destroyed() {
     if (!this.chartInstance) {
       return;

@@ -111,7 +111,13 @@ export default {
     };
   },
   watch: {
-    "myModel.hiddenDatasets": (val, oldVal) => {
+    "myModel.hiddenDatasets": function(val, oldVal) {
+      _delay(() => {
+        if (!!this.lazyLoadCanvas && !!this.lazyLoad) {
+          this.lazyLoadCanvas.update();
+          this.lazyLoad.update();
+        }
+      }, 9);
       let urlParams = new URLSearchParams(window.location.search);
       urlParams.delete("hidden");
       if (!_isEqual(val, defaultHiddenDatasets)) {
@@ -120,7 +126,13 @@ export default {
 
       window.history.replaceState({}, "", `${location.pathname}?${urlParams}`);
     },
-    "myModel.periods": (val, oldVal) => {
+    "myModel.periods": function(val, oldVal) {
+      _delay(() => {
+        if (!!this.lazyLoadCanvas && !!this.lazyLoad) {
+          this.lazyLoadCanvas.update();
+          this.lazyLoad.update();
+        }
+      }, 9);
       let urlParams = new URLSearchParams(window.location.search);
       urlParams.delete("periods");
 
