@@ -116,10 +116,6 @@ func (v HarianList) ToChartjs() libs.Chartjs {
 	item[2].BackgroundColor = libs.ChartjsColor.Recover
 	item[4].BackgroundColor = libs.ChartjsColor.Death
 	item[6].BackgroundColor = libs.ChartjsColor.Active
-	item[0].Type = "line"
-	item[2].Type = "line"
-	item[4].Type = "line"
-	item[6].Type = "line"
 
 	// log.Println(item[0].Data)
 	item[1].Data = libs.MyRegression(item[0].Data)
