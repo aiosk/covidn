@@ -20,7 +20,7 @@
         li.hide-for-xlarge #[strong Tap / Touch outside] chart legend to hide case number
 
     #myChart.grid-x.xlarge-up-2(aria-describedby="chartHelpText")
-      .cell(v-for="v in myModel.selectedZones" ':key'="v" ':class'='{"width-100":v=="NATIONAL"}')
+      .cell(v-for="v in myModel.selectedZones" ':key'="v" ':class'='[{"width-100":v=="NATIONAL"},"chart-item",`chart-item--${v}`]' )
         MyChart(':zone'='v' 'v-model'="myModel" ':ref'='v')
 
     button.button.small#top('@click'='topBtnOnClick')
@@ -73,9 +73,6 @@ const zones = [
   "BENGKULU",
   "NUSA_TENGGARA_TIMUR"
 ];
-const logElement = el => {
-  console.log(el);
-};
 const defaultPeriods = 8;
 const defaultHiddenDatasets = [
   true,
@@ -212,30 +209,34 @@ export default {
       const LazyLoad = require("lazyload");
 
       this.lazyLoadCanvas = new LazyLoad({
-        elements_selector: "canvas",
+        elements_selector: ".chart-item",
         unobserve_entered: true,
         callback_enter: el => {
-          const elId = el.id
-            .split("_")
+          const elId = el
+            .querySelector("canvas")
+            .id.split("_")
             .slice(1)
             .join("_");
           const component = this.$refs[elId];
           component[0].init();
-        },
-        callback_exit: el => {
-          const elId = el.id
-            .split("_")
-            .slice(1)
-            .join("_");
-          console.log("exit", elId);
-        },
-        callback_loading: logElement,
-        callback_loaded: logElement
+        }
+        // callback_exit: el => {
+        //   const elId = el
+        //     .querySelector("canvas")
+        //     .id.split("_")
+        //     .slice(1)
+        //     .join("_");
+        //   console.log("callback_exit", elId);
+        // }
       });
-      this.lazyLoad = new LazyLoad();
+      this.lazyLoad = new LazyLoad({
+        elements_selector: "img.lazy"
+      });
     }, 99);
   },
   destroyed() {
+    this.lazyLoadCanvas.destroy();
+    this.lazyLoad.destroy();
     window.removeEventListener("resize", this.windowOnResize);
   }
 };
