@@ -115,14 +115,18 @@ export default {
       let urlParams = new URLSearchParams(window.location.search);
       urlParams.delete("hidden");
       if (!_isEqual(val, defaultHiddenDatasets)) {
-        urlParams.set(`hidden`, val.join("+"));
+        urlParams.set(`hidden`, val.map(v => (v ? 1 : 0)).join(""));
       }
 
       window.history.replaceState({}, "", `${location.pathname}?${urlParams}`);
     },
     "myModel.periods": (val, oldVal) => {
       let urlParams = new URLSearchParams(window.location.search);
-      urlParams.set("periods", val);
+      urlParams.delete("periods");
+
+      if (val != defaultPeriods) {
+        urlParams.set("periods", val);
+      }
       window.history.replaceState({}, "", `${location.pathname}?${urlParams}`);
     },
     "myModel.selectedZones": function(val, oldVal) {
@@ -165,12 +169,10 @@ export default {
     const _this = this;
 
     if (!!hiddenDatasets) {
-      hiddenDatasets = hiddenDatasets.split("+");
-      hiddenDatasets
-        .map(v => JSON.parse(v.toLowerCase() == "true"))
-        .forEach((v, i) => {
-          _this.$set(this.myModel.hiddenDatasets, i, v);
-        });
+      hiddenDatasets = hiddenDatasets.split("").map(v => v == "1");
+      hiddenDatasets.forEach((v, i) => {
+        _this.$set(this.myModel.hiddenDatasets, i, v);
+      });
     }
 
     if (!!selectedZones) {

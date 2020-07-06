@@ -50,7 +50,7 @@ const initChart = (params = { zone: null, data: null, mqIsAtLeastMedium: false }
             let value = data.datasets[datasetIndexVal].data[tooltipItem.index];
             let total = _sum(_take(data.datasets[datasetIndexVal].data, tooltipItem.index + 1));
 
-            return `${label}: ${value}, Total ${label}: ${total}`;
+            return `${label}: ${total} (${value > 0 ? "+" : ""}${value})`;
           },
         },
       },

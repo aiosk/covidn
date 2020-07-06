@@ -133,16 +133,15 @@ export default {
       this.legendHTML = this.chartInstance.generateLegend();
     },
     init() {
-      const _this = this;
-
       _delay(() => {
-        const { initChart } = require("../js/chartjs");
-        this.chartInstance = initChart({
-          zone: this.zone,
-          data: this.data,
-          mqIsAtLeastMedium: this.mqIsAtLeastMedium
-        });
-
+        if (!this.chartInstance) {
+          const { initChart } = require("../js/chartjs");
+          this.chartInstance = initChart({
+            zone: this.zone,
+            data: this.data,
+            mqIsAtLeastMedium: this.mqIsAtLeastMedium
+          });
+        }
         _delay(() => {
           this.updateData();
         }, 9);
@@ -167,7 +166,8 @@ export default {
 @include foundation-card;
 
 .my-chart {
-  margin: 0.5rem;
+  margin: 0.5rem 0;
+  border-color: map-get($foundation-palette, "primary");
 }
 .capture {
   background-color: white;
