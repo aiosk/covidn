@@ -4,13 +4,13 @@ import _take from "lodash/take";
 
 const Chart = require("chartjs");
 
-Chart.plugins.register({
-  beforeDraw: function(chartInstance) {
-    var ctx = chartInstance.chart.ctx;
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
-  },
-});
+// Chart.plugins.register({
+//   beforeDraw: function(chartInstance) {
+//     var ctx = chartInstance.chart.ctx;
+//     ctx.fillStyle = "white";
+//     ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+//   },
+// });
 
 // http://www.picturetopeople.org/p2p/text_effects_generator.p2p/transparent_text_effect
 var image = new Image();
@@ -31,10 +31,6 @@ const initChart = (params = { zone: null, data: null, mqIsAtLeastMedium: false }
         mode: "index",
         intersect: false,
         // filter: function(tooltipItem, data) {
-        //   // console.log(
-        //   //   data.datasets[tooltipItem.datasetIndex].label,
-        //   //   data.datasets[tooltipItem.datasetIndex].type
-        //   // );
         //   return _isUndefined(data.datasets[tooltipItem.datasetIndex].type);
         // },
         callbacks: {
