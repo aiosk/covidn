@@ -16,7 +16,7 @@ Chart.plugins.register({
 var image = new Image();
 image.src = "img/watermark2.png";
 
-const initChart = (params = { zone: null, data: null, legendOnClick: null, mqIsAtLeastMedium: false }) => {
+const initChart = (params = { zone: null, data: null, mqIsAtLeastMedium: false }) => {
   // console.log(params.mqIsAtLeastMedium);
   const chartInstance = new Chart(`Chart_${params.zone}`, {
     type: "bar",
@@ -29,7 +29,7 @@ const initChart = (params = { zone: null, data: null, legendOnClick: null, mqIsA
       // },
       tooltips: {
         mode: "index",
-        // intersect: false,
+        intersect: false,
         // filter: function(tooltipItem, data) {
         //   // console.log(
         //   //   data.datasets[tooltipItem.datasetIndex].label,
@@ -59,8 +59,22 @@ const initChart = (params = { zone: null, data: null, legendOnClick: null, mqIsA
         },
       },
       legend: {
-        display: params.mqIsAtLeastMedium,
-        onClick: params.legendOnClick,
+        display: false,
+        // display: params.mqIsAtLeastMedium,
+      },
+      legendCallback: (chart) => {
+        const chartLegendHtml = chart.legend.legendItems
+          .map((v) => {
+            return `<div class='cell item ${v.text}'>
+  <div class='grid-x'>
+    <div class='cell small-2 color' style="background-color:${v.fillStyle};border:.2rem solid ${v.strokeStyle};"></div>
+    <div class='cell small-10 text' style="text-decoration:${v.hidden ? "line-through" : "none"};">${v.text}</div>
+  </div>
+</div>`;
+          })
+          .join("\n");
+
+        return chartLegendHtml;
       },
       scales: {
         xAxes: [
@@ -69,7 +83,7 @@ const initChart = (params = { zone: null, data: null, legendOnClick: null, mqIsA
               // display: params.mqIsAtLeastMedium,
               display: params.mqIsAtLeastMedium,
               // min: 0,
-              maxRotation: 23,
+              // maxRotation: 23,
             },
           },
         ],

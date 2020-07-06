@@ -20,6 +20,14 @@
 // import and modify the default settings through
 
 $breakpoint-classes: (small medium large xlarge);
+
+$foundation-palette: (
+  primary: #2c347c,
+  secondary: #767676,
+  success: #3adb76,
+  warning: #ffae00,
+  alert: #cc4b37,
+);
 // @import 'settings/settings';
 
 // --- Components ---

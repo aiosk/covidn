@@ -20,10 +20,8 @@
         li.hide-for-xlarge #[strong Tap / Touch outside] chart legend to hide case number
 
     #myChart.grid-x.xlarge-up-2(aria-describedby="chartHelpText")
-      .cell.callout('@show'="handler" v-for="v in myModel.selectedZones" ':key'="v" ':class'='{"width-100":v=="NATIONAL"}')
+      .cell(v-for="v in myModel.selectedZones" ':key'="v" ':class'='{"width-100":v=="NATIONAL"}')
         MyChart(':zone'='v' 'v-model'="myModel" ':ref'='v')
-      //- MyChart.cell.callout(v-for="v in myModel.selectedZones" ':key'="v" ':class'='{"width-100":v=="NATIONAL"}' ':zone'='v' 'v-model'="myModel")
-
 
     button.button.small#top('@click'='topBtnOnClick')
       img.lazy(data-src="img/baseline_vertical_align_top_black_18dp.png" alt="Scroll to top")
@@ -144,9 +142,6 @@ export default {
     }
   },
   methods: {
-    handler(component) {
-      console.log(component);
-    },
     windowOnResize(e) {
       this.$set(
         this.myModel.mediaQuery,
@@ -184,8 +179,12 @@ export default {
         ? selectedZones
         : _cloneDeep(zones);
     }
-    const periods = urlParams.get("periods");
-    this.myModel.periods = !!periods ? periods : defaultPeriods;
+
+    let periods = urlParams.get("periods");
+    periods = !!periods ? periods : defaultPeriods;
+    if (!_isEqual(periods, defaultPeriods)) {
+      this.myModel.periods = periods;
+    }
   },
   mounted() {
     ({ MediaQuery } = require("./js/mediaQuery"));
@@ -209,7 +208,13 @@ export default {
           const component = this.$refs[elId];
           component[0].init();
         },
-        callback_exit: logElement,
+        callback_exit: el => {
+          const elId = el.id
+            .split("_")
+            .slice(1)
+            .join("_");
+          console.log("exit", elId);
+        },
         callback_loading: logElement,
         callback_loaded: logElement
       });
@@ -247,12 +252,6 @@ export default {
   transition: width 1s;
   position: relative;
 }
-.callout {
-  padding: 0.5rem;
-}
-.width-100 {
-  width: 100% !important;
-}
 
 #top {
   // margin-bottom: 0.5rem;
@@ -271,5 +270,33 @@ export default {
   // background: rgba(192, 192, 192, 0.5);
   padding: 0.5rem;
   border-radius: 50%;
+}
+.legend {
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  text-align: left;
+  .item {
+    cursor: pointer;
+    margin-bottom: 0.25rem;
+    .color {
+      $size: 1rem;
+      width: $size;
+      height: $size;
+      display: inline-block;
+    }
+    .text {
+      // padding: 0.125rem;
+      padding-left: 0.25rem;
+      line-height: 0.75rem;
+    }
+  }
+}
+.width-100 {
+  width: 100% !important;
+  .legend {
+    @include breakpoint(xlarge up) {
+      @include xy-grid-layout(8, ".cell");
+    }
+  }
 }
 </style>
