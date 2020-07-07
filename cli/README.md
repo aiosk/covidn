@@ -6,6 +6,7 @@
   - [Daily](#daily)
     - [National](#national)
     - [Province](#province)
+  - [Stats](#stats)
   - [Weekly](#weekly)
     - [Zona Rawan Kecamatan](#zona-rawan-kecamatan)
 - [Credits](#credits)
@@ -48,6 +49,13 @@ $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date 
 $ cd /path/to/project
 $ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s%3N)" |  ./covidn prov - |
 parallel -k "curl --compressed 'https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s%3N)' | ./covidn provitem -"
+```
+
+### Stats
+
+```sh
+$ cd /path/to/project
+$ ./covidn stats
 ```
 
 ### Weekly

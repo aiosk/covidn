@@ -2,7 +2,39 @@
   .my-chart.card('aria-describedby'="chartHelpText")
     .capture
       .card-divider.title
-        h1 {{zone.split('_').join(' ')}}
+        h4 {{zone.split('_').join(' ')}}
+      .card-section.stats
+        .grid-x.small-up-1.medium-up-2
+          .cell
+            .card.population
+              .card-section
+                .total {{numberWithCommas(stats.population)}} People
+          .cell
+            .card.confirmed
+              .card-section
+                .total {{numberWithCommas(stats.confirmed)}} Confirmed
+                .percentage {{((stats.confirmed/stats.population)*100).toFixed(2)}}% from Population
+                .rate-mil {{((stats.confirmed/stats.population)*1000000).toFixed(0)}} per 1M Population
+        .grid-x.small-up-1.medium-up-3
+          .cell
+            .card.recover
+              .card-section
+                .total {{numberWithCommas(stats.recover)}} Recover
+                .percentage {{((stats.recover/stats.confirmed)*100).toFixed(2)}}% from confirmed
+                .rate-mil {{((stats.recover/stats.population)*1000000).toFixed(0)}} per 1M Population
+          .cell
+            .card.death
+              .card-section
+                .total {{numberWithCommas(stats.death)}} Death
+                .percentage {{((stats.death/stats.confirmed)*100).toFixed(2)}}% from confirmed
+                .rate-mil {{((stats.death/stats.population)*1000000).toFixed(0)}} per 1M Population
+          .cell
+            .card.active
+              .card-section
+                .total {{numberWithCommas(stats.active)}} Active
+                .percentage {{((stats.active/stats.confirmed)*100).toFixed(2)}}% from confirmed
+                .rate-mil {{((stats.active/stats.population)*1000000).toFixed(0)}} per 1M Population
+
       .card-section.legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
       .card-image
         canvas(:id="`Chart_${zone}`")
@@ -38,15 +70,22 @@ export default {
     return {
       chartInstance: null,
       legendHTML: null,
+      stats: {
+        population: 0,
+        confirmed: 0,
+        recover: 0,
+        death: 0,
+        active: 0
+      },
       data: { datasets: [], labels: [] }
     };
   },
   watch: {
     periods(val, oldVal) {
-      // this.updateData();
+      // this.updateChartData();
     },
     hiddenDatasets(val, oldVal) {
-      // this.updateDatasets();
+      // this.updateChartDatasets();
     },
     mqIsAtLeastMedium(val, oldVal) {
       if (!this.chartInstance) {
@@ -103,7 +142,26 @@ export default {
 
       this.$emit("input", propsValue);
     },
-    updateData() {
+    updateChartStats() {
+      if (!this.chartInstance) {
+        return;
+      }
+      (async () => {
+        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/stats/${
+          this.zone
+        }.json?_=${Date.now()}`;
+        let res = await fetch(url);
+        let resJSON = await res.json();
+        // resJSON.datasets[1].borderDash = [5, 5];
+
+        this.$set(this.stats, "population", resJSON.population);
+        this.$set(this.stats, "confirmed", resJSON.confirmed);
+        this.$set(this.stats, "recover", resJSON.recover);
+        this.$set(this.stats, "death", resJSON.death);
+        this.$set(this.stats, "active", resJSON.active);
+      })();
+    },
+    updateChartData() {
       if (!this.chartInstance) {
         return;
       }
@@ -117,10 +175,10 @@ export default {
 
         this.$set(this.data, "datasets", resJSON.datasets);
         this.$set(this.data, "labels", resJSON.labels);
-        this.updateDatasets();
+        this.updateChartDatasets();
       })();
     },
-    updateDatasets() {
+    updateChartDatasets() {
       if (!this.chartInstance) {
         return;
       }
@@ -142,8 +200,24 @@ export default {
         });
       }
       _delay(() => {
-        this.updateData();
+        this.updateChartData();
+        this.updateChartStats();
       }, 9);
+    },
+    moolahRound(num, locale = "en") {
+      // Nine Zeroes for Billions
+      return Math.abs(Number(num)) >= 1.0e9
+        ? Math.round(Math.abs(Number(num)) / 1.0e9) + "B"
+        : // Six Zeroes for Millions
+        Math.abs(Number(num)) >= 1.0e6
+        ? Math.round(Math.abs(Number(num)) / 1.0e6) + "M"
+        : // Three Zeroes for Thousands
+        Math.abs(Number(num)) >= 1.0e3
+        ? Math.round(Math.abs(Number(num)) / 1.0e3) + "K"
+        : Math.abs(Number(num));
+    },
+    numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   },
   mounted() {},
@@ -159,23 +233,32 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "../css/_foundation";
+@import "../css/_color";
 @include foundation-card;
+
+@mixin my-card($color: map-get($foundation-palette, "primary")) {
+  @include card-container($border: 1px solid $color);
+  .card-divider {
+    @include card-divider($background: $color);
+    color: white;
+  }
+}
 
 .my-chart {
   margin: 0.5rem 0;
-  border-color: map-get($foundation-palette, "primary");
+  &.card {
+    @include my-card(map-get($foundation-palette, "primary"));
+    .title {
+      font-weight: bold;
+
+      h4 {
+        font-size: 1rem;
+      }
+    }
+  }
 }
 .capture {
   background-color: white;
-}
-.card-divider.title {
-  background-color: map-get($foundation-palette, "primary");
-  color: white;
-  font-weight: bold;
-
-  h1 {
-    font-size: 1rem;
-  }
 }
 .card-image {
   padding: 1rem 0;
@@ -203,6 +286,54 @@ export default {
   }
   & > .cell:nth-child(2) {
     order: 1;
+  }
+}
+.stats {
+  .population,
+  .confirmed,
+  .recover,
+  .death,
+  .active {
+    margin: 0;
+    color: white;
+    text-align: center;
+    .total {
+      font-size: 1.25rem;
+    }
+    .percentage,
+    .rate-mil {
+      font-size: 0.875rem;
+    }
+  }
+  .population {
+    // height: 7.35rem;
+    height: 100%;
+
+    .total {
+      @include breakpoint(medium up) {
+        @include absolute-center;
+      }
+    }
+  }
+  .population,
+  .confirmed {
+    margin: 0;
+    background: map-get($case-color, "confirmed");
+  }
+  .confirmed {
+  }
+  .recover,
+  .death,
+  .active {
+  }
+  .recover {
+    background: map-get($case-color, "recover");
+  }
+  .death {
+    background: map-get($case-color, "death");
+  }
+  .active {
+    background: map-get($case-color, "active");
   }
 }
 </style>

@@ -288,7 +288,7 @@ export default {
 }
 .legend {
   padding: 0.5rem;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   text-align: left;
   .item {
     cursor: pointer;
@@ -302,7 +302,7 @@ export default {
     .text {
       // padding: 0.125rem;
       padding-left: 0.25rem;
-      line-height: 0.75rem;
+      line-height: 0.875rem;
     }
   }
 }
