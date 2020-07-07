@@ -100,6 +100,13 @@ export default {
         mediaQuery: {
           isAtLeastMedium: false
         },
+        statsNational: {
+          population: 0,
+          confirmed: 0,
+          recover: 0,
+          death: 0,
+          active: 0
+        },
         periods: defaultPeriods,
         zones,
         selectedZones: _cloneDeep(zones),
@@ -167,6 +174,20 @@ export default {
         .querySelector("#chartHelpText")
         .scrollIntoView({ behavior: "smooth" });
       // window.scroll({ top: 0, left: 0, behavior: "smooth" });
+    },
+    getNationalStats(e) {
+      (async () => {
+        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/stats/NATIONAL.json?_=${Date.now()}`;
+        let res = await fetch(url);
+        let resJSON = await res.json();
+        // resJSON.datasets[1].borderDash = [5, 5];
+
+        this.$set(this.myModel.statsNational, "population", resJSON.population);
+        this.$set(this.myModel.statsNational, "confirmed", resJSON.confirmed);
+        this.$set(this.myModel.statsNational, "recover", resJSON.recover);
+        this.$set(this.myModel.statsNational, "death", resJSON.death);
+        this.$set(this.myModel.statsNational, "active", resJSON.active);
+      })();
     }
   },
   created() {
@@ -196,6 +217,7 @@ export default {
     if (!_isEqual(periods, defaultPeriods)) {
       this.myModel.periods = periods;
     }
+    this.getNationalStats();
   },
   mounted() {
     ({ MediaQuery } = require("./js/mediaQuery"));

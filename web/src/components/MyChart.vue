@@ -13,28 +13,35 @@
             .card.confirmed
               .card-section
                 .total {{numberWithCommas(stats.confirmed)}} Confirmed
-                .percentage {{((stats.confirmed/stats.population)*100).toFixed(2)}}% from Population
+                .percentage {{((stats.confirmed/statsNational.confirmed)*100).toFixed(2)}}% from National Case
+                //- .percentage {{((stats.confirmed/stats.population)*100).toFixed(2)}}% from Population
+                br
                 .rate-mil {{((stats.confirmed/stats.population)*1000000).toFixed(0)}} per 1M Population
         .grid-x.small-up-1.medium-up-3
           .cell
             .card.recover
               .card-section
                 .total {{numberWithCommas(stats.recover)}} Recover
-                .percentage {{((stats.recover/stats.confirmed)*100).toFixed(2)}}% from confirmed
+                .percentage {{((stats.recover/stats.confirmed)*100).toFixed(2)}}% from Confirmed Case
+                .percentage {{((stats.recover/statsNational.recover)*100).toFixed(2)}}% from National Case
+                br
                 .rate-mil {{((stats.recover/stats.population)*1000000).toFixed(0)}} per 1M Population
           .cell
             .card.death
               .card-section
                 .total {{numberWithCommas(stats.death)}} Death
-                .percentage {{((stats.death/stats.confirmed)*100).toFixed(2)}}% from confirmed
+                .percentage {{((stats.death/stats.confirmed)*100).toFixed(2)}}% from Confirmed Case
+                .percentage {{((stats.death/statsNational.death)*100).toFixed(2)}}% from National Case
+                br
                 .rate-mil {{((stats.death/stats.population)*1000000).toFixed(0)}} per 1M Population
           .cell
             .card.active
               .card-section
                 .total {{numberWithCommas(stats.active)}} Active
-                .percentage {{((stats.active/stats.confirmed)*100).toFixed(2)}}% from confirmed
+                .percentage {{((stats.active/stats.confirmed)*100).toFixed(2)}}% from Confirmed Case
+                .percentage {{((stats.active/statsNational.active)*100).toFixed(2)}}% from National Case
+                br
                 .rate-mil {{((stats.active/stats.population)*1000000).toFixed(0)}} per 1M Population
-
       .card-section.legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
       .card-image
         canvas(:id="`Chart_${zone}`")
@@ -56,6 +63,9 @@ export default {
     value: Object
   },
   computed: {
+    statsNational() {
+      return this.value.statsNational;
+    },
     periods() {
       return this.value.periods;
     },
@@ -302,7 +312,7 @@ export default {
     }
     .percentage,
     .rate-mil {
-      font-size: 0.875rem;
+      font-size: 0.675rem;
     }
   }
   .population {
