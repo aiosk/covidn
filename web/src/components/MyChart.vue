@@ -13,35 +13,35 @@
             .card.confirmed
               .card-section
                 .total {{numberWithCommas(stats.confirmed)}} Confirmed
-                .percentage {{((stats.confirmed/statsNational.confirmed)*100).toFixed(2)}}% from National Case
+                .percentage.show-for-medium(':class'="{'hide':zone=='NATIONAL'}") {{((stats.confirmed/statsNational.confirmed)*100).toFixed(2)}}% from National Case
                 //- .percentage {{((stats.confirmed/stats.population)*100).toFixed(2)}}% from Population
-                br
-                .rate-mil {{((stats.confirmed/stats.population)*1000000).toFixed(0)}} per 1M Population
+
+                .rate-mil.show-for-medium {{((stats.confirmed/stats.population)*1000000).toFixed(0)}} per 1M Population
         .grid-x.small-up-1.medium-up-3
           .cell
             .card.recover
               .card-section
                 .total {{numberWithCommas(stats.recover)}} Recover
-                .percentage {{((stats.recover/stats.confirmed)*100).toFixed(2)}}% from Confirmed Case
-                .percentage {{((stats.recover/statsNational.recover)*100).toFixed(2)}}% from National Case
-                br
-                .rate-mil {{((stats.recover/stats.population)*1000000).toFixed(0)}} per 1M Population
+                .percentage.show-for-medium {{((stats.recover/stats.confirmed)*100).toFixed(2)}}% from Confirmed Case
+                .percentage.show-for-medium(':class'="{'hide':zone=='NATIONAL'}") {{((stats.recover/statsNational.recover)*100).toFixed(2)}}% from National Case
+
+                .rate-mil.show-for-medium {{((stats.recover/stats.population)*1000000).toFixed(0)}} per 1M Population
           .cell
             .card.death
               .card-section
                 .total {{numberWithCommas(stats.death)}} Death
-                .percentage {{((stats.death/stats.confirmed)*100).toFixed(2)}}% from Confirmed Case
-                .percentage {{((stats.death/statsNational.death)*100).toFixed(2)}}% from National Case
-                br
-                .rate-mil {{((stats.death/stats.population)*1000000).toFixed(0)}} per 1M Population
+                .percentage.show-for-medium {{((stats.death/stats.confirmed)*100).toFixed(2)}}% from Confirmed Case
+                .percentage.show-for-medium(':class'="{'hide':zone=='NATIONAL'}") {{((stats.death/statsNational.death)*100).toFixed(2)}}% from National Case
+
+                .rate-mil.show-for-medium {{((stats.death/stats.population)*1000000).toFixed(0)}} per 1M Population
           .cell
             .card.active
               .card-section
                 .total {{numberWithCommas(stats.active)}} Active
-                .percentage {{((stats.active/stats.confirmed)*100).toFixed(2)}}% from Confirmed Case
-                .percentage {{((stats.active/statsNational.active)*100).toFixed(2)}}% from National Case
-                br
-                .rate-mil {{((stats.active/stats.population)*1000000).toFixed(0)}} per 1M Population
+                .percentage.show-for-medium {{((stats.active/stats.confirmed)*100).toFixed(2)}}% from Confirmed Case
+                .percentage.show-for-medium(':class'="{'hide':zone=='NATIONAL'}") {{((stats.active/statsNational.active)*100).toFixed(2)}}% from National Case
+
+                .rate-mil.show-for-medium {{((stats.active/stats.population)*1000000).toFixed(0)}} per 1M Population
       .card-section.legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
       .card-image
         canvas(:id="`Chart_${zone}`")
@@ -313,6 +313,9 @@ export default {
     .percentage,
     .rate-mil {
       font-size: 0.675rem;
+    }
+    .rate-mil {
+      margin-top: 0.5rem;
     }
   }
   .population {
