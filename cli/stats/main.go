@@ -15,40 +15,37 @@ func Main() {
 	files, err := ioutil.ReadDir(srcDir)
 	libs.PanicError(err)
 
-	result := make(map[string]Result)
+	results := make(map[string]Result)
 	for _, file := range files {
 		dataID := strings.Split(file.Name(), ".")[0]
 		if dataID == "rawan" {
 			break
 		}
 		filepath := fmt.Sprintf("%s/%s", srcDir, file.Name())
-		// log.Printf("%+v\n", path)
 
 		records := libs.ReadCsv(filepath)
+		// log.Printf("%+v\n", records)
+		// log.Printf("%+v\n", dataID)
 
 		lenRecords := len(records)
 		i := 1
 		found := false
 		for found == false {
-			confirmed, err := strconv.Atoi(records[lenRecords-i][1])
-			libs.PanicError(err)
+			totalConfirmed := records[lenRecords-i][1]
+			// log.Printf("%+v\n", confirmed != "0")
 
-			if confirmed != 0 {
-				recover, err := strconv.Atoi(records[lenRecords-i][3])
-				libs.PanicError(err)
-				death, err := strconv.Atoi(records[lenRecords-i][5])
-				libs.PanicError(err)
-				active, err := strconv.Atoi(records[lenRecords-i][7])
-				libs.PanicError(err)
-
-				if item, ok := result[dataID]; ok {
-					item.Confirmed = confirmed
-					item.Recover = recover
-					item.Death = death
-					item.Active = active
-					item.Population = 0
-					result[dataID] = item
-				}
+			if totalConfirmed != "0" {
+				var item Result
+				item.LastUpdate = records[lenRecords-i][0]
+				item.TotalConfirmed = totalConfirmed
+				item.Confirmed = records[lenRecords-i][2]
+				item.TotalRecover = records[lenRecords-i][3]
+				item.Recover = records[lenRecords-i][4]
+				item.TotalDeath = records[lenRecords-i][5]
+				item.Death = records[lenRecords-i][6]
+				item.TotalActive = records[lenRecords-i][7]
+				item.Active = records[lenRecords-i][8]
+				results[dataID] = item
 
 				found = true
 			}
@@ -56,6 +53,7 @@ func Main() {
 		}
 
 	}
+	// log.Printf("%+v\n", results)
 
 	filepath := fmt.Sprintf("%s/%s", srcDir, "rawan.csv")
 	records := libs.ReadCsv(filepath)
@@ -65,22 +63,22 @@ func Main() {
 		population, err := strconv.Atoi(v[1])
 		libs.PrintError("not integer", err)
 
-		if item, ok := result[dataID]; ok {
+		if item, ok := results[dataID]; ok {
 			populationNational = populationNational + population
 			item.Population = item.Population + population
-			result[dataID] = item
+			results[dataID] = item
 		}
 		// result[dataID].Population = item
 
 	}
 
-	if item, ok := result["NATIONAL"]; ok {
+	if item, ok := results["NATIONAL"]; ok {
 		item.Population = populationNational
-		result["NATIONAL"] = item
+		results["NATIONAL"] = item
 	}
 
-	// log.Printf("%+v\n", result)
-	for k, v := range result {
+	// log.Printf("%+v\n", results)
+	for k, v := range results {
 		filepath := fmt.Sprintf("dist/stats/%s.json", k)
 
 		libs.WriteToJSON(filepath, v)

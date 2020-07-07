@@ -2,9 +2,14 @@ package stats
 
 // Result ...
 type Result struct {
-	Population int `json:"population"`
-	Confirmed  int `json:"confirmed"`
-	Recover    int `json:"recover"`
-	Death      int `json:"death"`
-	Active     int `json:"active"`
+	LastUpdate     string `json:"lastUpdate"`
+	Population     int    `json:"population"`
+	TotalConfirmed string `json:"totalConfirmed"`
+	Confirmed      string `json:"confirmed"`
+	TotalRecover   string `json:"totalRecover"`
+	Recover        string `json:"recover"`
+	TotalDeath     string `json:"totalDeath"`
+	Death          string `json:"death"`
+	TotalActive    string `json:"totalActive"`
+	Active         string `json:"active"`
 }
