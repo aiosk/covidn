@@ -20,8 +20,10 @@
         li.hide-for-xlarge #[strong Tap / Touch outside] chart legend to hide case number
 
     #myChart.grid-x.xlarge-up-2(aria-describedby="chartHelpText")
-      .cell(v-for="v in myModel.selectedZones" ':key'="v" ':class'='[{"width-100":v=="NATIONAL"},"chart-item",`chart-item--${v}`]' )
-        MyChart(':zone'='v' 'v-model'="myModel" ':ref'='v')
+      template(v-for="v in myModel.selectedZones")
+        .cell(':key'="v" ':class'='[{"width-100":v=="NATIONAL"},"chart-item"]' ':id'="`CellChart_${v}`" )
+          //- MyChart(':zone'='v' 'v-model'="myModel")
+          component(':key'="v"  ':is'="myChart[v]" ':zone'='v' 'v-model'="myModel" ':ref'='v')
 
     button.button.small#top('@click'='topBtnOnClick')
       img.lazy(data-src="img/baseline_vertical_align_top_black_18dp.png" alt="Scroll to top")
@@ -96,6 +98,7 @@ export default {
     return {
       lazyLoadCanvas: null,
       lazyLoad: null,
+      myChart: {},
       myModel: {
         mediaQuery: {
           isAtLeastMedium: false
@@ -109,6 +112,14 @@ export default {
     };
   },
   watch: {
+    myChart: function(val, oldVal) {
+      _delay(() => {
+        if (!!this.lazyLoadCanvas && !!this.lazyLoad) {
+          this.lazyLoadCanvas.update();
+          this.lazyLoad.update();
+        }
+      }, 9);
+    },
     "myModel.hiddenDatasets": function(val, oldVal) {
       _delay(() => {
         if (!!this.lazyLoadCanvas && !!this.lazyLoad) {
@@ -224,13 +235,15 @@ export default {
         elements_selector: ".chart-item",
         unobserve_entered: true,
         callback_enter: el => {
-          const elId = el
-            .querySelector("canvas")
-            .id.split("_")
+          const elId = el.id
+            .split("_")
             .slice(1)
             .join("_");
-          const component = this.$refs[elId];
-          component[0].init();
+
+          this.$set(this.myChart, elId, MyChart);
+          if (!!this.$refs[elId]) {
+            this.$refs[elId][0].updateChartData();
+          }
         }
         // callback_exit: el => {
         //   const elId = el
@@ -244,7 +257,7 @@ export default {
       this.lazyLoad = new LazyLoad({
         elements_selector: "img.lazy"
       });
-    }, 99);
+    }, 299);
   },
   destroyed() {
     this.lazyLoadCanvas.destroy();
@@ -258,7 +271,9 @@ export default {
 @import "css/_foundation";
 @include foundation-everything;
 @include foundation-form-helptext;
-
+.chart-item {
+  min-height: 20rem;
+}
 .help-text {
   img {
     $size: 1.25rem;

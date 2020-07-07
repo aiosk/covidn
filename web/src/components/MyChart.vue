@@ -4,7 +4,7 @@
       .card-divider.title
         h4 {{zone.split('_').join(' ')}}
       .card-section.stats
-        component(:is="myChartStats" 'v-model'='myStatsModel')
+        component(':is'="myChartStats" 'v-model'='myStatsModel')
       .card-section.legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
       .card-image
         canvas(:id="`Chart_${zone}`")
@@ -142,23 +142,19 @@ export default {
       });
       this.chartInstance.update();
       this.legendHTML = this.chartInstance.generateLegend();
-    },
-    init() {
-      if (!this.chartInstance) {
-        const { initChartDaily } = require("../js/chartjs");
-        this.chartInstance = initChartDaily({
-          zone: this.zone,
-          data: this.data,
-          mqIsAtLeastMedium: this.mqIsAtLeastMedium
-        });
-      }
-      _delay(() => {
-        this.updateChartData();
-        this.myChartStats = MyChartStats;
-      }, 9);
     }
   },
-  mounted() {},
+  mounted() {
+    if (!this.chartInstance) {
+      const { initChartDaily } = require("../js/chartjs");
+      this.chartInstance = initChartDaily({
+        zone: this.zone,
+        data: this.data,
+        mqIsAtLeastMedium: this.mqIsAtLeastMedium
+      });
+    }
+    this.myChartStats = MyChartStats;
+  },
   destroyed() {
     if (!this.chartInstance) {
       return;

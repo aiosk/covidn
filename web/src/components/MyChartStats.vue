@@ -142,7 +142,6 @@ export default {
     //     zone: this.zone,
     //     data: this.chartStatsData
     //   });
-    //   this.updateData();
     // }, 499);
   },
   destroyed() {
