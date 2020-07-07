@@ -19,7 +19,7 @@ func Main(file io.Reader) {
 
 	for i := 1; i <= 21; i++ {
 		filepath := fmt.Sprintf("dist/chartjs/NATIONAL-%d.json", i)
-		libs.WriteToChartjs(filepath, rawFile.Update.Harian.Cleaning().Chunk(i).ToChartjs())
+		libs.WriteToJSON(filepath, rawFile.Update.Harian.Cleaning().Chunk(i).ToChartjs())
 	}
 
 }

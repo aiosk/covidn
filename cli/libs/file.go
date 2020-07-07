@@ -48,6 +48,19 @@ func WriteToCsv(filepath string, data [][]string) {
 	log.Printf("Write to %s", filepath)
 }
 
+// ReadCsv ...
+func ReadCsv(filepath string) [][]string {
+	file, err := os.Open(filepath)
+	PanicError(err)
+	defer file.Close()
+
+	r := csv.NewReader(file)
+	records, err := r.ReadAll()
+	PanicError(err)
+
+	return records
+}
+
 // WriteToIcs ...
 func WriteToIcs(filepath string, data interface{}) {
 	file, err := os.Create(filepath)
@@ -67,8 +80,8 @@ func WriteToIcs(filepath string, data interface{}) {
 
 }
 
-// WriteToChartjs ...
-func WriteToChartjs(filepath string, data Chartjs) {
+// WriteToJSON ...
+func WriteToJSON(filepath string, data interface{}) {
 	// jsonStr, err := json.MarshalIndent(data, "", "  ")
 	jsonStr, err := json.Marshal(data)
 	PanicError(err)

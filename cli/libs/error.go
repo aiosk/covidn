@@ -16,3 +16,10 @@ func FatalError(message string, err error) {
 		log.Fatalln(message, err)
 	}
 }
+
+// PrintError ...
+func PrintError(message string, err error) {
+	if err != nil {
+		log.Println(message, err)
+	}
+}

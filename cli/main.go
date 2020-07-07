@@ -9,6 +9,7 @@ import (
 	"github.com/aiosk/covidn/national"
 	"github.com/aiosk/covidn/prov"
 	"github.com/aiosk/covidn/rawan"
+	"github.com/aiosk/covidn/stats"
 )
 
 func printHelp() {
@@ -20,6 +21,7 @@ func main() {
 	cmdProv := flag.NewFlagSet("prov", flag.ExitOnError)
 	cmdProvItem := flag.NewFlagSet("provitem", flag.ExitOnError)
 	cmdRawan := flag.NewFlagSet("rawan", flag.ExitOnError)
+	cmdStats := flag.NewFlagSet("stats", flag.ExitOnError)
 
 	if len(os.Args) < 2 {
 		printHelp()
@@ -43,6 +45,9 @@ func main() {
 		cmdRawan.Parse(os.Args[2:])
 		srcFile = libs.OpenStdinOrFile(cmdRawan)
 		rawan.Main(srcFile)
+	case "stats":
+		cmdStats.Parse(os.Args[2:])
+		stats.Main()
 	default:
 		printHelp()
 		os.Exit(1)

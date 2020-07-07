@@ -73,10 +73,11 @@ func (v FileItem) Cleaning() FileItem {
 func (v FileItem) ToCsv() [][]string {
 
 	var dataCsv [][]string
-	itemTags := v.GetTags("json")
+	// itemTags := v.GetTags("json")
 	listPerkembanganTags := v.ListPerkembangan[0].GetTags("json")
 	title := []string{
-		itemTags["Provinsi"], listPerkembanganTags["Date"],
+		// itemTags["Provinsi"],
+		listPerkembanganTags["Date"],
 		listPerkembanganTags["TotalCase"], listPerkembanganTags["Case"],
 		listPerkembanganTags["TotalRecover"], listPerkembanganTags["Recover"],
 		listPerkembanganTags["TotalDeath"], listPerkembanganTags["Death"],
@@ -86,7 +87,8 @@ func (v FileItem) ToCsv() [][]string {
 
 	for _, v2 := range v.ListPerkembangan {
 		row := []string{
-			v.Provinsi, libs.UnixToMyFormat(v2.Date),
+			// v.Provinsi,
+			libs.UnixToMyFormat(v2.Date),
 			strconv.Itoa(v2.TotalCase), strconv.Itoa(v2.Case),
 			strconv.Itoa(v2.TotalRecover), strconv.Itoa(v2.Recover),
 			strconv.Itoa(v2.TotalDeath), strconv.Itoa(v2.Death),
