@@ -183,10 +183,9 @@ export default {
   &.card {
     @include my-card(map-get($foundation-palette, "primary"));
     .title {
-      font-weight: bold;
-
       h4 {
-        font-size: 1rem;
+        font-weight: bold;
+        font-size: 1.25rem;
       }
     }
   }
