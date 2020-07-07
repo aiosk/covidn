@@ -16,8 +16,36 @@ const Chart = require("chartjs");
 var image = new Image();
 image.src = "img/watermark2.png";
 
-const initChart = (params = { zone: null, data: null, mqIsAtLeastMedium: false }) => {
-  // console.log(params.mqIsAtLeastMedium);
+const defaultWatermark = {
+  // the image you would like to show
+  // alternatively, this can be of type "Image"
+  image: image,
+  // x and y offsets of the image
+  x: 0,
+  y: 0,
+  // width and height to resize the image to
+  // image is not resized if these values are not set
+  // width: 108,
+  // height: 39,
+  // opacity of the image, from 0 to 1 (default: 1)
+  opacity: 1,
+  // x-alignment of the image (default: "left")
+  // valid values: "left", "middle", "right"
+  alignX: "middle",
+  // y-alignment of the image (default: "top")
+  // valid values: "top", "middle", "bottom"
+  alignY: "middle",
+  // if true, aligns the watermark to the inside of the chart area (where the lines are)
+  // (where the lines are)
+  // if false, aligns the watermark to the inside of the canvas
+  // see samples/alignToChartArea.html
+  // alignToChartArea: false,
+  // determines whether the watermark is drawn on top of or behind the chart
+  // valid values: "front", "back"
+  position: "front",
+};
+
+const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: false }) => {
   const chartInstance = new Chart(`Chart_${params.zone}`, {
     type: "bar",
     data: params.data,
@@ -87,38 +115,39 @@ const initChart = (params = { zone: null, data: null, mqIsAtLeastMedium: false }
       animation: { duration: 0 },
       hover: { animationDuration: 0 },
       responsiveAnimationDuration: 0,
-      watermark: {
-        // the image you would like to show
-        // alternatively, this can be of type "Image"
-        image: image,
-        // x and y offsets of the image
-        x: 0,
-        y: 0,
-        // width and height to resize the image to
-        // image is not resized if these values are not set
-        // width: 108,
-        // height: 39,
-        // opacity of the image, from 0 to 1 (default: 1)
-        opacity: 1,
-        // x-alignment of the image (default: "left")
-        // valid values: "left", "middle", "right"
-        alignX: "middle",
-        // y-alignment of the image (default: "top")
-        // valid values: "top", "middle", "bottom"
-        alignY: "middle",
-        // if true, aligns the watermark to the inside of the chart area (where the lines are)
-        // (where the lines are)
-        // if false, aligns the watermark to the inside of the canvas
-        // see samples/alignToChartArea.html
-        // alignToChartArea: false,
-        // determines whether the watermark is drawn on top of or behind the chart
-        // valid values: "front", "back"
-        position: "front",
-      },
+      watermark: defaultWatermark,
     },
   });
 
   return chartInstance;
 };
 
-export { initChart };
+const initChartStatsCase = (params = { zone: null, data: null }) => {
+  const chartInstance = new Chart(`Stats_${params.zone}`, {
+    type: "doughnut",
+    data: params.data,
+    options: {
+      legend: {
+        display: false,
+      },
+      animation: { duration: 0 },
+      hover: { animationDuration: 0 },
+      responsiveAnimationDuration: 0,
+      // watermark: defaultWatermark,
+      tooltips: {
+        callbacks: {
+          label(tooltipItem, data) {
+            var label = data.labels[tooltipItem.index] || "";
+
+            let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+
+            return `${label}: ${value}%`;
+          },
+        },
+      },
+    },
+  });
+  return chartInstance;
+};
+
+export { initChartDaily, initChartStatsCase };
