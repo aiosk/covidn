@@ -5,8 +5,8 @@
         h4 {{zone.split('_').join(' ')}}
       .card-section.stats
         component(':is'="myChartStats" 'v-model'='myStatsModel')
-      .card-section.legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
       .card-image
+        .legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
         canvas(:id="`Chart_${zone}`")
     .card-section.action
       a.icon.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): img.lazy(data-src="./img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
@@ -58,15 +58,15 @@ export default {
     },
     hiddenDatasets(val, oldVal) {
       // this.updateChartDatasets();
-    },
-    mqIsAtLeastMedium(val, oldVal) {
-      if (!this.chartInstance) {
-        return;
-      }
-      this.chartInstance.options.scales.xAxes[0].ticks.display = val;
-      this.chartInstance.options.scales.yAxes[0].ticks.display = true;
-      this.chartInstance.update();
     }
+    // mqIsAtLeastMedium(val, oldVal) {
+    //   if (!this.chartInstance) {
+    //     return;
+    //   }
+    //   // this.chartInstance.options.scales.xAxes[0].ticks.display = val;
+    //   // this.chartInstance.options.scales.yAxes[0].ticks.display = true;
+    //   this.chartInstance.update();
+    // }
   },
   methods: {
     onClickFullscreen(e) {
@@ -170,18 +170,16 @@ export default {
 @import "../css/_color";
 @include foundation-card;
 
-@mixin my-card($color: map-get($foundation-palette, "primary")) {
-  @include card-container($border: 1px solid $color);
-  .card-divider {
-    @include card-divider($background: $color);
-    color: white;
-  }
-}
-
 .my-chart {
   margin: 0.5rem 0;
   &.card {
-    @include my-card(map-get($foundation-palette, "primary"));
+    $color: map-get($element-color, "title");
+    border: 1px solid $color;
+
+    .card-divider {
+      background: $color;
+      color: white;
+    }
     .title {
       h4 {
         font-weight: bold;
@@ -190,11 +188,14 @@ export default {
     }
   }
 }
+.stats {
+  // padding-top: 0;
+}
 .capture {
   background-color: white;
 }
 .card-image {
-  padding: 1rem 0;
+  // padding: 1rem 0;
 }
 
 .action {

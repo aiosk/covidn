@@ -47,7 +47,7 @@ const defaultWatermark = {
 
 const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: false }) => {
   const chartInstance = new Chart(`Chart_${params.zone}`, {
-    type: "bar",
+    type: "line",
     data: params.data,
     options: {
       // title: {
@@ -63,22 +63,35 @@ const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: fa
         // },
         callbacks: {
           labelColor(tooltipItem, chart) {
-            let datasetIndexVal =
-              tooltipItem.datasetIndex % 2 ? tooltipItem.datasetIndex - 1 : tooltipItem.datasetIndex;
+            let datasetIndexVal = tooltipItem.datasetIndex % 8;
+            // console.log(tooltipItem.datasetIndex, datasetIndexVal, chart.data.datasets[datasetIndexVal]);
+
             return {
               // borderColor: "rgb(255, 0, 0)",
-              backgroundColor: chart.data.datasets[datasetIndexVal].backgroundColor,
+              borderColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor,
+              backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor,
             };
           },
           label(tooltipItem, data) {
-            let datasetIndexVal =
-              tooltipItem.datasetIndex % 2 ? tooltipItem.datasetIndex - 1 : tooltipItem.datasetIndex;
+            let datasetIndexVal = tooltipItem.datasetIndex % 8;
             var label = data.datasets[datasetIndexVal].label || "";
-
             let value = data.datasets[datasetIndexVal].data[tooltipItem.index];
+            // console.log(datasetIndexVal, datasetIndexVal + 4);
+            // let total = data.datasets[datasetIndexVal + 4].data[tooltipItem.index];
             let total = _sum(_take(data.datasets[datasetIndexVal].data, tooltipItem.index + 1));
 
-            return `${label}: ${total} (${value > 0 ? "+" : ""}${value})`;
+            const valueStr = value == 0 ? "" : value > 0 ? `(+${value})` : `(${value})`;
+            // console.log(tooltipItem.datasetIndex, (tooltipItem.datasetIndex / 4).toFixed(0) == 1);
+
+            let isSecondDataset = (tooltipItem.datasetIndex / 4).toFixed(1);
+            isSecondDataset = isSecondDataset >= 1 && isSecondDataset < 2;
+
+            if (isSecondDataset) {
+              return `${label}: ${value}`;
+            } else {
+              return `${label}: ${total} ${valueStr}`;
+            }
+            // return `${label}: ${total} (${value > 0 ? "+" : ""}${value})`;
           },
         },
       },
@@ -100,12 +113,34 @@ const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: fa
 
         return chartLegendHtml;
       },
+      elements: {
+        line: {
+          tension: 0,
+          fill: false,
+        },
+      },
       scales: {
         xAxes: [
           {
+            gridLines: {
+              display: false,
+            },
+            ticks: {
+              display: false,
+              // display: params.mqIsAtLeastMedium,
+              // min: 0,
+              // maxRotation: 23,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
             ticks: {
               // display: params.mqIsAtLeastMedium,
-              display: params.mqIsAtLeastMedium,
+              display: false,
               // min: 0,
               // maxRotation: 23,
             },

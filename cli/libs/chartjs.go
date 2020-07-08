@@ -22,26 +22,38 @@ type Chartjs struct {
 }
 
 type datasets struct {
-	Confirmed string
-	Death     string
-	Recover   string
-	Active    string
+	Confirmed      string
+	Death          string
+	Recover        string
+	Active         string
+	TotalConfirmed string
+	TotalDeath     string
+	TotalRecover   string
+	TotalActive    string
 }
 
 // ChartjsColor ...
 var ChartjsColor = datasets{
-	Confirmed: "#2C347C",
-	Death:     "#ec6f58",
-	Recover:   "#3c928c",
-	Active:    "#ceb546",
+	Confirmed:      "#2C347C",
+	Death:          "#ec6f58",
+	Recover:        "#3c928c",
+	Active:         "#ceb546",
+	TotalConfirmed: "#2C347C",
+	TotalDeath:     "#ec6f58",
+	TotalRecover:   "#3c928c",
+	TotalActive:    "#ceb546",
 }
 
 // ChartjsLabel ...
 var ChartjsLabel = datasets{
-	Confirmed: "Confirmed",
-	Death:     "Death",
-	Recover:   "Recover",
-	Active:    "Active",
+	Confirmed:      "Daily Confirmed",
+	Death:          "Daily Death",
+	Recover:        "Daily Recover",
+	Active:         "Daily Active",
+	TotalConfirmed: "Total Confirmed",
+	TotalDeath:     "Total Death",
+	TotalRecover:   "Total Recover",
+	TotalActive:    "Total Active",
 }
 
 // MyRegression ...

@@ -75,15 +75,19 @@ const zones = [
   "BENGKULU",
   "NUSA_TENGGARA_TIMUR"
 ];
-const defaultPeriods = 8;
+const defaultPeriods = 3;
 const defaultHiddenDatasets = [
   true,
-  false,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
   true,
   false,
-  true,
   false,
-  true,
+  false,
   false
 ];
 let MediaQuery;

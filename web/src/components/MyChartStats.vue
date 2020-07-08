@@ -1,6 +1,6 @@
 <template lang="pug">
   .my-chart-stats
-    .help-text.text-right Last Update: {{stats.lastUpdate}}
+    //- .help-text.text-right Last Update: {{stats.lastUpdate}}
     .grid-x.small-up-1.medium-up-2
       .cell
         .card.population
@@ -13,11 +13,11 @@
             .text Confirmed
             .total {{numberWithCommas(stats.totalConfirmed)}}
               sup {{ plusMinusStr(stats.confirmed) }}
-            .percentage.show-for-medium('v-if'="zone!='NATIONAL'")
+            .percentage('v-if'="zone!='NATIONAL'")
               b {{((stats.totalConfirmed/statsNational.totalConfirmed)*100).toFixed(2)}}%
               | &nbsp;from National Case
             //- .percentage {{((stats.totalConfirmed/stats.population)*100).toFixed(2)}}% from Population
-            .rate-mil.show-for-medium
+            .rate-mil
               b {{((stats.totalConfirmed/stats.population)*1000000).toFixed(0)}}
               | &nbsp;per 1M Population
 
@@ -29,7 +29,7 @@
             .total {{numberWithCommas(stats.totalRecover)}}
               sup {{ plusMinusStr(stats.recover) }}
             //- .percentage.show-for-medium('v-if'="zone!='NATIONAL'") {{((stats.totalRecover/statsNational.totalRecover)*100).toFixed(2)}}% from National Case
-            .rate-mil.show-for-medium
+            .rate-mil
               b {{((stats.totalRecover/stats.population)*1000000).toFixed(0)}}
               | &nbsp;per 1M Population
       .cell
@@ -39,7 +39,7 @@
             .total {{numberWithCommas(stats.totalDeath) }}
               sup {{ plusMinusStr(stats.death) }}
             //- .percentage.show-for-medium('v-if'="zone!='NATIONAL'") {{((stats.totalDeath/statsNational.totalDeath)*100).toFixed(2)}}% from National Case
-            .rate-mil.show-for-medium
+            .rate-mil
               b {{((stats.totalDeath/stats.population)*1000000).toFixed(0)}}
               | &nbsp;per 1M Population
       .cell
@@ -49,7 +49,7 @@
             .total {{ numberWithCommas(stats.totalActive) }}
               sup {{ plusMinusStr(stats.active) }}
             //- .percentage.show-for-medium('v-if'="zone!='NATIONAL'") {{((stats.totalActive/statsNational.totalActive)*100).toFixed(2)}}% from National Case
-            .rate-mil.show-for-medium
+            .rate-mil
               b {{((stats.totalActive/stats.population)*1000000).toFixed(0)}}
               | &nbsp;per 1M Population
 
@@ -185,7 +185,7 @@ canvas {
   }
   .percentage,
   .rate-mil {
-    font-size: 0.675rem;
+    font-size: 0.875rem;
   }
   .rate-mil {
     // margin-top: 0.5rem;

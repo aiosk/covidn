@@ -100,50 +100,56 @@ func (v HarianList) ToCsv() [][]string {
 func (v HarianList) ToChartjs() libs.Chartjs {
 	var data libs.Chartjs
 
-	var item [8]libs.ChartjsDatasetsItem
+	var item [4 * 3]libs.ChartjsDatasetsItem
 	for _, v2 := range v {
 		data.Labels = append(data.Labels, v2.DateStr)
+		// log.Printf("%+v\n", v2)
 		item[0].Data = append(item[0].Data, float64(v2.Case.Value))
-		item[2].Data = append(item[2].Data, float64(v2.Recover.Value))
-		item[4].Data = append(item[4].Data, float64(v2.Death.Value))
-		item[6].Data = append(item[6].Data, float64(v2.Active.Value))
+		item[1].Data = append(item[1].Data, float64(v2.Recover.Value))
+		item[2].Data = append(item[2].Data, float64(v2.Death.Value))
+		item[3].Data = append(item[3].Data, float64(v2.Active.Value))
+
+		item[4].Data = append(item[4].Data, float64(v2.TotalCase.Value))
+		item[5].Data = append(item[5].Data, float64(v2.TotalRecover.Value))
+		item[6].Data = append(item[6].Data, float64(v2.TotalDeath.Value))
+		item[7].Data = append(item[7].Data, float64(v2.TotalActive.Value))
 	}
 	item[0].Label = libs.ChartjsLabel.Confirmed
-	item[2].Label = libs.ChartjsLabel.Recover
-	item[4].Label = libs.ChartjsLabel.Death
-	item[6].Label = libs.ChartjsLabel.Active
-	item[0].BackgroundColor = libs.ChartjsColor.Confirmed
-	item[2].BackgroundColor = libs.ChartjsColor.Recover
-	item[4].BackgroundColor = libs.ChartjsColor.Death
-	item[6].BackgroundColor = libs.ChartjsColor.Active
+	item[1].Label = libs.ChartjsLabel.Recover
+	item[2].Label = libs.ChartjsLabel.Death
+	item[3].Label = libs.ChartjsLabel.Active
+	item[0].BorderColor = libs.ChartjsColor.Confirmed
+	item[1].BorderColor = libs.ChartjsColor.Recover
+	item[2].BorderColor = libs.ChartjsColor.Death
+	item[3].BorderColor = libs.ChartjsColor.Active
 
-	// log.Println(item[0].Data)
-	item[1].Data = libs.MyRegression(item[0].Data)
-	item[3].Data = libs.MyRegression(item[2].Data)
-	item[5].Data = libs.MyRegression(item[4].Data)
-	item[7].Data = libs.MyRegression(item[6].Data)
-
-	item[1].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Confirmed)
-	item[3].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Recover)
-	item[5].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Death)
-	item[7].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Active)
-	item[1].Type = "line"
-	item[3].Type = "line"
-	item[5].Type = "line"
-	item[7].Type = "line"
-	item[1].BorderColor = libs.ChartjsColor.Confirmed
-	item[3].BorderColor = libs.ChartjsColor.Recover
-	item[5].BorderColor = libs.ChartjsColor.Death
+	item[4].Label = libs.ChartjsLabel.TotalConfirmed
+	item[5].Label = libs.ChartjsLabel.TotalRecover
+	item[6].Label = libs.ChartjsLabel.TotalDeath
+	item[7].Label = libs.ChartjsLabel.TotalActive
+	item[4].BorderColor = libs.ChartjsColor.Confirmed
+	item[5].BorderColor = libs.ChartjsColor.Recover
+	item[6].BorderColor = libs.ChartjsColor.Death
 	item[7].BorderColor = libs.ChartjsColor.Active
 
-	data.Datasets = append(data.Datasets, item[0])
-	data.Datasets = append(data.Datasets, item[1])
-	data.Datasets = append(data.Datasets, item[2])
-	data.Datasets = append(data.Datasets, item[3])
-	data.Datasets = append(data.Datasets, item[4])
-	data.Datasets = append(data.Datasets, item[5])
-	data.Datasets = append(data.Datasets, item[6])
-	data.Datasets = append(data.Datasets, item[7])
+	// log.Println(item[0].Data)
+	item[8].Data = libs.MyRegression(item[0].Data)
+	item[9].Data = libs.MyRegression(item[1].Data)
+	item[10].Data = libs.MyRegression(item[2].Data)
+	item[11].Data = libs.MyRegression(item[3].Data)
+
+	item[8].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Confirmed)
+	item[9].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Recover)
+	item[10].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Death)
+	item[11].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Active)
+	item[8].BorderColor = libs.ChartjsColor.Confirmed
+	item[9].BorderColor = libs.ChartjsColor.Recover
+	item[10].BorderColor = libs.ChartjsColor.Death
+	item[11].BorderColor = libs.ChartjsColor.Active
+
+	for i := range item {
+		data.Datasets = append(data.Datasets, item[i])
+	}
 	return data
 }
 
@@ -169,11 +175,19 @@ func (v HarianList) Chunk(size int) HarianList {
 		item.Recover.Value = 0
 		item.Death.Value = 0
 		item.Active.Value = 0
+		item.TotalCase.Value = 0
+		item.TotalRecover.Value = 0
+		item.TotalDeath.Value = 0
+		item.TotalActive.Value = 0
 		for _, v3 := range v2 {
 			item.Case.Value += v3.Case.Value
 			item.Recover.Value += v3.Recover.Value
 			item.Death.Value += v3.Death.Value
 			item.Active.Value += v3.Active.Value
+			item.TotalCase.Value += v3.TotalCase.Value
+			item.TotalRecover.Value += v3.TotalRecover.Value
+			item.TotalDeath.Value += v3.TotalDeath.Value
+			item.TotalActive.Value += v3.TotalActive.Value
 		}
 
 		newData = append(newData, item)
