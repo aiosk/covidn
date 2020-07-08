@@ -15,7 +15,7 @@ func Main(file io.Reader) {
 	libs.PanicError(err)
 
 	libs.WriteToCsv("dist/csv/NATIONAL.csv", rawFile.Update.Harian.Cleaning().ToCsv())
-	libs.WriteToIcs("dist/ics/NATIONAL.ics", rawFile.Update.Harian.Cleaning())
+	// libs.WriteToIcs("dist/ics/NATIONAL.ics", rawFile.Update.Harian.Cleaning())
 
 	for i := 1; i <= 21; i++ {
 		filepath := fmt.Sprintf("dist/chartjs/NATIONAL-%d.json", i)
