@@ -1,6 +1,6 @@
 <template lang="pug">
   .my-chart-stats
-    //- .help-text.text-right Last Update: {{stats.lastUpdate}}
+    .help-text.text-right Last Update: {{stats.lastUpdate}}
     .grid-x.small-up-1.medium-up-2
       .cell
         .card.population
