@@ -3,7 +3,7 @@
     .capture
       .card-divider.title
         h4 {{zone.split('_').join(' ')}}
-      .card-section.stats
+      .card-image.stats
         component(':is'="myChartStats" 'v-model'='myStatsModel')
       .card-image
         .legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
@@ -97,6 +97,9 @@ export default {
     },
     legendOnClick(e) {
       const $item = e.target.closest(".item");
+      if (!$item) {
+        return;
+      }
       const $legend = e.target.closest(".legend");
 
       if (e.target.style.textDecoration == "none") {
@@ -182,7 +185,7 @@ export default {
     }
     .title {
       h4 {
-        font-weight: bold;
+        // font-weight: bold;
         font-size: 1.25rem;
       }
     }

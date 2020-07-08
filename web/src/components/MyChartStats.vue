@@ -1,6 +1,5 @@
 <template lang="pug">
   .my-chart-stats
-    .help-text.text-right Last Update: {{stats.lastUpdate}}
     .grid-x.small-up-1.medium-up-2
       .cell
         .card.population
@@ -52,6 +51,7 @@
             .rate-mil
               b {{((stats.totalActive/stats.population)*1000000).toFixed(0)}}
               | &nbsp;per 1M Population
+    .help-text.text-right Last Update: {{stats.lastUpdate}}
 
       //- canvas(':id'="`Stats_${zone}`")
 </template>
@@ -177,11 +177,11 @@ canvas {
       display: inline-block;
       margin-left: 0.5rem;
     }
-    font-weight: bold;
+    font-weight: 100;
+    font-size: 1.125rem;
   }
-  .text,
   .total {
-    font-size: 1.25rem;
+    font-size: 1.325rem;
   }
   .percentage,
   .rate-mil {
@@ -200,6 +200,7 @@ canvas {
       @include absolute-center;
     }
   }
+  background: map-get($element-color, "title");
 }
 .population,
 .confirmed {
@@ -220,5 +221,9 @@ canvas {
 }
 .active {
   background: map-get($case-color, "active");
+}
+
+.help-text {
+  margin-top: 0;
 }
 </style>
