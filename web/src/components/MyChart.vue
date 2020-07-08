@@ -9,14 +9,14 @@
         .legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
         canvas(:id="`Chart_${zone}`")
     .card-section.action
-      a.icon.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): img.lazy(data-src="./img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
-      a.icon.download-chart('@click'='onClickDownloadChart'): img.lazy(data-src="./img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
-      a.icon.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): img.lazy(data-src="./img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
+      a.icon.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): img(src="@/assets/img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
+      a.icon.download-chart('@click'='onClickDownloadChart'): img(src="@/assets/img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
+      a.icon.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): img(src="@/assets/img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
 
 </template>
 
 <script>
-import MyChartStats from "./MyChartStats";
+import MyChartStats from "@/components/MyChartStats";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 
@@ -149,7 +149,7 @@ export default {
   },
   mounted() {
     if (!this.chartInstance) {
-      const { initChartDaily } = require("../js/chartjs");
+      const { initChartDaily } = require("@/js/chartjs");
       this.chartInstance = initChartDaily({
         zone: this.zone,
         data: this.data,
@@ -159,6 +159,7 @@ export default {
     this.myChartStats = MyChartStats;
   },
   destroyed() {
+    this.data = { datasets: [], labels: [] };
     if (!this.chartInstance) {
       return;
     }
@@ -169,8 +170,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-@import "../css/_foundation";
-@import "../css/_color";
+@import "@/css/_foundation";
+@import "@/css/_color";
 @include foundation-card;
 
 .my-chart {

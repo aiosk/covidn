@@ -35,7 +35,7 @@ export default {
         const propsValue = _cloneDeep(this.value);
         this.$set(propsValue, "periods", val);
         this.$emit("input", propsValue);
-      },
+      }
     },
     selectedZones: {
       get() {
@@ -45,15 +45,15 @@ export default {
         const propsValue = _cloneDeep(this.value);
         this.$set(propsValue, "selectedZones", val);
         this.$emit("input", propsValue);
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-@import "../css/_foundation";
+@import "@/css/_foundation";
 @include foundation-forms;
 // @include foundation-button;
 .periods {

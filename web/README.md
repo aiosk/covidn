@@ -1,4 +1,4 @@
-# web
+# covidn-web
 
 ## Project setup
 ```

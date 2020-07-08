@@ -1,4 +1,4 @@
-<template lang="pug">
+<template lang='pug'>
   .hello
     h1 {{ msg }}
     p
@@ -11,6 +11,8 @@
     ul
       li
         a(href='https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel' target='_blank' rel='noopener') babel
+      li
+        a(href='https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router' target='_blank' rel='noopener') router
     h3 Essential Links
     ul
       li
@@ -42,8 +44,8 @@
 export default {
   name: "HelloWorld",
   props: {
-    msg: String,
-  },
+    msg: String
+  }
 };
 </script>
 

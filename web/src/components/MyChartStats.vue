@@ -12,13 +12,10 @@
             .text Confirmed
             .total {{numberWithCommas(stats.totalConfirmed)}}
               sup {{ plusMinusStr(stats.confirmed) }}
-            .percentage('v-if'="zone!='NATIONAL'")
-              b {{((stats.totalConfirmed/statsNational.totalConfirmed)*100).toFixed(2)}}%
-              | &nbsp;from National Case
             //- .percentage {{((stats.totalConfirmed/stats.population)*100).toFixed(2)}}% from Population
-            .rate-mil
-              b {{((stats.totalConfirmed/stats.population)*1000000).toFixed(0)}}
-              | &nbsp;per 1M Population
+            //- .rate-mil
+            //-   b {{((stats.totalConfirmed/stats.population)*1000000).toFixed(0)}}
+            //-   | &nbsp;per 1M Population
 
     .grid-x.small-up-12.medium-up-3
       .cell
@@ -27,30 +24,27 @@
             .text Recover
             .total {{numberWithCommas(stats.totalRecover)}}
               sup {{ plusMinusStr(stats.recover) }}
-            //- .percentage.show-for-medium('v-if'="zone!='NATIONAL'") {{((stats.totalRecover/statsNational.totalRecover)*100).toFixed(2)}}% from National Case
-            .rate-mil
-              b {{((stats.totalRecover/stats.population)*1000000).toFixed(0)}}
-              | &nbsp;per 1M Population
+            //- .rate-mil
+            //-   b {{((stats.totalRecover/stats.population)*1000000).toFixed(0)}}
+            //-   | &nbsp;per 1M Population
       .cell
         .card.death
           .card-section
             .text Death
             .total {{numberWithCommas(stats.totalDeath) }}
               sup {{ plusMinusStr(stats.death) }}
-            //- .percentage.show-for-medium('v-if'="zone!='NATIONAL'") {{((stats.totalDeath/statsNational.totalDeath)*100).toFixed(2)}}% from National Case
-            .rate-mil
-              b {{((stats.totalDeath/stats.population)*1000000).toFixed(0)}}
-              | &nbsp;per 1M Population
+            //- .rate-mil
+            //-   b {{((stats.totalDeath/stats.population)*1000000).toFixed(0)}}
+            //-   | &nbsp;per 1M Population
       .cell
         .card.active
           .card-section
             .text Active
             .total {{ numberWithCommas(stats.totalActive) }}
               sup {{ plusMinusStr(stats.active) }}
-            //- .percentage.show-for-medium('v-if'="zone!='NATIONAL'") {{((stats.totalActive/statsNational.totalActive)*100).toFixed(2)}}% from National Case
-            .rate-mil
-              b {{((stats.totalActive/stats.population)*1000000).toFixed(0)}}
-              | &nbsp;per 1M Population
+            //- .rate-mil
+            //-   b {{((stats.totalActive/stats.population)*1000000).toFixed(0)}}
+            //-   | &nbsp;per 1M Population
     .help-text.text-right Last Update: {{stats.lastUpdate}}
 
       //- canvas(':id'="`Stats_${zone}`")
@@ -65,17 +59,7 @@ export default {
   props: { value: Object },
   data() {
     return {
-      stats: {},
-      chartInstance: null,
-      chartStatsData: {
-        datasets: [
-          {
-            data: [1, 1, 1],
-            backgroundColor: ["#3c928c", "#ec6f58", "#ceb546"]
-          }
-        ],
-        labels: ["Recover", "Death", "Active"]
-      }
+      stats: {}
     };
   },
   computed: {
@@ -112,16 +96,6 @@ export default {
         let resJSON = await res.json();
         // resJSON.datasets[1].borderDash = [5, 5];
         this.stats = resJSON;
-
-        // console.log(this.chartStatsData.datasets[0].data);
-        this.$set(this.chartStatsData.datasets[0], "data", [
-          ((resJSON.totalRecover / resJSON.totalConfirmed) * 100).toFixed(2),
-          ((resJSON.totalDeath / resJSON.totalConfirmed) * 100).toFixed(2),
-          ((resJSON.totalActive / resJSON.totalConfirmed) * 100).toFixed(2)
-        ]);
-        if (this.chartInstance) {
-          this.chartInstance.update();
-        }
       })();
     },
     plusMinusStr(val) {
@@ -134,28 +108,15 @@ export default {
   created() {
     this.updateData();
   },
-  mounted() {
-    // _delay(() => {
-    //   const { initChartStatsCase } = require("../js/chartjs");
-    //   // console.log(this.chartStatsData);
-    //   this.chartInstance = initChartStatsCase({
-    //     zone: this.zone,
-    //     data: this.chartStatsData
-    //   });
-    // }, 499);
-  },
-  destroyed() {
-    if (this.chartInstance) {
-      this.chartInstance.destroy();
-    }
-  }
+  mounted() {},
+  destroyed() {}
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-@import "../css/_foundation";
-@import "../css/_color";
+@import "@/css/_foundation";
+@import "@/css/_color";
 @include foundation-card;
 
 .my-chart-stats {
