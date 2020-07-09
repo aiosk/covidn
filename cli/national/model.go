@@ -175,19 +175,15 @@ func (v HarianList) Chunk(size int) HarianList {
 		item.Recover.Value = 0
 		item.Death.Value = 0
 		item.Active.Value = 0
-		item.TotalCase.Value = 0
-		item.TotalRecover.Value = 0
-		item.TotalDeath.Value = 0
-		item.TotalActive.Value = 0
+		item.TotalCase.Value = v2[len(v2)-1].TotalCase.Value
+		item.TotalRecover.Value = v2[len(v2)-1].TotalRecover.Value
+		item.TotalDeath.Value = v2[len(v2)-1].TotalDeath.Value
+		item.TotalActive.Value = v2[len(v2)-1].TotalActive.Value
 		for _, v3 := range v2 {
 			item.Case.Value += v3.Case.Value
 			item.Recover.Value += v3.Recover.Value
 			item.Death.Value += v3.Death.Value
 			item.Active.Value += v3.Active.Value
-			item.TotalCase.Value += v3.TotalCase.Value
-			item.TotalRecover.Value += v3.TotalRecover.Value
-			item.TotalDeath.Value += v3.TotalDeath.Value
-			item.TotalActive.Value += v3.TotalActive.Value
 		}
 
 		newData = append(newData, item)
