@@ -67,52 +67,44 @@ export default {
   created() {
     _delay(async () => {
       const { color } = require("@/js/chartjs");
-      let dataZones = zones
-        .filter(v => v != "NATIONAL")
-        .map(async (v, i) => {
-          const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/stats/${v}.json?_=${Date.now()}`;
-          let res = await fetch(url);
-          let resJSON = await res.json();
-          resJSON.zone = v.split("_").join(" ");
-          cases.forEach(v => {
-            const totalCaseCamelcase = _camelCase(`total ${v}`);
-            const totalCasePerMPopCamelcase = `${totalCaseCamelcase}PerMPop`;
-            resJSON[totalCasePerMPopCamelcase] = (
-              (resJSON[totalCaseCamelcase] / resJSON.population) *
-              1000000
-            ).toFixed(0);
 
-            this.$set(
-              this.data[v].datasets[0].data,
-              i,
-              resJSON[totalCaseCamelcase]
-            );
-            this.$set(this.data[v].datasets[0], "backgroundColor", color[v]);
-            this.$set(this.data[v].labels, i, resJSON.zone);
-          });
-          return resJSON;
-        });
-      dataZones = await Promise.all(dataZones);
-      console.log(dataZones);
+      const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/stats/stats.json?_=${Date.now()}`;
+      let res = await fetch(url);
+      let resJSON = await res.json();
 
+      resJSON = Object.entries(resJSON).filter(v => v[0] != "NATIONAL");
       cases.forEach(v => {
         const totalCaseCamelcase = _camelCase(`total ${v}`);
         const totalCasePerMPopCamelcase = `${totalCaseCamelcase}PerMPop`;
-        let currentOrderedData = _orderBy(
-          dataZones,
-          v2 => {
-            return parseInt(v2[totalCasePerMPopCamelcase]);
+
+        resJSON.forEach((v, i) => {
+          const k2 = v[0];
+          const v2 = v[1];
+
+          resJSON[i][1][totalCasePerMPopCamelcase] = (
+            (v2[totalCaseCamelcase] / v2.population) *
+            1000000
+          ).toFixed(0);
+        });
+      });
+      cases.forEach(v => {
+        const totalCaseCamelcase = _camelCase(`total ${v}`);
+        const totalCasePerMPopCamelcase = `${totalCaseCamelcase}PerMPop`;
+
+        let orderedResJSON = _orderBy(
+          resJSON,
+          v => {
+            return parseInt(v[1][totalCasePerMPopCamelcase]);
           },
           "desc"
         );
-        currentOrderedData.forEach((v2, i2) => {
-          this.$set(
-            this.data[v].datasets[0].data,
-            i2,
-            v2[totalCasePerMPopCamelcase]
-          );
-          this.$set(this.data[v].labels, i2, v2.zone);
-          // this.chartInstance[v].update();
+        orderedResJSON.forEach(v2 => {
+          const k3 = v2[0];
+          const v3 = v2[1];
+
+          this.data[v].datasets[0].data.push(v3[totalCasePerMPopCamelcase]);
+          this.$set(this.data[v].datasets[0], "backgroundColor", color[v]);
+          this.data[v].labels.push(k3);
         });
       });
     }, 9);

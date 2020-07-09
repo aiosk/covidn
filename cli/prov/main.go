@@ -46,7 +46,7 @@ func Item(file io.Reader) {
 	// filepathChartjs := fmt.Sprintf("dist/chartjs/%s.json", fileName)
 	// libs.WriteToChartjs(filepathChartjs, provItem.ToChartjs())
 
-	for i := 1; i <= 21; i++ {
+	for i := 1; i <= 14; i++ {
 		dirpath := fmt.Sprintf("dist/chartjs/%s", fileName)
 		filepath := fmt.Sprintf("%s/%d.json", dirpath, i)
 		libs.WriteToJSON(dirpath, filepath, provItem.Cleaning().Chunk(i).ToChartjs())
