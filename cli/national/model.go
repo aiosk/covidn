@@ -175,10 +175,31 @@ func (v HarianList) Chunk(size int) HarianList {
 		item.Recover.Value = 0
 		item.Death.Value = 0
 		item.Active.Value = 0
-		item.TotalCase.Value = v2[len(v2)-1].TotalCase.Value
-		item.TotalRecover.Value = v2[len(v2)-1].TotalRecover.Value
-		item.TotalDeath.Value = v2[len(v2)-1].TotalDeath.Value
-		item.TotalActive.Value = v2[len(v2)-1].TotalActive.Value
+
+		length := len(v2)
+		validIdx := length - 1
+		i := 0
+		found := false
+
+		for found == false {
+			i++
+			if i > length-1 {
+				break
+			}
+			// log.Printf("%+v\n", v2)
+			// log.Printf("%+v\n", length)
+			// log.Printf("%+v\n", i)
+			if v2[length-i].TotalCase.Value != 0 {
+				found = true
+			}
+		}
+		validIdx = length - i
+
+		item.TotalCase.Value = v2[validIdx].TotalCase.Value
+		item.TotalRecover.Value = v2[validIdx].TotalRecover.Value
+		item.TotalDeath.Value = v2[validIdx].TotalDeath.Value
+		item.TotalActive.Value = v2[validIdx].TotalActive.Value
+
 		for _, v3 := range v2 {
 			item.Case.Value += v3.Case.Value
 			item.Recover.Value += v3.Recover.Value

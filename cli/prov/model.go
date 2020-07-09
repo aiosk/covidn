@@ -121,10 +121,31 @@ func (v FileItem) Chunk(size int) FileItem {
 		item.Recover = 0
 		item.Death = 0
 		item.Active = 0
-		item.TotalCase = v2[len(v2)-1].TotalCase
-		item.TotalRecover = v2[len(v2)-1].TotalRecover
-		item.TotalDeath = v2[len(v2)-1].TotalDeath
-		item.TotalActive = v2[len(v2)-1].TotalActive
+
+		length := len(v2)
+		validIdx := length - 1
+		i := 0
+		found := false
+
+		for found == false {
+			i++
+			if i > length-1 {
+				break
+			}
+			// log.Printf("%+v\n", v2)
+			// log.Printf("%+v\n", length)
+			// log.Printf("%+v\n", i)
+			if v2[length-i].TotalCase != 0 {
+				found = true
+			}
+		}
+		validIdx = length - i
+
+		item.TotalCase = v2[validIdx].TotalCase
+		item.TotalRecover = v2[validIdx].TotalRecover
+		item.TotalDeath = v2[validIdx].TotalDeath
+		item.TotalActive = v2[validIdx].TotalActive
+
 		for _, v3 := range v2 {
 			item.Case += v3.Case
 			item.Recover += v3.Recover
