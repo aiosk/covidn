@@ -79,8 +79,9 @@ func Main() {
 
 	// log.Printf("%+v\n", results)
 	for k, v := range results {
-		filepath := fmt.Sprintf("dist/stats/%s.json", k)
+		dirpath := fmt.Sprintf("dist/stats")
+		filepath := fmt.Sprintf("%s/%s.json", dirpath, k)
 
-		libs.WriteToJSON(filepath, v)
+		libs.WriteToJSON(dirpath, filepath, v)
 	}
 }

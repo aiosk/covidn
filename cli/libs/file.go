@@ -81,9 +81,12 @@ func WriteToIcs(filepath string, data interface{}) {
 }
 
 // WriteToJSON ...
-func WriteToJSON(filepath string, data interface{}) {
+func WriteToJSON(dirpath string, filepath string, data interface{}) {
 	// jsonStr, err := json.MarshalIndent(data, "", "  ")
 	jsonStr, err := json.Marshal(data)
+	PanicError(err)
+
+	err = os.MkdirAll(dirpath, os.ModePerm)
 	PanicError(err)
 
 	err = ioutil.WriteFile(filepath, jsonStr, os.ModePerm)

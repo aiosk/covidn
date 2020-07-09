@@ -121,19 +121,15 @@ func (v FileItem) Chunk(size int) FileItem {
 		item.Recover = 0
 		item.Death = 0
 		item.Active = 0
-		item.TotalCase = 0
-		item.TotalRecover = 0
-		item.TotalDeath = 0
-		item.TotalActive = 0
+		item.TotalCase = v2[len(v2)-1].TotalCase
+		item.TotalRecover = v2[len(v2)-1].TotalRecover
+		item.TotalDeath = v2[len(v2)-1].TotalDeath
+		item.TotalActive = v2[len(v2)-1].TotalActive
 		for _, v3 := range v2 {
 			item.Case += v3.Case
 			item.Recover += v3.Recover
 			item.Death += v3.Death
 			item.Active += v3.Active
-			item.TotalCase += v3.TotalCase
-			item.TotalRecover += v3.TotalRecover
-			item.TotalDeath += v3.TotalDeath
-			item.TotalActive += v3.TotalActive
 		}
 
 		newData.ListPerkembangan = append(newData.ListPerkembangan, item)
