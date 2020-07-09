@@ -4,7 +4,7 @@
       .cell.xlarge-3
         label(for='periods') #[span {{periods}}] days period
       .cell.xlarge-9
-        input#periods(name="periods" type='range' min='1' max='21' step='1' 'v-model'='periods' aria-describedby="periodsHelpText" )
+        input#periods(name="periods" type='range' min='1' max='14' step='1' 'v-model'='periods' aria-describedby="periodsHelpText" )
         p#periodsHelpText.help-text Try smaller or larger data periods by sliding (tap/click => hold => move) slider to change days period.#[br]#[strong Smaller] day periods will generate complicated chart data, while #[strong larger] day periods will generate simplified chart data. Use wisely.
     .grid-x.zones
       .cell.xlarge-3

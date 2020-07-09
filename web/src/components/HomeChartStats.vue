@@ -93,6 +93,7 @@ canvas {
 .recover,
 .death,
 .active {
+  border: none;
   margin: 0;
   color: white;
   text-align: center;

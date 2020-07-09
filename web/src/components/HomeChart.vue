@@ -118,7 +118,7 @@ export default {
         const length = resJSON.datasets[4].data.length;
         while (!found) {
           i++;
-          if (resJSON.datasets[4].data[length - i] != 0) {
+          if (resJSON.datasets[0].data[length - i] != 0) {
             found = true;
           }
         }
