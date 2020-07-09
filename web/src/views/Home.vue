@@ -2,17 +2,16 @@
   .home
     MyForm('v-model'="myModel")
 
-    #myChart.grid-x.xlarge-up-2(aria-describedby="chartHelpText")
+    .grid-x.xlarge-up-2(aria-describedby="chartHelpText")
       template(v-for="v in myModel.selectedZones")
         .cell(':key'="v" ':class'='[{"width-100":v=="NATIONAL"},"chart-item"]' ':id'="`CellChart_${v}`" )
-          //- MyChart(':zone'='v' 'v-model'="myModel")
-          component(':key'="v"  ':is'="myChart[v]" ':zone'='v' 'v-model'="myModel" ':ref'='v')
+          component(':key'="v"  ':is'="homeChart[v]" ':zone'='v' 'v-model'="myModel" ':ref'='v')
 </template>
 
 <script>
 // @ is an alias to /src
 import MyForm from "@/components/MyForm.vue";
-import MyChart from "@/components/MyChart.vue";
+import HomeChart from "@/components/HomeChart.vue";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 import _isEqual from "lodash/isEqual";
@@ -29,19 +28,14 @@ let MediaQuery;
 export default {
   name: "Home",
   components: {
-    // HelloWorld
     MyForm,
-    MyChart
+    HomeChart
   },
   data() {
     return {
       lazyLoadCanvas: null,
-      myChart: {},
+      homeChart: {},
       myModel: {
-        mediaQuery: {
-          isAtLeastMedium: false
-        },
-        statsNational: {},
         periods: defaultPeriods,
         zones,
         selectedZones: _cloneDeep(defaultZones),
@@ -50,7 +44,7 @@ export default {
     };
   },
   watch: {
-    myChart: function(val, oldVal) {
+    homeChart: function(val, oldVal) {
       _delay(() => {
         if (!!this.lazyLoadCanvas) {
           this.lazyLoadCanvas.update();
@@ -121,28 +115,8 @@ export default {
       }
     }
   },
-  methods: {
-    windowOnResize(e) {
-      this.$set(
-        this.myModel.mediaQuery,
-        "isAtLeastMedium",
-        MediaQuery.atLeast("medium")
-      );
-    },
-    getNationalStats(e) {
-      (async () => {
-        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/stats/NATIONAL.json?_=${Date.now()}`;
-        let res = await fetch(url);
-        let resJSON = await res.json();
-        // resJSON.datasets[1].borderDash = [5, 5];
-
-        this.$set(this.myModel, "statsNational", resJSON);
-      })();
-    }
-  },
+  methods: {},
   created() {
-    window.addEventListener("resize", this.windowOnResize);
-
     let {
       hidden: hiddenDatasets,
       zones: selectedZones,
@@ -162,16 +136,8 @@ export default {
     if (!!periods) {
       this.myModel.periods = periods;
     }
-    this.getNationalStats();
   },
   mounted() {
-    ({ MediaQuery } = require("@/js/mediaQuery"));
-    MediaQuery._init();
-    this.$set(
-      this.myModel.mediaQuery,
-      "isAtLeastMedium",
-      MediaQuery.atLeast("medium")
-    );
     _delay(() => {
       const LazyLoad = require("lazyload");
 
@@ -184,9 +150,9 @@ export default {
             .slice(1)
             .join("_");
 
-          this.$set(this.myChart, elId, MyChart);
+          this.$set(this.homeChart, elId, HomeChart);
           if (!!this.$refs[elId]) {
-            this.$refs[elId][0].updateChartData();
+            this.$refs[elId][0].updateChartHiddenDatasets();
           }
         }
         // callback_exit: el => {
@@ -210,7 +176,6 @@ export default {
       "hiddenDatasets",
       _cloneDeep(defaultHiddenDatasets)
     );
-    window.removeEventListener("resize", this.windowOnResize);
   }
 };
 </script>

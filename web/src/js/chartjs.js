@@ -1,7 +1,3 @@
-import _isUndefined from "lodash/isUndefined";
-import _sum from "lodash/sum";
-import _take from "lodash/take";
-
 const Chart = require("chartjs");
 
 // Chart.plugins.register({
@@ -130,7 +126,7 @@ const defaultZoom = {
   },
 };
 
-const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: false }) => {
+const initChartDaily = (params = { zone: null, data: null }) => {
   const chartInstance = new Chart(`Chart_${params.zone}`, {
     type: "line",
     data: params.data,
@@ -143,9 +139,6 @@ const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: fa
       tooltips: {
         mode: "index",
         intersect: false,
-        // filter: function(tooltipItem, data) {
-        //   return _isUndefined(data.datasets[tooltipItem.datasetIndex].type);
-        // },
         callbacks: {
           labelColor(tooltipItem, chart) {
             let datasetIndexVal = tooltipItem.datasetIndex % 8;
@@ -161,12 +154,10 @@ const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: fa
             let datasetIndexVal = tooltipItem.datasetIndex % 8;
             var label = data.datasets[datasetIndexVal].label || "";
             let value = data.datasets[datasetIndexVal].data[tooltipItem.index];
-            // console.log(datasetIndexVal, datasetIndexVal + 4);
-            // let total = data.datasets[datasetIndexVal + 4].data[tooltipItem.index];
-            let total = _sum(_take(data.datasets[datasetIndexVal].data, tooltipItem.index + 1));
+
+            let total = data.datasets[datasetIndexVal + 4].data[tooltipItem.index];
 
             const valueStr = value == 0 ? "" : value > 0 ? `(+${value})` : `(${value})`;
-            // console.log(tooltipItem.datasetIndex, (tooltipItem.datasetIndex / 4).toFixed(0) == 1);
 
             let isSecondDataset = (tooltipItem.datasetIndex / 4).toFixed(1);
             isSecondDataset = isSecondDataset >= 1 && isSecondDataset < 2;
@@ -176,13 +167,11 @@ const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: fa
             } else {
               return `${label}: ${total} ${valueStr}`;
             }
-            // return `${label}: ${total} (${value > 0 ? "+" : ""}${value})`;
           },
         },
       },
       legend: {
         display: false,
-        // display: params.mqIsAtLeastMedium,
       },
       legendCallback: (chart) => {
         const chartLegendHtml = chart.legend.legendItems
@@ -215,7 +204,6 @@ const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: fa
             },
             ticks: {
               display: false,
-              // display: params.mqIsAtLeastMedium,
               // min: 0,
               // maxRotation: 23,
             },
@@ -227,7 +215,6 @@ const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: fa
               display: false,
             },
             ticks: {
-              // display: params.mqIsAtLeastMedium,
               display: false,
               // min: 0,
               // maxRotation: 23,
@@ -245,34 +232,6 @@ const initChartDaily = (params = { zone: null, data: null, mqIsAtLeastMedium: fa
     },
   });
 
-  return chartInstance;
-};
-
-const initChartStatsCase = (params = { zone: null, data: null }) => {
-  const chartInstance = new Chart(`Stats_${params.zone}`, {
-    type: "doughnut",
-    data: params.data,
-    options: {
-      legend: {
-        display: false,
-      },
-      animation: { duration: 0 },
-      hover: { animationDuration: 0 },
-      responsiveAnimationDuration: 0,
-      // watermark: defaultWatermark,
-      tooltips: {
-        callbacks: {
-          label(tooltipItem, data) {
-            var label = data.labels[tooltipItem.index] || "";
-
-            let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-
-            return `${label}: ${value}%`;
-          },
-        },
-      },
-    },
-  });
   return chartInstance;
 };
 
@@ -297,7 +256,6 @@ const initChartRanking = (params = { elementId: null, data: null }) => {
             },
             ticks: {
               display: false,
-              // display: params.mqIsAtLeastMedium,
               min: 0,
               // maxRotation: 23,
             },
@@ -309,7 +267,6 @@ const initChartRanking = (params = { elementId: null, data: null }) => {
               display: false,
             },
             ticks: {
-              // display: params.mqIsAtLeastMedium,
               // display: false,
               // min: 0,
               // maxRotation: 23,
@@ -338,4 +295,4 @@ const color = {
   death: "#ec6f58",
   active: "#c6ac42",
 };
-export { color, initChartDaily, initChartStatsCase, initChartRanking };
+export { color, initChartDaily, initChartRanking };

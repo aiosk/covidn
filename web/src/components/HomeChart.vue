@@ -1,10 +1,10 @@
 <template lang="pug">
-  .my-chart.card('aria-describedby'="chartHelpText")
+  .home-chart.card('aria-describedby'="chartHelpText")
     .capture
       .card-divider.title
         h4 {{zone.split('_').join(' ')}}
       .card-image.stats
-        component(':is'="myChartStats" 'v-model'='myStatsModel')
+        component(':is'="homeChartStats" 'v-model'='myStatsModel')
       .card-image
         .legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
         canvas(:id="`Chart_${zone}`")
@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import MyChartStats from "@/components/MyChartStats";
+import HomeChartStats from "@/components/HomeChartStats";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 
 export default {
-  name: "MyChart",
+  name: "HomeChart",
   components: {
-    MyChartStats
+    HomeChartStats
   },
   props: {
     zone: String,
@@ -31,42 +31,32 @@ export default {
   },
   computed: {
     myStatsModel() {
-      return { statsNational: this.value.statsNational, zone: this.zone };
+      return { zone: this.zone, stats: this.stats };
     },
     periods() {
       return this.value.periods;
     },
     hiddenDatasets() {
       return this.value.hiddenDatasets;
-    },
-    mqIsAtLeastMedium() {
-      return this.value.mediaQuery.isAtLeastMedium;
+    }
+  },
+  watch: {
+    periods(val, oldVal) {
+      this.updateChartData();
     }
   },
   data() {
     return {
       chartInstance: null,
       legendHTML: null,
-      stats: {},
-      myChartStats: null,
+      stats: {
+        lastUpdate: null,
+        total: {},
+        daily: {}
+      },
+      homeChartStats: null,
       data: { datasets: [], labels: [] }
     };
-  },
-  watch: {
-    periods(val, oldVal) {
-      // this.updateChartData();
-    },
-    hiddenDatasets(val, oldVal) {
-      // this.updateChartDatasets();
-    }
-    // mqIsAtLeastMedium(val, oldVal) {
-    //   if (!this.chartInstance) {
-    //     return;
-    //   }
-    //   // this.chartInstance.options.scales.xAxes[0].ticks.display = val;
-    //   // this.chartInstance.options.scales.yAxes[0].ticks.display = true;
-    //   this.chartInstance.update();
-    // }
   },
   methods: {
     onClickFullscreen(e) {
@@ -91,9 +81,6 @@ export default {
         a.click();
       })();
       // Page.domSpin(e.target);
-
-      // $anchor.href = image;
-      // $anchor.download = `Chart_${this.zone}.jpg`;
     },
     legendOnClick(e) {
       const $item = e.target.closest(".item");
@@ -113,28 +100,48 @@ export default {
 
       const propsValue = _cloneDeep(this.value);
       this.$set(propsValue, "hiddenDatasets", hiddenDatasets);
-      // propsValue.hiddenDatasets = ci.data.datasets.map((v) => v.hidden);
-
       this.$emit("input", propsValue);
     },
     updateChartData() {
-      if (!this.chartInstance) {
-        return;
-      }
       (async () => {
         const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/chartjs/${
           this.zone
-        }-${this.periods}.json?_=${Date.now()}`;
+        }/${this.periods}.json?_=${Date.now()}`;
         let res = await fetch(url);
         let resJSON = await res.json();
-        // resJSON.datasets[1].borderDash = [5, 5];
 
         this.$set(this.data, "datasets", resJSON.datasets);
         this.$set(this.data, "labels", resJSON.labels);
-        this.updateChartDatasets();
+
+        let i = 0;
+        let found = false;
+        const length = resJSON.datasets[4].data.length;
+        while (!found) {
+          i++;
+          if (resJSON.datasets[4].data[length - i] != 0) {
+            found = true;
+          }
+        }
+        const validIdx = length - i;
+
+        this.$set(this.stats, "lastUpdate", resJSON.labels[length - i]);
+        this.$set(this.stats, "total", {
+          confirmed: resJSON.datasets[4].data[validIdx],
+          recover: resJSON.datasets[5].data[validIdx],
+          death: resJSON.datasets[6].data[validIdx],
+          active: resJSON.datasets[7].data[validIdx]
+        });
+        this.$set(this.stats, "daily", {
+          confirmed: resJSON.datasets[0].data[validIdx],
+          recover: resJSON.datasets[1].data[validIdx],
+          death: resJSON.datasets[2].data[validIdx],
+          active: resJSON.datasets[3].data[validIdx]
+        });
+
+        this.updateChartHiddenDatasets();
       })();
     },
-    updateChartDatasets() {
+    updateChartHiddenDatasets() {
       if (!this.chartInstance) {
         return;
       }
@@ -147,16 +154,18 @@ export default {
       this.legendHTML = this.chartInstance.generateLegend();
     }
   },
+  created() {
+    this.updateChartData();
+  },
   mounted() {
     if (!this.chartInstance) {
       const { initChartDaily } = require("@/js/chartjs");
       this.chartInstance = initChartDaily({
         zone: this.zone,
-        data: this.data,
-        mqIsAtLeastMedium: this.mqIsAtLeastMedium
+        data: this.data
       });
     }
-    this.myChartStats = MyChartStats;
+    this.homeChartStats = HomeChartStats;
   },
   destroyed() {
     this.data = { datasets: [], labels: [] };
@@ -174,7 +183,7 @@ export default {
 @import "@/css/_color";
 @include foundation-card;
 
-.my-chart {
+.home-chart {
   margin: 0.5rem 0;
   &.card {
     $color: map-get($element-color, "title");

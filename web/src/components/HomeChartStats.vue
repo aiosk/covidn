@@ -1,53 +1,38 @@
 <template lang="pug">
-  .my-chart-stats
-    .grid-x.small-up-1.medium-up-2
-      .cell
-        .card.population
-          .card-section
-            .text Population
-            .total {{numberWithCommas(stats.population)}}
+  .home-chart-stats
+    //- .grid-x.small-up-1
+      //- .cell
+      //-   .card.population
+      //-     .card-section
+      //-       .text Population
+      //-       .total {{numberWithCommas(stats.population)}}
+
+    .grid-x.small-up-2.medium-up-4
       .cell
         .card.confirmed
           .card-section
             .text Confirmed
-            .total {{numberWithCommas(stats.totalConfirmed)}}
-              sup {{ plusMinusStr(stats.confirmed) }}
-            //- .percentage {{((stats.totalConfirmed/stats.population)*100).toFixed(2)}}% from Population
-            //- .rate-mil
-            //-   b {{((stats.totalConfirmed/stats.population)*1000000).toFixed(0)}}
-            //-   | &nbsp;per 1M Population
-
-    .grid-x.small-up-12.medium-up-3
+            .total {{numberWithCommas(stats.total.confirmed)}}
+              sup {{ plusMinusStr(stats.daily.confirmed) }}
       .cell
         .card.recover
           .card-section
             .text Recover
-            .total {{numberWithCommas(stats.totalRecover)}}
-              sup {{ plusMinusStr(stats.recover) }}
-            //- .rate-mil
-            //-   b {{((stats.totalRecover/stats.population)*1000000).toFixed(0)}}
-            //-   | &nbsp;per 1M Population
+            .total {{numberWithCommas(stats.total.recover)}}
+              sup {{ plusMinusStr(stats.daily.recover) }}
       .cell
         .card.death
           .card-section
             .text Death
-            .total {{numberWithCommas(stats.totalDeath) }}
-              sup {{ plusMinusStr(stats.death) }}
-            //- .rate-mil
-            //-   b {{((stats.totalDeath/stats.population)*1000000).toFixed(0)}}
-            //-   | &nbsp;per 1M Population
+            .total {{numberWithCommas(stats.total.death) }}
+              sup {{ plusMinusStr(stats.daily.death) }}
       .cell
         .card.active
           .card-section
             .text Active
-            .total {{ numberWithCommas(stats.totalActive) }}
-              sup {{ plusMinusStr(stats.active) }}
-            //- .rate-mil
-            //-   b {{((stats.totalActive/stats.population)*1000000).toFixed(0)}}
-            //-   | &nbsp;per 1M Population
+            .total {{ numberWithCommas(stats.total.active) }}
+              sup {{ plusMinusStr(stats.daily.active) }}
     .help-text.text-right Last Update: {{stats.lastUpdate}}
-
-      //- canvas(':id'="`Stats_${zone}`")
 </template>
 
 <script>
@@ -55,16 +40,11 @@ import _delay from "lodash/delay";
 import _isEmpty from "lodash/isEmpty";
 
 export default {
-  name: "MyChartStats",
+  name: "HomeChartStats",
   props: { value: Object },
-  data() {
-    return {
-      stats: {}
-    };
-  },
   computed: {
-    statsNational() {
-      return this.value.statsNational;
+    stats() {
+      return this.value.stats;
     },
     zone() {
       return this.value.zone;
@@ -87,29 +67,13 @@ export default {
     numberWithCommas(x) {
       return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-    updateData() {
-      (async () => {
-        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/stats/${
-          this.zone
-        }.json?_=${Date.now()}`;
-        let res = await fetch(url);
-        let resJSON = await res.json();
-        // resJSON.datasets[1].borderDash = [5, 5];
-        this.stats = resJSON;
-      })();
-    },
     plusMinusStr(val) {
       if (val == 0) {
         return "";
       }
       return `(${val > 0 ? `+${val}` : val})`;
     }
-  },
-  created() {
-    this.updateData();
-  },
-  mounted() {},
-  destroyed() {}
+  }
 };
 </script>
 
@@ -119,7 +83,7 @@ export default {
 @import "@/css/_color";
 @include foundation-card;
 
-.my-chart-stats {
+.home-chart-stats {
 }
 canvas {
   // @include absolute-center;
