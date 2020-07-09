@@ -1,14 +1,15 @@
 <template lang="pug">
   .rangking
+    h3 Cases Ranking per Provinces
     template(v-for="v in cases")
       .card(':class'="[v]" ':key'="v")
         .capture
           .card-divider
             h4 {{v}}
           .card-image
-            canvas(':id'="`Ranking_${v.toUpperCase()}`")
+            canvas(':id'="`RankingBar_${v.toUpperCase()}`")
         .card-section.action
-          a.icon.download-chart('@click'='onClickDownloadChart'): img(src="@/assets/img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
+          a.download-chart('@click'='onClickDownloadChart'): i.icon-download-cloud(title='download chart')
 </template>
 
 <script>
@@ -86,9 +87,10 @@ export default {
           const k3 = v2[0];
           const v3 = v2[1];
 
+          // this.data[v].datasets[0].barThickness = 32;
           this.data[v].datasets[0].data.push(v3[totalCaseCamelcase]);
           this.$set(this.data[v].datasets[0], "backgroundColor", color[v]);
-          this.data[v].labels.push(k3);
+          this.data[v].labels.push(k3.split("_").join(" "));
         });
       });
     }, 9);
@@ -98,7 +100,7 @@ export default {
       if (!this.chartInstance[v]) {
         const { initChartRanking } = require("@/js/chartjs");
         this.chartInstance[v] = initChartRanking({
-          elementId: `Ranking_${v.toUpperCase()}`,
+          elementId: `RankingBar_${v.toUpperCase()}`,
           data: this.data[v]
         });
       }
@@ -115,50 +117,14 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "@/css/_foundation";
-@import "@/css/_color";
+@import "@/css/_chart";
 @include foundation-card;
-.capture {
-  background: white;
+
+.ranking {
 }
-.action {
-  text-align: right;
-}
-.confirmed,
-.recover,
-.death,
-.active {
-  .card-divider {
-    color: white;
-    text-transform: uppercase;
-    h4 {
-      font-size: 1.25rem;
-    }
-  }
-}
-.confirmed {
-  border: 1px solid map-get($case-color, "confirmed");
-  .card-divider {
-    background: map-get($case-color, "confirmed");
-  }
-}
-.recover {
-  border: 1px solid map-get($case-color, "recover");
-  .card-divider {
-    background: map-get($case-color, "recover");
-  }
-}
-.death {
-  border: 1px solid map-get($case-color, "death");
-  .card-divider {
-    background: map-get($case-color, "death");
-  }
-}
-.active {
-  border: 1px solid map-get($case-color, "active");
-  .card-divider {
-    background: map-get($case-color, "active");
-  }
+.card-image {
+  min-height: 40rem;
 }
 </style>

@@ -1,9 +1,9 @@
 <template lang="pug">
-  .about coming soon
+  .about
+    h3 coming soon
 </template>
 
 
 <style lang="scss">
 // @import "@/css/_foundation";
-// @include foundation-everything;
 </style>

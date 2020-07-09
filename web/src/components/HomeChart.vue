@@ -2,16 +2,17 @@
   .home-chart.card('aria-describedby'="chartHelpText")
     .capture
       .card-divider.title
-        h4 {{zone.split('_').join(' ')}}
+        h5 {{zone.split('_').join(' ')}}
       .card-image.stats
         component(':is'="homeChartStats" 'v-model'='myStatsModel')
       .card-image
         .legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
+        .help-text.text-right #[strong.show-for-xlarge Click]#[strong.hide-for-xlarge Tap / Touch] legend item to toggle chart line
         canvas(:id="`Chart_${zone}`")
     .card-section.action
-      a.icon.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): img(src="@/assets/img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")
-      a.icon.download-chart('@click'='onClickDownloadChart'): img(src="@/assets/img/baseline_get_app_black_18dp.png" alt="download chart" title='download chart')
-      a.icon.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): img(src="@/assets/img/baseline_fullscreen_black_18dp.png" alt="fullscreen")
+      a.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): i.icon-table( title="download raw")
+      a.download-chart('@click'='onClickDownloadChart'): i.icon-download-cloud(title='download chart')
+      a.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): i.icon-resize-full(title="resize fullscreen")
 
 </template>
 
@@ -182,6 +183,7 @@ export default {
 @import "@/css/_foundation";
 @import "@/css/_color";
 @include foundation-card;
+@include foundation-form-helptext;
 
 .home-chart {
   margin: 0.5rem 0;
@@ -196,43 +198,18 @@ export default {
     .title {
       h4 {
         // font-weight: bold;
-        font-size: 1.25rem;
+        // font-size: 1.25rem;
       }
     }
   }
-}
-.stats {
-  // padding-top: 0;
-}
-.capture {
-  background-color: white;
 }
 .card-image {
   // padding: 1rem 0;
 }
 
 .action {
-  text-align: right;
-  a.icon {
-    $size: 2rem;
-    height: $size;
-    width: $size;
-    display: inline-block;
-    position: relative;
+  a {
     margin: 0 0.5rem;
-    img {
-      @include absolute-center;
-      // $size: $size - 1rem;
-      height: $size;
-      width: $size;
-    }
-  }
-
-  & > .cell:nth-child(1) {
-    order: 2;
-  }
-  & > .cell:nth-child(2) {
-    order: 1;
   }
 }
 </style>

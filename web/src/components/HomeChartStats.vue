@@ -11,25 +11,25 @@
       .cell
         .card.confirmed
           .card-section
-            .text Confirmed
+            h6 Confirmed
             .total {{numberWithCommas(stats.total.confirmed)}}
               sup {{ plusMinusStr(stats.daily.confirmed) }}
       .cell
         .card.recover
           .card-section
-            .text Recover
+            h6 Recover
             .total {{numberWithCommas(stats.total.recover)}}
               sup {{ plusMinusStr(stats.daily.recover) }}
       .cell
         .card.death
           .card-section
-            .text Death
+            h6 Death
             .total {{numberWithCommas(stats.total.death) }}
               sup {{ plusMinusStr(stats.daily.death) }}
       .cell
         .card.active
           .card-section
-            .text Active
+            h6 Active
             .total {{ numberWithCommas(stats.total.active) }}
               sup {{ plusMinusStr(stats.daily.active) }}
     .help-text.text-right Last Update: {{stats.lastUpdate}}
@@ -99,15 +99,9 @@ canvas {
   text-align: center;
   height: 100%;
   .text {
-    @include breakpoint(small only) {
-      display: inline-block;
-      margin-left: 0.5rem;
-    }
-    font-weight: 100;
-    font-size: 1.125rem;
   }
   .total {
-    font-size: 1.325rem;
+    font-size: 1.125rem;
   }
   .percentage,
   .rate-mil {
@@ -116,17 +110,6 @@ canvas {
   .rate-mil {
     // margin-top: 0.5rem;
   }
-}
-.population {
-  // height: 7.35rem;
-  height: 100%;
-
-  .total {
-    @include breakpoint(medium up) {
-      @include absolute-center;
-    }
-  }
-  background: map-get($element-color, "title");
 }
 .population,
 .confirmed {

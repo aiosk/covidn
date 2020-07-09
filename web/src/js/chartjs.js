@@ -176,10 +176,14 @@ const initChartDaily = (params = { zone: null, data: null }) => {
       legendCallback: (chart) => {
         const chartLegendHtml = chart.legend.legendItems
           .map((v) => {
-            return `<div class='cell item ${v.text}'>
+            return `<div class='cell item'>
   <div class='grid-x'>
-    <div class='cell small-2 color' style="background-color:${v.fillStyle};border:.2rem solid ${v.strokeStyle};"></div>
-    <div class='cell small-10 text' style="text-decoration:${v.hidden ? "line-through" : "none"};">${v.text}</div>
+    <div class='cell small-2'>
+      <span class='color' style="background-color:${v.fillStyle};border:.2rem solid ${v.strokeStyle};"></span>
+    </div>
+    <div class='cell small-10'>
+      <span class='text' style="text-decoration:${v.hidden ? "line-through" : "none"};">${v.text}</span>
+    </div>
   </div>
 </div>`;
           })
@@ -240,6 +244,7 @@ const initChartRanking = (params = { elementId: null, data: null }) => {
     type: "horizontalBar",
     data: params.data,
     options: {
+      maintainAspectRatio: false,
       legend: {
         display: false,
       },
@@ -274,17 +279,16 @@ const initChartRanking = (params = { elementId: null, data: null }) => {
           },
         ],
       },
-      // tooltips: {
-      //   callbacks: {
-      //     label(tooltipItem, data) {
-      //       var label = data.labels[tooltipItem.index] || "";
-
-      //       let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-
-      //       return `${label}: ${value}%`;
-      //     },
-      //   },
-      // },
+      tooltips: {
+        // intersect: false,
+        //   callbacks: {
+        //     label(tooltipItem, data) {
+        //       var label = data.labels[tooltipItem.index] || "";
+        //       let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+        //       return `${label}: ${value}%`;
+        //     },
+        //   },
+      },
     },
   });
   return chartInstance;

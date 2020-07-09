@@ -1,34 +1,32 @@
 <template lang='pug'>
   #app.grid-container
-    a(href='./')
-      h4.text-center Daily Indonesia COVID-19 cases
-      h5.text-center National and Provinces
-    .clearfix &nbsp;
-      a.float-right(href='https://github.com/aiosk/covidn')
-        img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
+    //- a(href='./')
 
-    #nav
-      router-link(to="/") Home
-      | &nbsp;|&nbsp;
-      router-link(to="/ranking") Ranking
-      | &nbsp;|&nbsp;
-      router-link(to="/density") Density
-      | &nbsp;|&nbsp;
-      router-link(to="/about") About
-
-    #chartHelpText.callout.secondary
+    ul#nav.menu.vertical.medium-horizontal
+      li.menu-text: a(href='./') COVIDN
+      router-link( to="/daily" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
+        li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
+          a(':href'="href" '@click'="navigate") Daily
+      router-link( to="/ranking" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
+        li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
+          a(':href'="href" '@click'="navigate") Ranking
+      router-link( to="/density" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
+        li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
+          a(':href'="href" '@click'="navigate") Density
+      router-link( to="/about" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
+        li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
+          a(':href'="href" '@click'="navigate") About
+      li.github
+          a(href='https://github.com/aiosk/covidn')
+            img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
+    
+    #chartHelpText.callout.warning.hide-for-medium
       ul.help-text
-        li.hide-for-xlarge For best results please view in #[strong landscape] mode
-        li Click #[img(src="@/assets/img/baseline_get_app_black_18dp.png" alt="download chart")] to save chart as image
-        li Click #[img(src="@/assets/img/baseline_backup_table_black_18dp.png" alt="download raw" title="download raw")] to save chart raw data
-        li.show-for-xlarge Click #[img(src="@/assets/img/baseline_fullscreen_black_18dp.png" alt="fullscreen")] to toggle chart #[strong full-width] mode
-        li #[strong.show-for-xlarge Click]#[strong.hide-for-xlarge Tap / Touch] chart legend to show/hide chart data
-        li #[strong.show-for-xlarge Hover]#[strong.hide-for-xlarge Tap / Touch] chart legend to show case number
-        li.hide-for-xlarge #[strong Tap / Touch outside] chart legend to hide case number
+        li For best results please view in #[strong landscape] mode
+    br
     router-view
 
-    button.button.small#top('@click'='topBtnOnClick')
-      img(src="@/assets/img/baseline_vertical_align_top_black_18dp.png" alt="Scroll to top")
+    button.button.small#top('@click'='topBtnOnClick'): i.icon-angle-circled-up(title="Scroll to top")
 </template>
 
 <script>
@@ -48,7 +46,96 @@ export default {
 </script>
 
 <style lang="scss">
-ul.help-text {
-  margin-left: 0;
+@import "@/css/_foundation";
+@import "@/css/_chart";
+@include foundation-everything;
+@include foundation-menu;
+
+#nav {
+  // text-align: center;
+  // margin: 1rem 0;
+  // position: fixe;
+  // top: 0;
+  // height: 2rem;
+}
+.menu {
+  background: $light-gray;
+  .menu-text,
+  // .menu-text a,
+  a {
+    // padding: 0.5rem 0.75rem !important;
+  }
+  .menu-text {
+    a {
+      padding: 0 !important;
+    }
+  }
+
+  .github {
+    a {
+      padding: 0.25rem;
+    }
+  }
+}
+.github {
+  // margin: 1rem 0;
+  text-align: right;
+}
+[class^="icon-"],
+[class*=" icon-"] {
+  font-size: 1.5rem;
+  color: $black;
+  &:before {
+    margin: {
+      left: 0;
+      right: 0;
+    }
+  }
+}
+#chartHelpText {
+  margin: 1rem 0;
+  ul.help-text {
+    margin-left: 0;
+    list-style-type: none;
+    li {
+      // display: inline-block;
+      // list-style-type: none;
+      // margin: 0 1rem;
+    }
+  }
+  .help-text {
+    i {
+      font-size: 1.25rem;
+    }
+  }
+}
+
+#top {
+  // margin-bottom: 0.5rem;
+  $position: 1rem;
+  position: fixed;
+  bottom: $position + 1rem;
+  right: $position;
+  background: white;
+  // $size: 2.5rem;
+  // width: $size;
+  // height: $size;
+
+  border-radius: 50%;
+  i {
+    font-size: 2.5rem;
+    // color: map-get($foundation-palette, "primary");
+    // color: $dark-gray;
+    // color: $medium-gray;
+  }
+}
+.card {
+  .capture {
+    background-color: white;
+  }
+
+  .action {
+    text-align: right;
+  }
 }
 </style>

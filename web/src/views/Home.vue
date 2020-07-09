@@ -1,5 +1,6 @@
 <template lang='pug'>
   .home
+    h3 Daily Cases per Provinces
     MyForm('v-model'="myModel")
 
     .grid-x.xlarge-up-2(aria-describedby="chartHelpText")
@@ -139,31 +140,33 @@ export default {
   },
   mounted() {
     _delay(() => {
-      const LazyLoad = require("lazyload");
+      if (!this.lazyLoadCanvas) {
+        const LazyLoad = require("lazyload");
 
-      this.lazyLoadCanvas = new LazyLoad({
-        elements_selector: ".chart-item",
-        unobserve_entered: true,
-        callback_enter: el => {
-          const elId = el.id
-            .split("_")
-            .slice(1)
-            .join("_");
+        this.lazyLoadCanvas = new LazyLoad({
+          elements_selector: ".chart-item",
+          unobserve_entered: true,
+          callback_enter: el => {
+            const elId = el.id
+              .split("_")
+              .slice(1)
+              .join("_");
 
-          this.$set(this.homeChart, elId, HomeChart);
-          if (!!this.$refs[elId]) {
-            this.$refs[elId][0].updateChartHiddenDatasets();
+            this.$set(this.homeChart, elId, HomeChart);
+            if (!!this.$refs[elId]) {
+              this.$refs[elId][0].updateChartHiddenDatasets();
+            }
           }
-        }
-        // callback_exit: el => {
-        //   const elId = el
-        //     .querySelector("canvas")
-        //     .id.split("_")
-        //     .slice(1)
-        //     .join("_");
-        //   console.log("callback_exit", elId);
-        // }
-      });
+          // callback_exit: el => {
+          //   const elId = el
+          //     .querySelector("canvas")
+          //     .id.split("_")
+          //     .slice(1)
+          //     .join("_");
+          //   console.log("callback_exit", elId);
+          // }
+        });
+      }
     }, 299);
   },
   destroyed() {
@@ -182,76 +185,16 @@ export default {
 
 <style lang="scss">
 @import "@/css/_foundation";
-@include foundation-everything;
-@include foundation-form-helptext;
+// @import "@/css/_chart";
 .chart-item {
   min-height: 20rem;
-}
-.help-text {
-  img {
-    $size: 1.25rem;
-    width: $size;
-    height: $size;
-  }
-
-  ul {
-    margin: 0;
-  }
-  li {
-    // display: inline-block;
-    // list-style-type: none;
-    margin: 0 1rem;
-  }
 }
 .cell {
   transition: width 1s;
   position: relative;
 }
 
-#top {
-  // margin-bottom: 0.5rem;
-  $position: 1rem;
-  position: fixed;
-  bottom: $position;
-  right: $position;
-  margin: 0;
-  img {
-    $size: 1.5rem;
-    width: $size;
-    height: $size;
-  }
-
-  background: $medium-gray;
-  // background: rgba(192, 192, 192, 0.5);
-  padding: 0.5rem;
-  border-radius: 50%;
-}
-.legend {
-  padding: 0.5rem;
-  font-size: 0.875rem;
-  text-align: left;
-  .item {
-    cursor: pointer;
-    margin-bottom: 0.25rem;
-    .color {
-      $size: 1rem;
-      width: $size;
-      height: $size;
-      display: inline-block;
-    }
-    .text {
-      // padding: 0.125rem;
-      padding-left: 0.25rem;
-      line-height: 0.875rem;
-    }
-  }
-}
 .width-100 {
   width: 100% !important;
-  .legend {
-    @include breakpoint(xlarge up) {
-      @include xy-grid-layout(8, ".cell");
-    }
-  }
 }
 </style>
