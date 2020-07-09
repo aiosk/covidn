@@ -38,13 +38,13 @@ func Main() {
 				var item Result
 				item.LastUpdate = records[lenRecords-i][0]
 				item.TotalConfirmed = totalConfirmed
-				item.Confirmed = records[lenRecords-i][2]
+				// item.Confirmed = records[lenRecords-i][2]
 				item.TotalRecover = records[lenRecords-i][3]
-				item.Recover = records[lenRecords-i][4]
+				// item.Recover = records[lenRecords-i][4]
 				item.TotalDeath = records[lenRecords-i][5]
-				item.Death = records[lenRecords-i][6]
+				// item.Death = records[lenRecords-i][6]
 				item.TotalActive = records[lenRecords-i][7]
-				item.Active = records[lenRecords-i][8]
+				// item.Active = records[lenRecords-i][8]
 				results[dataID] = item
 
 				found = true
@@ -78,10 +78,9 @@ func Main() {
 	}
 
 	// log.Printf("%+v\n", results)
-	for k, v := range results {
-		dirpath := fmt.Sprintf("dist/stats")
-		filepath := fmt.Sprintf("%s/%s.json", dirpath, k)
+	dirpath := fmt.Sprintf("dist/stats")
+	filepath = fmt.Sprintf("%s/stats.json", dirpath)
 
-		libs.WriteToJSON(dirpath, filepath, v)
-	}
+	libs.WriteToJSON(dirpath, filepath, results)
+
 }
