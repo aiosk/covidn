@@ -1,0 +1,61 @@
+@import "@/css/_bem";
+@import "@/css/_color";
+
+@include block("card") {
+  @include parse("m:confirmed", "m:recover", "m:death", "m:active") {
+    main.card-image {
+      min-height: 40rem;
+    }
+    header {
+      color: white;
+      text-transform: capitalize;
+      h4 {
+        font-size: 1.25rem;
+      }
+    }
+    menu {
+      text-align: right;
+    }
+  }
+
+  @include modifier("confirmed") {
+    $color: map-get($case-color, "confirmed");
+    border: 1px solid $color !important;
+    header {
+      background: $color !important;
+    }
+    menu a i {
+      color: $color;
+    }
+  }
+  @include modifier("recover") {
+    $color: map-get($case-color, "recover");
+    border: 1px solid $color !important;
+    header {
+      background: $color !important;
+    }
+    menu a i {
+      color: $color;
+    }
+  }
+  @include modifier("death") {
+    $color: map-get($case-color, "death");
+    border: 1px solid $color !important;
+    header {
+      background: $color !important;
+    }
+    menu a i {
+      color: $color;
+    }
+  }
+  @include modifier("active") {
+    $color: map-get($case-color, "active");
+    border: 1px solid $color !important;
+    header {
+      background: $color !important;
+    }
+    menu a i {
+      color: $color;
+    }
+  }
+}

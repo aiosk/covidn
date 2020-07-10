@@ -1,13 +1,15 @@
 <template lang="pug">
-  .rangking
+  .ratio
     Card('v-for'="v in cases" ':key'="v" ':class'="[`card--${v}`]" )
       template(#header)
-        h4 {{`${v} Case Ranking`}}
+        h4 {{`Case ${v == 'death' ? 'fatality':v} Ratio`}}
       template(#mainImage)
-        canvas(':id'="`RankingBar_${v.toUpperCase()}`")
+        canvas(':id'="`Ratio_${v.toUpperCase()}`")
       template(#menu)
         a.download-chart('@click'='onClickDownloadChart'): i.icon-floppy(title='download chart')
 </template>
+
+
 
 <script>
 import Card from "@/components/Card.vue";
@@ -18,28 +20,17 @@ import _zipObject from "lodash/zipObject";
 import _cloneDeep from "lodash/cloneDeep";
 import { cases } from "@/js/vars";
 
+const defaultCases = cases.filter(v => v != "confirmed");
 const defaultChartData = { datasets: [{ data: [] }], labels: [] };
 
 export default {
-  name: "Ranking",
+  name: "RationPopulation",
   components: {
     Card
   },
-  data() {
-    return {
-      cases,
-      chartInstance: _zipObject(cases, [null, null, null, null]),
-      data: _zipObject(cases, [
-        _cloneDeep(defaultChartData),
-        _cloneDeep(defaultChartData),
-        _cloneDeep(defaultChartData),
-        _cloneDeep(defaultChartData)
-      ])
-    };
-  },
   watch: {
-    "data.confirmed.labels": _debounce(function(val, oldVal) {
-      cases.forEach(v => {
+    "data.recover.labels": _debounce(function(val, oldVal) {
+      defaultCases.forEach(v => {
         this.chartInstance[v].update();
       });
     }, 500)
@@ -63,6 +54,17 @@ export default {
       })();
     }
   },
+  data() {
+    return {
+      cases: defaultCases,
+      chartInstance: _zipObject(defaultCases, [null, null, null]),
+      data: _zipObject(defaultCases, [
+        _cloneDeep(defaultChartData),
+        _cloneDeep(defaultChartData),
+        _cloneDeep(defaultChartData)
+      ])
+    };
+  },
   created() {
     _delay(async () => {
       const { color } = require("@/js/chartjs");
@@ -71,13 +73,13 @@ export default {
       let res = await fetch(url);
       let resJSON = await res.json();
 
-      resJSON = Object.entries(resJSON).filter(v => v[0] != "NATIONAL");
-      cases.forEach(v => {
+      resJSON = Object.entries(resJSON);
+      defaultCases.forEach(v => {
         let orderedResJSON = _orderBy(
           resJSON,
           v2 => {
             const v3 = v2[1];
-            return parseInt(v3.total[v]);
+            return parseInt(v3.ratio[v]);
           },
           "desc"
         );
@@ -85,8 +87,7 @@ export default {
           const k3 = v2[0];
           const v3 = v2[1];
 
-          // this.data[v].datasets[0].barThickness = 32;
-          this.data[v].datasets[0].data.push(v3.total[v]);
+          this.data[v].datasets[0].data.push(v3.ratio[v]);
           this.$set(this.data[v].datasets[0], "backgroundColor", color[v]);
           this.data[v].labels.push(k3.split("_").join(" "));
         });
@@ -94,18 +95,18 @@ export default {
     }, 9);
   },
   mounted() {
-    cases.forEach(v => {
+    defaultCases.forEach(v => {
       if (!this.chartInstance[v]) {
         const { initChartRanking } = require("@/js/chartjs");
         this.chartInstance[v] = initChartRanking({
-          elementId: `RankingBar_${v.toUpperCase()}`,
+          elementId: `Ratio_${v.toUpperCase()}`,
           data: this.data[v]
         });
       }
     });
   },
   destroyed() {
-    cases.forEach(v => {
+    defaultCases.forEach(v => {
       if (!!this.chartInstance[v]) {
         this.chartInstance[v].destroy();
       }
@@ -117,7 +118,6 @@ export default {
 
 <style lang="scss">
 @import "@/css/_card";
-
-.ranking {
+.ratio-population {
 }
 </style>

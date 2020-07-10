@@ -10,15 +10,15 @@
       router-link( to="/ranking" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
         li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
           a(':href'="href" '@click'="navigate") Ranking
-      router-link( to="/density" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
+      router-link( to="/ratio" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
         li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
-          a(':href'="href" '@click'="navigate") Density
+          a(':href'="href" '@click'="navigate") Ratio
+      router-link( to="/ratio-population" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
+        li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
+          a(':href'="href" '@click'="navigate") Population Ratio
       router-link( to="/about" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
         li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
           a(':href'="href" '@click'="navigate") About
-      li.github
-          a(href='https://github.com/aiosk/covidn')
-            img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
     
     #chartHelpText.callout.warning.hide-for-medium
       ul.help-text
@@ -26,7 +26,7 @@
     br
     router-view
 
-    button.button.small#top('@click'='topBtnOnClick'): i.icon-angle-circled-up(title="Scroll to top")
+    button.button.small#top('@click'='topBtnOnClick'): i.icon-up-circled(title="Scroll to top")
 </template>
 
 <script>
@@ -34,9 +34,7 @@ export default {
   name: "App",
   methods: {
     topBtnOnClick(e) {
-      document
-        .querySelector("#chartHelpText")
-        .scrollIntoView({ behavior: "smooth" });
+      document.querySelector("#nav").scrollIntoView({ behavior: "smooth" });
       // window.scroll({ top: 0, left: 0, behavior: "smooth" });
     }
   },
@@ -50,6 +48,7 @@ export default {
 @import "@/css/_chart";
 @include foundation-everything;
 @include foundation-menu;
+@include foundation-visibility-classes;
 
 #nav {
   // text-align: center;
@@ -77,10 +76,7 @@ export default {
     }
   }
 }
-.github {
-  // margin: 1rem 0;
-  text-align: right;
-}
+
 [class^="icon-"],
 [class*=" icon-"] {
   font-size: 1.5rem;
@@ -114,17 +110,21 @@ export default {
   // margin-bottom: 0.5rem;
   $position: 1rem;
   position: fixed;
-  bottom: $position + 1rem;
+  bottom: $position;
   right: $position;
+  // background: map-get($foundation-palette, "primary");
   background: white;
+
   // $size: 2.5rem;
   // width: $size;
   // height: $size;
+  // padding: 0.5rem;
 
   border-radius: 50%;
   i {
-    font-size: 2.5rem;
-    // color: map-get($foundation-palette, "primary");
+    font-size: 3rem;
+    // color: white;
+    color: map-get($foundation-palette, "primary");
     // color: $dark-gray;
     // color: $medium-gray;
   }

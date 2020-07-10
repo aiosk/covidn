@@ -1,12 +1,13 @@
 <template lang="pug">
-  .rangking
+  .ratio-population
     Card('v-for'="v in cases" ':key'="v" ':class'="[`card--${v}`]" )
       template(#header)
-        h4 {{`${v} Case Ranking`}}
+        h4 {{`${v} Case per 1 Million Population Ratio`}}
       template(#mainImage)
-        canvas(':id'="`RankingBar_${v.toUpperCase()}`")
+        canvas(':id'="`RatioPopulation_${v.toUpperCase()}`")
       template(#menu)
         a.download-chart('@click'='onClickDownloadChart'): i.icon-floppy(title='download chart')
+
 </template>
 
 <script>
@@ -21,7 +22,7 @@ import { cases } from "@/js/vars";
 const defaultChartData = { datasets: [{ data: [] }], labels: [] };
 
 export default {
-  name: "Ranking",
+  name: "RationPopulation",
   components: {
     Card
   },
@@ -77,7 +78,7 @@ export default {
           resJSON,
           v2 => {
             const v3 = v2[1];
-            return parseInt(v3.total[v]);
+            return parseInt(v3.populationRatio[v]);
           },
           "desc"
         );
@@ -85,8 +86,7 @@ export default {
           const k3 = v2[0];
           const v3 = v2[1];
 
-          // this.data[v].datasets[0].barThickness = 32;
-          this.data[v].datasets[0].data.push(v3.total[v]);
+          this.data[v].datasets[0].data.push(v3.populationRatio[v]);
           this.$set(this.data[v].datasets[0], "backgroundColor", color[v]);
           this.data[v].labels.push(k3.split("_").join(" "));
         });
@@ -98,7 +98,7 @@ export default {
       if (!this.chartInstance[v]) {
         const { initChartRanking } = require("@/js/chartjs");
         this.chartInstance[v] = initChartRanking({
-          elementId: `RankingBar_${v.toUpperCase()}`,
+          elementId: `RatioPopulation_${v.toUpperCase()}`,
           data: this.data[v]
         });
       }
@@ -117,7 +117,6 @@ export default {
 
 <style lang="scss">
 @import "@/css/_card";
-
-.ranking {
+.ratio-population {
 }
 </style>

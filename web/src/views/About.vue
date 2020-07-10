@@ -1,9 +1,10 @@
 <template lang="pug">
   .about
-    h3 coming soon
+    .github
+      a(href='https://github.com/aiosk/covidn')
+        img(alt="GitHub stars" src="https://img.shields.io/github/stars/aiosk/covidn?logo=github&style=for-the-badge")
 </template>
 
 
 <style lang="scss">
-// @import "@/css/_foundation";
 </style>

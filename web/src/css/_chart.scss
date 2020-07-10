@@ -1,4 +1,4 @@
-@import "@/css/_color";
+@import "@/css/_foundation";
 
 .legend {
   //   padding: 0.5rem;
@@ -21,43 +21,5 @@
     .text {
       //   padding-left: 0.25rem;
     }
-  }
-}
-
-.confirmed,
-.recover,
-.death,
-.active {
-  .card-divider {
-    color: white;
-    text-transform: uppercase;
-    h4 {
-      font-weight: bold;
-      font-size: 1.25rem;
-    }
-  }
-}
-.confirmed {
-  border: 1px solid map-get($case-color, "confirmed");
-  .card-divider {
-    background: map-get($case-color, "confirmed");
-  }
-}
-.recover {
-  border: 1px solid map-get($case-color, "recover");
-  .card-divider {
-    background: map-get($case-color, "recover");
-  }
-}
-.death {
-  border: 1px solid map-get($case-color, "death");
-  .card-divider {
-    background: map-get($case-color, "death");
-  }
-}
-.active {
-  border: 1px solid map-get($case-color, "active");
-  .card-divider {
-    background: map-get($case-color, "active");
   }
 }

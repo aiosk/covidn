@@ -10,8 +10,8 @@
         .help-text.text-right #[strong.show-for-xlarge Click]#[strong.hide-for-xlarge Tap / Touch] legend item to toggle chart line
         canvas(:id="`Chart_${zone}`")
     .card-section.action
-      a.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): i.icon-table( title="download raw")
-      a.download-chart('@click'='onClickDownloadChart'): i.icon-download-cloud(title='download chart')
+      a.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): i.icon-download-cloud( title="download raw")
+      a.download-chart('@click'='onClickDownloadChart'): i.icon-floppy(title='download chart')
       a.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): i.icon-resize-full(title="resize fullscreen")
 
 </template>
@@ -68,7 +68,6 @@ export default {
         return;
       }
       const domtoimage = require("domtoimage");
-      const $anchor = e.target.closest("a.download-chart");
       const _this = this;
 
       (async () => {
@@ -78,7 +77,7 @@ export default {
 
         var a = document.createElement("a");
         a.href = dataUrl;
-        a.download = `Chart_${this.zone}.jpeg`;
+        a.download = `${this.zone}.jpeg`;
         a.click();
       })();
       // Page.domSpin(e.target);

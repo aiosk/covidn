@@ -151,11 +151,11 @@ $foundation-palette: (
   //   @include foundation-top-bar;
 
   // Helpers
-  @include foundation-float-classes;
+  // @include foundation-float-classes;
   //   @if $flex {
   //     @include foundation-flex-classes;
   //   }
-  @include foundation-visibility-classes;
+  // @include foundation-visibility-classes;
   //   @if $prototype {
   //     @include foundation-prototype-classes;
   //   }

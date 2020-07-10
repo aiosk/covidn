@@ -157,7 +157,7 @@ const initChartDaily = (params = { zone: null, data: null }) => {
 
             let total = data.datasets[datasetIndexVal + 4].data[tooltipItem.index];
 
-            const valueStr = value == 0 ? "" : value > 0 ? `(+${value})` : `(${value})`;
+            const valueStr = value == 0 ? "0" : value > 0 ? `+${value}` : value;
 
             let isSecondDataset = (tooltipItem.datasetIndex / 4).toFixed(1);
             isSecondDataset = isSecondDataset >= 1 && isSecondDataset < 2;
@@ -165,7 +165,7 @@ const initChartDaily = (params = { zone: null, data: null }) => {
             if (isSecondDataset) {
               return `${label}: ${value}`;
             } else {
-              return `${label}: ${total} ${valueStr}`;
+              return `${label}: ${valueStr}, Total: ${total} `;
             }
           },
         },
@@ -193,8 +193,8 @@ const initChartDaily = (params = { zone: null, data: null }) => {
       },
       elements: {
         line: {
-          tension: 0,
-          fill: false,
+          tension: 0.2,
+          // fill: false,
         },
         point: {
           radius: 2,
