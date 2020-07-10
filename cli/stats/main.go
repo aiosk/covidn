@@ -3,6 +3,7 @@ package stats
 import (
 	"fmt"
 	"io/ioutil"
+	"math"
 	"strconv"
 	"strings"
 
@@ -37,13 +38,26 @@ func Main() {
 			if totalConfirmed != "0" {
 				var item Result
 				item.LastUpdate = records[lenRecords-i][0]
-				item.TotalConfirmed = totalConfirmed
+				item.Total.Confirmed = totalConfirmed
+				confirmedNum, err := strconv.ParseFloat(totalConfirmed, 64)
 				// item.Confirmed = records[lenRecords-i][2]
-				item.TotalRecover = records[lenRecords-i][3]
+
+				item.Total.Recover = records[lenRecords-i][3]
+				recoverNum, err := strconv.ParseFloat(records[lenRecords-i][3], 64)
+				libs.PanicError(err)
+				item.Ratio.Recover = fmt.Sprintf("%.2f", (recoverNum/confirmedNum)*100)
 				// item.Recover = records[lenRecords-i][4]
-				item.TotalDeath = records[lenRecords-i][5]
+
+				item.Total.Death = records[lenRecords-i][5]
+				deathNum, err := strconv.ParseFloat(records[lenRecords-i][5], 64)
+				libs.PanicError(err)
+				item.Ratio.Death = fmt.Sprintf("%.2f", (deathNum/confirmedNum)*100)
 				// item.Death = records[lenRecords-i][6]
-				item.TotalActive = records[lenRecords-i][7]
+
+				item.Total.Active = records[lenRecords-i][7]
+				activeNum, err := strconv.ParseFloat(records[lenRecords-i][7], 64)
+				libs.PanicError(err)
+				item.Ratio.Active = fmt.Sprintf("%.2f", (activeNum/confirmedNum)*100)
 				// item.Active = records[lenRecords-i][8]
 				results[dataID] = item
 
@@ -75,6 +89,29 @@ func Main() {
 	if item, ok := results["NATIONAL"]; ok {
 		item.Population = populationNational
 		results["NATIONAL"] = item
+	}
+
+	for k, v := range results {
+
+		confirmedNum, err := strconv.ParseFloat(v.Total.Confirmed, 64)
+		libs.PanicError(err)
+		recoverNum, err := strconv.ParseFloat(v.Total.Recover, 64)
+		libs.PanicError(err)
+		deathNum, err := strconv.ParseFloat(v.Total.Death, 64)
+		libs.PanicError(err)
+		activeNum, err := strconv.ParseFloat(v.Total.Active, 64)
+		libs.PanicError(err)
+
+		if item, ok := results[k]; ok {
+			item.PopulationRatio = Cases{
+				Confirmed: fmt.Sprintf("%.0f", math.Round((confirmedNum/float64(v.Population))*1000000)),
+				Recover:   fmt.Sprintf("%.0f", math.Round((recoverNum/float64(v.Population))*1000000)),
+				Death:     fmt.Sprintf("%.0f", math.Round((deathNum/float64(v.Population))*1000000)),
+				Active:    fmt.Sprintf("%.0f", math.Round((activeNum/float64(v.Population))*1000000)),
+			}
+
+			results[k] = item
+		}
 	}
 
 	// log.Printf("%+v\n", results)
