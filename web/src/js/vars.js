@@ -35,29 +35,7 @@ const zones = [
   "BENGKULU",
   "NUSA_TENGGARA_TIMUR",
 ];
-const defaultZones = [
-  "NATIONAL",
-
-  "RIAU",
-  "KALIMANTAN_BARAT",
-  "DAERAH_ISTIMEWA_YOGYAKARTA",
-  "KEPULAUAN_RIAU",
-  "BENGKULU",
-  "JAWA_TIMUR",
-  "SULAWESI_UTARA",
-  "LAMPUNG",
-  "BANTEN",
-  "PAPUA",
-  "KALIMANTAN_SELATAN",
-  "DKI_JAKARTA",
-  "MALUKU_UTARA",
-  "MALUKU",
-
-  "SULAWESI_SELATAN",
-  "JAWA_TENGAH",
-  "JAWA_BARAT",
-  "SUMATERA_SELATAN",
-];
+const defaultZones = ["NATIONAL"];
 const defaultPeriods = 3;
 const defaultHiddenDatasets = [true, true, true, true, false, false, false, false, true, true, true, true];
 

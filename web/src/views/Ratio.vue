@@ -7,12 +7,17 @@
         canvas(':id'="`Ratio_${v.toUpperCase()}`")
       template(#menu)
         a.download-chart('@click'='onClickDownloadChart'): i.icon-floppy(title='download chart')
+    Dialog('v-model'='modelDialog')
+      //- template(#header) {{title}}
+      component(:is='homeChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
 </template>
 
 
 
 <script>
 import Card from "@/components/Card.vue";
+import Dialog from "@/components/Dialog.vue";
+import HomeChart from "@/components/HomeChart.vue";
 import _delay from "lodash/delay";
 import _orderBy from "lodash/orderBy";
 import _debounce from "lodash/debounce";
@@ -26,14 +31,56 @@ const defaultChartData = { datasets: [{ data: [] }], labels: [] };
 export default {
   name: "RationPopulation",
   components: {
-    Card
+    HomeChart,
+    Card,
+    Dialog
+  },
+  data() {
+    return {
+      modelDialog: {
+        isOpen: false
+      },
+      homeChart: null,
+      modelChart: {
+        zone: null,
+        periods: 3,
+        hiddenDatasets: [
+          true,
+          true,
+          true,
+          true,
+          false,
+          false,
+          false,
+          false,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      cases: defaultCases,
+      chartInstance: _zipObject(defaultCases, [null, null, null]),
+      data: _zipObject(defaultCases, [
+        _cloneDeep(defaultChartData),
+        _cloneDeep(defaultChartData),
+        _cloneDeep(defaultChartData)
+      ])
+    };
   },
   watch: {
     "data.recover.labels": _debounce(function(val, oldVal) {
       defaultCases.forEach(v => {
         this.chartInstance[v].update();
       });
-    }, 500)
+    }, 500),
+    "modelDialog.isOpen": function(val, oldVal) {
+      if (!val) {
+        this.homeChart = null;
+      } else {
+        this.homeChart = HomeChart;
+      }
+    }
   },
   methods: {
     onClickDownloadChart(e) {
@@ -53,17 +100,6 @@ export default {
         a.click();
       })();
     }
-  },
-  data() {
-    return {
-      cases: defaultCases,
-      chartInstance: _zipObject(defaultCases, [null, null, null]),
-      data: _zipObject(defaultCases, [
-        _cloneDeep(defaultChartData),
-        _cloneDeep(defaultChartData),
-        _cloneDeep(defaultChartData)
-      ])
-    };
   },
   created() {
     _delay(async () => {
@@ -95,12 +131,22 @@ export default {
     }, 9);
   },
   mounted() {
+    const _this = this;
     defaultCases.forEach(v => {
       if (!this.chartInstance[v]) {
         const { initChartRanking } = require("@/js/chartjs");
         this.chartInstance[v] = initChartRanking({
           elementId: `Ratio_${v.toUpperCase()}`,
-          data: this.data[v]
+          data: this.data[v],
+          onClick(e, chartItem) {
+            if (!chartItem.length) {
+              return;
+            }
+            const chartItemID = chartItem[0]._view.label.replace(/ /g, "_");
+
+            _this.modelChart.zone = chartItemID;
+            _this.modelDialog.isOpen = true;
+          }
         });
       }
     });

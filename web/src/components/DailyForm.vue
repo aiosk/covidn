@@ -10,6 +10,9 @@
       .cell.xlarge-3
         label(for='zones') Zone
       .cell.xlarge-9
+        menu.text-right
+            a('@click'='selectAllOnClick') select all
+            a('@click'='deselectAllOnClick') deselect all
         select#zones(name="zones" multiple 'v-model'='selectedZones')
           option(v-for="v in zones" ':key'="v" ':value'='v' ) {{v.split('_').join(' ')}}
         p.help-text Too many charts, i don't like to scroll, i want to select some chart
@@ -47,6 +50,22 @@ export default {
         this.$emit("input", propsValue);
       }
     }
+  },
+  methods: {
+    selectAllOnClick(e) {
+      const $select = e.target.closest(".cell").querySelector("select");
+      $select.querySelectorAll("option").forEach(v => {
+        v.selected = true;
+      });
+      $select.dispatchEvent(new Event("change"));
+    },
+    deselectAllOnClick(e) {
+      const $select = e.target.closest(".cell").querySelector("select");
+      $select.querySelectorAll("option:not([value='NATIONAL'])").forEach(v => {
+        v.selected = false;
+      });
+      $select.dispatchEvent(new Event("change"));
+    }
   }
 };
 </script>
@@ -62,6 +81,14 @@ export default {
   }
   label span {
     font-weight: bold;
+  }
+}
+.zones {
+  menu {
+    margin: 0;
+    a {
+      margin: 0 0.5rem;
+    }
   }
 }
 </style>

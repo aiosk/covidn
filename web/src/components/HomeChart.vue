@@ -185,7 +185,7 @@ export default {
 @include foundation-form-helptext;
 
 .home-chart {
-  margin: 0.5rem 0;
+  // margin: 0.5rem 0;
   &.card {
     $color: map-get($element-color, "title");
     border: 1px solid $color;
