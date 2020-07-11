@@ -1,14 +1,20 @@
 <template lang="pug">
   .home-chart-stats
-    //- .grid-x.small-up-1
-      //- .cell
-      //-   .card.population
-      //-     .card-section
-      //-       .text Population
-      //-       .total {{ numberWithCommas(stats.population) }}
-
-    .grid-x.small-up-2.medium-up-4
+    .grid-x.small-up-2('v-if'="!!stats.population")
       .cell
+        .card.population
+          .card-section
+            h6 Population
+            .total {{ numberWithCommas(stats.population) }}
+      .cell
+        .card.confirmed
+          .card-section
+            h6 Confirmed
+            .total {{ numberWithCommas(stats.total.confirmed) }}
+              sup {{ plusMinusStr(stats.daily.confirmed) }}
+
+    .grid-x(':class'="[{'medium-up-4':!stats.population},{'medium-up-3':!!stats.population},{'small-up-2':!stats.population},{'small-up-3':!!stats.population}]")
+      .cell('v-if'="!stats.population")
         .card.confirmed
           .card-section
             h6 Confirmed

@@ -26,7 +26,7 @@ import _cloneDeep from "lodash/cloneDeep";
 
 import {
   defaultChartData,
-  defaultPeriods,
+  // defaultPeriods,
   defaultHiddenDatasets
 } from "@/js/vars";
 
@@ -50,8 +50,11 @@ export default {
     myStatsModel() {
       return { zone: this.zone, stats: this.stats };
     },
+    population() {
+      return this.value.population;
+    },
     periods() {
-      return this.value.periods ? this.value.periods : defaultPeriods;
+      return this.value.periods ? this.value.periods : 1;
     },
     hiddenDatasets: {
       get() {
@@ -107,8 +110,8 @@ export default {
     updateChartData() {
       (async () => {
         const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/chartjs/${
-          this.zone
-        }/${this.periods}.json?_=${Date.now()}`;
+          this.periods
+        }/${this.zone}.json?_=${Date.now()}`;
         let res = await fetch(url);
         let resJSON = await res.json();
 
@@ -126,6 +129,7 @@ export default {
         }
         const validIdx = length - i;
 
+        this.$set(this.stats, "population", this.population);
         this.$set(this.stats, "lastUpdate", resJSON.labels[length - i]);
         this.$set(this.stats, "total", {
           confirmed: resJSON.datasets[4].data[validIdx],

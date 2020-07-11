@@ -19,7 +19,6 @@
 <script>
 import Card from "@/components/Card.vue";
 import Dialog from "@/components/Dialog.vue";
-import ZoneCard from "@/components/ZoneCard.vue";
 import MixinRanking from "@/mixins/Ranking.js";
 import MixinCard from "@/mixins/Card.js";
 import _delay from "lodash/delay";
@@ -38,7 +37,7 @@ export default {
   },
   data() {
     return {
-      modelChart: { zone: null },
+      modelChart: { zone: null, population: null },
       cases,
       chartInstance: _zipObject(cases, [null, null, null, null]),
       data: _zipObject(cases, [
@@ -76,6 +75,7 @@ export default {
           const k3 = v2[0];
           const v3 = v2[1];
 
+          this.$set(this.modelChart, "population", v3.population);
           this.data[v].datasets[0].data.push(v3.populationRatio[v]);
           this.$set(
             this.data[v].datasets[0],
@@ -102,7 +102,8 @@ export default {
             }
             const chartItemID = chartItem[0]._view.label.replace(/ /g, "_");
 
-            _this.modelChart.zone = chartItemID;
+            _this.$set(_this.modelChart, "zone", chartItemID);
+            // _this.modelChart.zone = chartItemID;
             _this.modelDialog.isOpen = true;
           }
         });

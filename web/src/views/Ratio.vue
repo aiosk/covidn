@@ -20,7 +20,6 @@
 <script>
 import Card from "@/components/Card.vue";
 import Dialog from "@/components/Dialog.vue";
-import ZoneCard from "@/components/ZoneCard.vue";
 import MixinRanking from "@/mixins/Ranking.js";
 import MixinCard from "@/mixins/Card.js";
 import _delay from "lodash/delay";
