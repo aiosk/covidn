@@ -72,8 +72,11 @@ export default {
           const k3 = v2[0];
           const v3 = v2[1];
 
-          this.$set(this.modelChart, "population", v3.population);
           this.data[v].datasets[0].data.push(v3.populationRatio[v]);
+          if (!this.data[v].datasets[0].population) {
+            this.data[v].datasets[0].population = [];
+          }
+          this.data[v].datasets[0].population.push(v3.population);
           this.$set(
             this.data[v].datasets[0],
             "backgroundColor",
@@ -97,9 +100,19 @@ export default {
             if (!chartItem.length) {
               return;
             }
-            const chartItemID = chartItem[0]._view.label.replace(/ /g, "_");
 
+            console.log(chartItem[0]._index);
+            const thisCase = chartItem[0]._chart.canvas.id
+              .split("_")[1]
+              .toLowerCase();
+            const chartItemID = chartItem[0]._view.label.replace(/ /g, "_");
+            console.log(thisCase, _this.data[thisCase]);
             _this.$set(_this.modelChart, "zone", chartItemID);
+            _this.$set(
+              _this.modelChart,
+              "population",
+              _this.data[thisCase].datasets[0].population[chartItem[0]._index]
+            );
             // _this.modelChart.zone = chartItemID;
             _this.modelDialog.isOpen = true;
           }
