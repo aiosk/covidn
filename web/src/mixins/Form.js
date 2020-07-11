@@ -29,7 +29,11 @@ const main = {
         }
       } else {
         if (val != defaultVal) {
-          newQuery[key] = val;
+          if (_isBoolean(val)) {
+            newQuery[key] = val ? 1 : 0;
+          } else {
+            newQuery[key] = val;
+          }
         }
       }
 

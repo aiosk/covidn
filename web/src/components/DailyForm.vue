@@ -2,7 +2,7 @@
   form.daily-form.callout.secondary
     .grid-x.periods
       .cell.large-3
-        label(for='periods') #[span {{ periods }}] days period
+        label(for='periods') #[span {{ periods }}] Days Period
       .cell.large-9
         input#periods(name="periods" type='range' min='1' max='14' step='1' 'v-model'='periods' aria-describedby="periodsHelpText" )
         p#periodsHelpText.help-text Try slide to smaller or larger data periods. #[strong Smaller] day periods will generate complicated chart data, while #[strong larger] day periods will generate simplified chart data. Use wisely.
@@ -16,6 +16,18 @@
         select#zones(name="zones" multiple 'v-model'='selectedZones')
           option(v-for="v in zones" ':key'="v" ':value'='v' ) {{ v.split('_').join(' ') }}
         p.help-text Too many charts, i don't like to scroll, i want to select some chart
+    .grid-x
+      .cell.large-3
+        label(for='legend') Show Legend
+      .cell.large-9
+        .switch.large
+          input.switch-input#yes-no(type="checkbox" name="exampleSwitch" 'v-model'='showLegend')
+          label.switch-paddle(for="yes-no")
+            span.show-for-sr Do you like me?
+            span.switch-active(aria-hidden="true") Yes
+            span.switch-inactive(aria-hidden="true") No
+
+
     //- .grid-x.align-right
     //-   .cell
     //-     button.button(type='submit') Submit
@@ -24,7 +36,7 @@
 <script>
 import _cloneDeep from "lodash/cloneDeep";
 import MixinForm from "@/mixins/Form.js";
-import { defaultPeriods, defaultZones } from "@/js/vars";
+import { defaultPeriods, defaultZones, defaultShowLegend } from "@/js/vars";
 
 export default {
   name: "DailyForm",
@@ -49,6 +61,16 @@ export default {
       set(val) {
         this.emitModel({ selectedZones: val });
       }
+    },
+    showLegend: {
+      get() {
+        return this.value.showLegend
+          ? this.value.showLegend
+          : defaultShowLegend;
+      },
+      set(val) {
+        this.emitModel({ showLegend: val });
+      }
     }
   },
   watch: {
@@ -57,6 +79,9 @@ export default {
     },
     selectedZones(val, oldVal) {
       this.updateQuery("zones", val, defaultZones);
+    },
+    showLegend(val, oldVal) {
+      this.updateQuery("legend", val, defaultShowLegend);
     }
   },
   methods: {
@@ -89,6 +114,7 @@ export default {
 <style scoped lang="scss">
 @import "@/css/_foundation";
 @include foundation-forms;
+@include foundation-switch;
 // @include foundation-button;
 .periods {
   input[type="range"] {

@@ -6,7 +6,7 @@
     .grid-x.large-up-2(aria-describedby="chartHelpText")
       template(v-for="v in myModel.selectedZones")
         //- .cell(':key'="v" ':id'="`CellChart_${v}`" ':class'='[{"width-100":v=="NATIONAL"},"chart-item"]'  )
-        .cell(':key'="v" ':id'="`CellChart_${v}`" ':class'='["chart-item"]' )
+        .cell(':key'="v" ':id'="`CellChart_${v}`" ':class'='[{"width-100":myModel.selectedZones.length == 1},"chart-item"]' )
           component(':key'="v"  ':is'="componentZoneCard[v]" ':zone'='v' 'v-model'="myModel")
 </template>
 
@@ -37,7 +37,8 @@ export default {
         periods: null,
         zones,
         selectedZones: _cloneDeep(defaultZones),
-        hiddenDatasets: null
+        hiddenDatasets: null,
+        showLegend: null
       }
     };
   },

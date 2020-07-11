@@ -54,7 +54,7 @@ const defaultZones = [
   "KALIMANTAN_SELATAN",
   "MALUKU",
 ];
-const defaultPeriods = 7;
+const defaultPeriods = 1;
 const defaultHiddenDatasets = [true, true, true, true, false, false, false, false, true, true, true, true];
 
 const cases = ["confirmed", "recover", "death", "active"];
@@ -66,5 +66,15 @@ const defaultChartColor = {
   death: "#ec6f58",
   active: "#c6ac42",
 };
+const defaultShowLegend = false;
 
-export { zones, defaultZones, defaultPeriods, defaultHiddenDatasets, cases, defaultChartData, defaultChartColor };
+export {
+  zones,
+  defaultZones,
+  defaultPeriods,
+  defaultHiddenDatasets,
+  cases,
+  defaultChartData,
+  defaultChartColor,
+  defaultShowLegend,
+};

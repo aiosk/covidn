@@ -6,8 +6,8 @@
       .card-image.stats
         component(':is'="componentStats" 'v-model'='myStatsModel')
       .card-image
-        .legend('v-if'="legendHTML" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
-        .help-text.text-right('v-if'="legendHTML")
+        .legend('v-if'="showLegend" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
+        .help-text.text-right('v-if'="showLegend")
           div #[strong.show-for-large Touch / Click] legend item to toggle chart line
         canvas(:id="`Chart_${zone}`")
     .card-section.action
@@ -27,7 +27,8 @@ import _cloneDeep from "lodash/cloneDeep";
 import {
   defaultChartData,
   defaultPeriods,
-  defaultHiddenDatasets
+  defaultHiddenDatasets,
+  defaultShowLegend
 } from "@/js/vars";
 
 const defaultStats = {
@@ -65,6 +66,9 @@ export default {
       set(val) {
         this.emitModel({ hiddenDatasets: val });
       }
+    },
+    showLegend() {
+      return this.value.showLegend ? this.value.showLegend : defaultShowLegend;
     }
   },
   watch: {
@@ -174,7 +178,9 @@ export default {
         }
       });
       this.chartInstance.update();
-      // this.legendHTML = this.chartInstance.generateLegend();
+      if (this.showLegend) {
+        this.legendHTML = this.chartInstance.generateLegend();
+      }
     }
   },
   created() {
