@@ -1,15 +1,18 @@
 <template lang="pug">
   .ratio
+    .help-text.callout.warning
+      ul
+        li Long Tap to show legend
+        li Tap to show province detail
     Card('v-for'="v in cases" ':key'="v" ':class'="[`card--${v}`]" )
       template(#header)
-        h4 {{`Case ${v == 'death' ? 'fatality':v} Ratio`}}
+        h4 {{ `Case ${v == 'death' ? 'fatality':(v == 'recover'?'recovery':v)} Ratio` }}
       template(#mainImage)
         canvas(':id'="`Ratio_${v.toUpperCase()}`")
       template(#menu)
-        a.download-chart('@click'='onClickDownloadChart'): i.icon-floppy(title='download chart')
+        a.download-chart('@click'='downloadOnClick'): i.icon-floppy(title='download chart')
     Dialog('v-model'='modelDialog')
-      //- template(#header) {{title}}
-      component(:is='homeChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
+      component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
 </template>
 
 
@@ -17,48 +20,28 @@
 <script>
 import Card from "@/components/Card.vue";
 import Dialog from "@/components/Dialog.vue";
-import HomeChart from "@/components/HomeChart.vue";
+import ZoneCard from "@/components/ZoneCard.vue";
+import MixinRanking from "@/mixins/Ranking.js";
+import MixinCard from "@/mixins/Card.js";
 import _delay from "lodash/delay";
 import _orderBy from "lodash/orderBy";
 import _debounce from "lodash/debounce";
 import _zipObject from "lodash/zipObject";
 import _cloneDeep from "lodash/cloneDeep";
-import { cases } from "@/js/vars";
+import { cases, defaultChartData, defaultChartColor } from "@/js/vars";
 
 const defaultCases = cases.filter(v => v != "confirmed");
-const defaultChartData = { datasets: [{ data: [] }], labels: [] };
 
 export default {
   name: "RationPopulation",
+  mixins: [MixinRanking, MixinCard],
   components: {
-    HomeChart,
     Card,
     Dialog
   },
   data() {
     return {
-      modelDialog: {
-        isOpen: false
-      },
-      homeChart: null,
-      modelChart: {
-        zone: null,
-        periods: 3,
-        hiddenDatasets: [
-          true,
-          true,
-          true,
-          true,
-          false,
-          false,
-          false,
-          false,
-          true,
-          true,
-          true,
-          true
-        ]
-      },
+      modelChart: { zone: null },
       cases: defaultCases,
       chartInstance: _zipObject(defaultCases, [null, null, null]),
       data: _zipObject(defaultCases, [
@@ -73,38 +56,10 @@ export default {
       defaultCases.forEach(v => {
         this.chartInstance[v].update();
       });
-    }, 500),
-    "modelDialog.isOpen": function(val, oldVal) {
-      if (!val) {
-        this.homeChart = null;
-      } else {
-        this.homeChart = HomeChart;
-      }
-    }
-  },
-  methods: {
-    onClickDownloadChart(e) {
-      const domtoimage = require("domtoimage");
-      const $card = e.target.closest(".card");
-      const title = $card.querySelector("h4").innerText.replace(/ /g, "_");
-      const downloadName = `${title}.jpeg`;
-
-      (async () => {
-        const dataUrl = await domtoimage.toJpeg(
-          $card.querySelector(".capture")
-        );
-
-        var a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = downloadName;
-        a.click();
-      })();
-    }
+    }, 500)
   },
   created() {
     _delay(async () => {
-      const { color } = require("@/js/chartjs");
-
       const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/stats/stats.json?_=${Date.now()}`;
       let res = await fetch(url);
       let resJSON = await res.json();
@@ -124,7 +79,11 @@ export default {
           const v3 = v2[1];
 
           this.data[v].datasets[0].data.push(v3.ratio[v]);
-          this.$set(this.data[v].datasets[0], "backgroundColor", color[v]);
+          this.$set(
+            this.data[v].datasets[0],
+            "backgroundColor",
+            defaultChartColor[v]
+          );
           this.data[v].labels.push(k3.split("_").join(" "));
         });
       });
@@ -139,6 +98,7 @@ export default {
           elementId: `Ratio_${v.toUpperCase()}`,
           data: this.data[v],
           onClick(e, chartItem) {
+            // e.preventDefault();
             if (!chartItem.length) {
               return;
             }
@@ -156,14 +116,16 @@ export default {
       if (!!this.chartInstance[v]) {
         this.chartInstance[v].destroy();
       }
-      this.data[v] = { datasets: [], labels: [] };
+      this.data[v] = _cloneDeep(defaultChartData);
     });
   }
 };
 </script>
 
 <style lang="scss">
+@import "@/css/_foundation";
 @import "@/css/_card";
+@include foundation-form-helptext;
 .ratio-population {
 }
 </style>

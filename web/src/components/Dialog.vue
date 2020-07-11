@@ -1,7 +1,7 @@
 <template lang='pug'>
   .dialog
     .reveal-overlay(':style'="{display:styleDisplay}" '@click.self'='overlayOnClick')
-      .reveal(':style'="{display:styleDisplay}")
+      .reveal(':style'="{display:styleDisplay}" ':class'="[{collapse:isCollapse}]")
         button.close-button('@click'='closeOnClick' aria-label="Close Accessible Modal" type="button")
           span(aria-hidden="true") &times;
         slot
@@ -9,10 +9,17 @@
 </template>
 
 <script>
+import MixinForm from "@/mixins/Form.js";
 export default {
   name: "Dialog",
+  mixins: [MixinForm],
   props: {
     value: Object
+  },
+  data() {
+    return {
+      scrollTop: null
+    };
   },
   computed: {
     isOpen: {
@@ -20,7 +27,15 @@ export default {
         return !!this.value && !!this.value.isOpen;
       },
       set(val) {
-        this.value.isOpen = val;
+        this.emitModel({ isOpen: val });
+      }
+    },
+    isCollapse: {
+      get() {
+        return !!this.value && !!this.value.isCollapse;
+      },
+      set(val) {
+        this.emitModel({ isCollapse: val });
       }
     },
     styleDisplay() {
@@ -30,8 +45,17 @@ export default {
   watch: {
     isOpen(val, oldVal) {
       const $html = document.querySelector("html");
-      $html.classList.toggle("is-reveal-open");
-      // $html.classList.toggle("zf-has-scroll");
+      if (val) {
+        this.scrollTop = $html.scrollTop;
+        $html.style.top = `-${$html.scrollTop}px`;
+        $html.classList.add("zf-has-scroll");
+        $html.classList.add("is-reveal-open");
+      } else {
+        $html.classList.remove("zf-has-scroll");
+        $html.classList.remove("is-reveal-open");
+        $html.style.top = null;
+        window.scrollTo({ top: this.scrollTop });
+      }
     }
   },
   methods: {
@@ -41,6 +65,9 @@ export default {
     overlayOnClick(e) {
       this.isOpen = false;
     }
+  },
+  destroyed() {
+    this.scrollTop = null;
   }
 };
 </script>
@@ -53,9 +80,6 @@ export default {
 @include foundation-close-button;
 
 .card {
-}
-.reveal {
-  padding: 0;
 }
 // #close {
 //   position: absolute;

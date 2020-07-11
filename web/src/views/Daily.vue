@@ -5,94 +5,49 @@
 
     .grid-x.xlarge-up-2(aria-describedby="chartHelpText")
       template(v-for="v in myModel.selectedZones")
-        .cell(':key'="v" ':class'='[{"width-100":v=="NATIONAL"},"chart-item"]' ':id'="`CellChart_${v}`" )
-          component(':key'="v"  ':is'="homeChart[v]" ':zone'='v' 'v-model'="myModel" ':ref'='v')
+        .cell(':key'="v" ':class'='["chart-item"]' ':id'="`CellChart_${v}`" )
+          component(':key'="v"  ':is'="componentZoneCard[v]" ':zone'='v' 'v-model'="myModel")
+        //- .cell(':key'="v" ':class'='[{"width-100":v=="NATIONAL"},"chart-item"]' ':id'="`CellChart_${v}`" )
 </template>
 
 <script>
 // @ is an alias to /src
 import DailyForm from "@/components/DailyForm.vue";
-import HomeChart from "@/components/HomeChart.vue";
+import ZoneCard from "@/components/ZoneCard.vue";
+import MixinCard from "@/mixins/Card.js";
+import MixinForm from "@/mixins/Form.js";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
-import _isEqual from "lodash/isEqual";
-import _sortBy from "lodash/sortBy";
-import {
-  defaultPeriods,
-  zones,
-  defaultZones,
-  defaultHiddenDatasets
-} from "@/js/vars";
+import { zones, defaultZones } from "@/js/vars";
 
 let MediaQuery;
 
 export default {
   name: "Daily",
+  mixins: [MixinCard, MixinForm],
   components: {
     DailyForm,
-    HomeChart
+    ZoneCard
   },
   data() {
     return {
       lazyLoadCanvas: null,
-      homeChart: {},
+      componentZoneCard: {},
       myModel: {
-        periods: defaultPeriods,
+        periods: null,
         zones,
         selectedZones: _cloneDeep(defaultZones),
-        hiddenDatasets: _cloneDeep(defaultHiddenDatasets)
+        hiddenDatasets: null
       }
     };
   },
   watch: {
-    homeChart: function(val, oldVal) {
+    componentZoneCard: function(val, oldVal) {
       _delay(() => {
         if (!!this.lazyLoadCanvas) {
           this.lazyLoadCanvas.update();
         }
       }, 9);
-    },
-    "myModel.hiddenDatasets": async function(val, oldVal) {
-      _delay(() => {
-        if (!!this.lazyLoadCanvas) {
-          this.lazyLoadCanvas.update();
-        }
-      }, 9);
-
-      let newQuery = { ...this.$route.query };
-      delete newQuery.hidden;
-      if (!_isEqual(val, defaultHiddenDatasets)) {
-        newQuery.hidden = val.map(v => (v ? 1 : 0)).join("");
-      }
-
-      try {
-        await this.$router.push({
-          query: newQuery
-        });
-      } catch (e) {
-        // console.log(e);
-      }
-    },
-    "myModel.periods": async function(val, oldVal) {
-      _delay(() => {
-        if (!!this.lazyLoadCanvas) {
-          this.lazyLoadCanvas.update();
-        }
-      }, 9);
-
-      let newQuery = { ...this.$route.query };
-      delete newQuery.periods;
-      if (val != defaultPeriods) {
-        newQuery.periods = val;
-      }
-
-      try {
-        await this.$router.push({
-          query: newQuery
-        });
-      } catch (e) {
-        // console.log(e);
-      }
     },
     "myModel.selectedZones": async function(val, oldVal) {
       _delay(() => {
@@ -100,42 +55,15 @@ export default {
           this.lazyLoadCanvas.update();
         }
       }, 9);
-
-      let newQuery = { ...this.$route.query };
-      delete newQuery.zones;
-      if (!!val.length && !_isEqual(_sortBy(val), _sortBy(defaultZones))) {
-        newQuery.zones = val.join("+");
-      }
-
-      try {
-        await this.$router.push({
-          query: newQuery
-        });
-      } catch (e) {
-        // console.log(e);
-      }
     }
   },
-  methods: {},
-  created() {
-    let {
-      hidden: hiddenDatasets,
-      zones: selectedZones,
-      periods
-    } = this.$route.query;
 
-    if (!!hiddenDatasets) {
-      hiddenDatasets = hiddenDatasets.split("").map(v => v == "1");
-      this.myModel.hiddenDatasets = hiddenDatasets;
-    }
+  created() {
+    let { zones: selectedZones } = this.$route.query;
 
     if (!!selectedZones) {
       selectedZones = selectedZones.split("+");
       this.myModel.selectedZones = selectedZones;
-    }
-
-    if (!!periods) {
-      this.myModel.periods = periods;
     }
   },
   mounted() {
@@ -152,10 +80,7 @@ export default {
               .slice(1)
               .join("_");
 
-            this.$set(this.homeChart, elId, HomeChart);
-            if (!!this.$refs[elId]) {
-              this.$refs[elId][0].updateChartHiddenDatasets();
-            }
+            this.$set(this.componentZoneCard, elId, ZoneCard);
           }
           // callback_exit: el => {
           //   const elId = el
@@ -172,13 +97,9 @@ export default {
   destroyed() {
     this.lazyLoadCanvas.destroy();
 
-    this.$set(this.myModel, "periods", defaultPeriods);
+    this.$set(this.myModel, "periods", null);
     this.$set(this.myModel, "selectedZones", _cloneDeep(defaultZones));
-    this.$set(
-      this.myModel,
-      "hiddenDatasets",
-      _cloneDeep(defaultHiddenDatasets)
-    );
+    this.$set(this.myModel, "hiddenDatasets", null);
   }
 };
 </script>

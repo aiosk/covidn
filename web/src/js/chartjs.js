@@ -294,10 +294,4 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null 
   });
   return chartInstance;
 };
-const color = {
-  confirmed: "#2c347c",
-  recover: "#3c928c",
-  death: "#ec6f58",
-  active: "#c6ac42",
-};
-export { color, initChartDaily, initChartRanking };
+export { initChartDaily, initChartRanking };

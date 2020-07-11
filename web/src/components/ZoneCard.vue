@@ -1,28 +1,44 @@
 <template lang="pug">
-  .home-chart.card('aria-describedby'="chartHelpText")
+  .zone-card.card('aria-describedby'="chartHelpText")
     .capture
       .card-divider.title
-        h5 {{zone.split('_').join(' ')}}
+        h5 {{ `Daily ${zone.split('_').join(' ')}` }}
       .card-image.stats
-        component(':is'="homeChartStats" 'v-model'='myStatsModel')
+        component(':is'="componentStats" 'v-model'='myStatsModel')
       .card-image
         .legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
-        .help-text.text-right #[strong.show-for-xlarge Click]#[strong.hide-for-xlarge Tap / Touch] legend item to toggle chart line
+        .help-text.text-right
+          div #[strong.show-for-xlarge Click]#[strong.hide-for-xlarge Tap / Touch] legend item to toggle chart line
         canvas(:id="`Chart_${zone}`")
     .card-section.action
       a.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): i.icon-download-cloud( title="download raw")
-      a.download-chart('@click'='onClickDownloadChart'): i.icon-floppy(title='download chart')
+      a.download-chart('@click'='downloadOnClick'): i.icon-floppy(title='download chart')
       a.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): i.icon-resize-full(title="resize fullscreen")
 
 </template>
 
 <script>
 import HomeChartStats from "@/components/HomeChartStats";
+import MixinCard from "@/mixins/Card.js";
+import MixinForm from "@/mixins/Form.js";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 
+import {
+  defaultChartData,
+  defaultPeriods,
+  defaultHiddenDatasets
+} from "@/js/vars";
+
+const defaultStats = {
+  lastUpdate: null,
+  total: {},
+  daily: {}
+};
+
 export default {
-  name: "HomeChart",
+  name: "ZoneCard",
+  mixins: [MixinCard, MixinForm],
   components: {
     HomeChartStats
   },
@@ -35,52 +51,41 @@ export default {
       return { zone: this.zone, stats: this.stats };
     },
     periods() {
-      return this.value.periods;
+      return this.value.periods ? this.value.periods : defaultPeriods;
     },
-    hiddenDatasets() {
-      return this.value.hiddenDatasets;
+    hiddenDatasets: {
+      get() {
+        return this.value.hiddenDatasets
+          ? this.value.hiddenDatasets
+          : defaultHiddenDatasets;
+      },
+      set(val) {
+        this.emitModel({ hiddenDatasets: val });
+      }
     }
   },
   watch: {
     periods(val, oldVal) {
       this.updateChartData();
+    },
+    hiddenDatasets: async function(val, oldVal) {
+      this.updateChartHiddenDatasets();
+
+      this.updateQuery("hidden", val, defaultHiddenDatasets);
     }
   },
   data() {
     return {
       chartInstance: null,
       legendHTML: null,
-      stats: {
-        lastUpdate: null,
-        total: {},
-        daily: {}
-      },
-      homeChartStats: null,
-      data: { datasets: [], labels: [] }
+      stats: _cloneDeep(defaultStats),
+      componentStats: null,
+      data: _cloneDeep(defaultChartData)
     };
   },
   methods: {
     onClickFullscreen(e) {
       e.target.closest(".cell").classList.toggle("width-100");
-    },
-    onClickDownloadChart(e) {
-      if (!this.chartInstance) {
-        return;
-      }
-      const domtoimage = require("domtoimage");
-      const _this = this;
-
-      (async () => {
-        const dataUrl = await domtoimage.toJpeg(
-          e.target.closest(".card").querySelector(".capture")
-        );
-
-        var a = document.createElement("a");
-        a.href = dataUrl;
-        a.download = `${this.zone}.jpeg`;
-        a.click();
-      })();
-      // Page.domSpin(e.target);
     },
     legendOnClick(e) {
       const $item = e.target.closest(".item");
@@ -97,10 +102,7 @@ export default {
       let hiddenDatasets = [...$legend.querySelectorAll(".text")].map(
         v => v.style.textDecoration != "none"
       );
-
-      const propsValue = _cloneDeep(this.value);
-      this.$set(propsValue, "hiddenDatasets", hiddenDatasets);
-      this.$emit("input", propsValue);
+      this.hiddenDatasets = hiddenDatasets;
     },
     updateChartData() {
       (async () => {
@@ -145,8 +147,14 @@ export default {
       if (!this.chartInstance) {
         return;
       }
+      if (!this.hiddenDatasets.length) {
+        return;
+      }
       this.hiddenDatasets.forEach((v, i) => {
         if (!!this.chartInstance.data.datasets.length) {
+          if (!this.chartInstance.data.datasets[i]) {
+            return;
+          }
           this.chartInstance.data.datasets[i].hidden = v;
         }
       });
@@ -155,6 +163,12 @@ export default {
     }
   },
   created() {
+    let { hidden: hiddenDatasets } = this.$route.query;
+
+    if (!!hiddenDatasets) {
+      hiddenDatasets = hiddenDatasets.split("").map(v => v == "1");
+      this.hiddenDatasets = hiddenDatasets;
+    }
     this.updateChartData();
   },
   mounted() {
@@ -165,14 +179,17 @@ export default {
         data: this.data
       });
     }
-    this.homeChartStats = HomeChartStats;
+    this.componentStats = HomeChartStats;
   },
   destroyed() {
-    this.data = { datasets: [], labels: [] };
+    this.data = _cloneDeep(defaultChartData);
+    this.componentStats = null;
+    this.stats = _cloneDeep(defaultStats);
     if (!this.chartInstance) {
       return;
     }
     this.chartInstance.destroy();
+    this.chartInstance = null;
   }
 };
 </script>
@@ -184,7 +201,7 @@ export default {
 @include foundation-card;
 @include foundation-form-helptext;
 
-.home-chart {
+.zone-card {
   // margin: 0.5rem 0;
   &.card {
     $color: map-get($element-color, "title");
@@ -195,12 +212,11 @@ export default {
       color: white;
     }
     .title {
-      h4 {
-        // font-weight: bold;
-        // font-size: 1.25rem;
-      }
     }
   }
+}
+.help-text {
+  margin: 0;
 }
 .card-image {
   // padding: 1rem 0;

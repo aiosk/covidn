@@ -40,5 +40,13 @@ const defaultPeriods = 3;
 const defaultHiddenDatasets = [true, true, true, true, false, false, false, false, true, true, true, true];
 
 const cases = ["confirmed", "recover", "death", "active"];
+const defaultChartData = { datasets: [{ data: [] }], labels: [] };
 
-export { zones, defaultZones, defaultPeriods, defaultHiddenDatasets, cases };
+const defaultChartColor = {
+  confirmed: "#2c347c",
+  recover: "#3c928c",
+  death: "#ec6f58",
+  active: "#c6ac42",
+};
+
+export { zones, defaultZones, defaultPeriods, defaultHiddenDatasets, cases, defaultChartData, defaultChartColor };

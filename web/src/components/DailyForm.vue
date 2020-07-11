@@ -2,7 +2,7 @@
   form.daily-form.callout.secondary
     .grid-x.periods
       .cell.xlarge-3
-        label(for='periods') #[span {{periods}}] days period
+        label(for='periods') #[span {{ periods }}] days period
       .cell.xlarge-9
         input#periods(name="periods" type='range' min='1' max='14' step='1' 'v-model'='periods' aria-describedby="periodsHelpText" )
         p#periodsHelpText.help-text Try smaller or larger data periods by sliding (tap/click => hold => move) slider to change days period.#[br]#[strong Smaller] day periods will generate complicated chart data, while #[strong larger] day periods will generate simplified chart data. Use wisely.
@@ -11,10 +11,10 @@
         label(for='zones') Zone
       .cell.xlarge-9
         menu.text-right
-            a('@click'='selectAllOnClick') select all
-            a('@click'='deselectAllOnClick') deselect all
+            a('@click'='selectAllOnClick') Select All
+            a('@click'='deselectAllOnClick') Deselect All
         select#zones(name="zones" multiple 'v-model'='selectedZones')
-          option(v-for="v in zones" ':key'="v" ':value'='v' ) {{v.split('_').join(' ')}}
+          option(v-for="v in zones" ':key'="v" ':value'='v' ) {{ v.split('_').join(' ') }}
         p.help-text Too many charts, i don't like to scroll, i want to select some chart
     //- .grid-x.align-right
     //-   .cell
@@ -23,8 +23,12 @@
 
 <script>
 import _cloneDeep from "lodash/cloneDeep";
+import MixinForm from "@/mixins/Form.js";
+import { defaultPeriods, defaultZones } from "@/js/vars";
+
 export default {
   name: "DailyForm",
+  mixins: [MixinForm],
   props: { value: Object },
   computed: {
     zones() {
@@ -32,12 +36,10 @@ export default {
     },
     periods: {
       get() {
-        return this.value.periods;
+        return this.value.periods ? this.value.periods : defaultPeriods;
       },
       set(val) {
-        const propsValue = _cloneDeep(this.value);
-        this.$set(propsValue, "periods", val);
-        this.$emit("input", propsValue);
+        this.emitModel({ periods: val });
       }
     },
     selectedZones: {
@@ -45,10 +47,16 @@ export default {
         return this.value.selectedZones;
       },
       set(val) {
-        const propsValue = _cloneDeep(this.value);
-        this.$set(propsValue, "selectedZones", val);
-        this.$emit("input", propsValue);
+        this.emitModel({ selectedZones: val });
       }
+    }
+  },
+  watch: {
+    periods(val, oldVal) {
+      this.updateQuery("periods", val, defaultPeriods);
+    },
+    selectedZones(val, oldVal) {
+      this.updateQuery("zones", val, defaultZones);
     }
   },
   methods: {
@@ -65,6 +73,13 @@ export default {
         v.selected = false;
       });
       $select.dispatchEvent(new Event("change"));
+    }
+  },
+  created() {
+    let { periods } = this.$route.query;
+
+    if (!!periods) {
+      this.periods = periods;
     }
   }
 };

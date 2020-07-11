@@ -5,26 +5,26 @@
       //-   .card.population
       //-     .card-section
       //-       .text Population
-      //-       .total {{numberWithCommas(stats.population)}}
+      //-       .total {{ numberWithCommas(stats.population) }}
 
     .grid-x.small-up-2.medium-up-4
       .cell
         .card.confirmed
           .card-section
             h6 Confirmed
-            .total {{numberWithCommas(stats.total.confirmed)}}
+            .total {{ numberWithCommas(stats.total.confirmed) }}
               sup {{ plusMinusStr(stats.daily.confirmed) }}
       .cell
         .card.recover
           .card-section
             h6 Recover
-            .total {{numberWithCommas(stats.total.recover)}}
+            .total {{ numberWithCommas(stats.total.recover) }}
               sup {{ plusMinusStr(stats.daily.recover) }}
       .cell
         .card.death
           .card-section
             h6 Death
-            .total {{numberWithCommas(stats.total.death) }}
+            .total {{ numberWithCommas(stats.total.death) }}
               sup {{ plusMinusStr(stats.daily.death) }}
       .cell
         .card.active
@@ -32,7 +32,7 @@
             h6 Active
             .total {{ numberWithCommas(stats.total.active) }}
               sup {{ plusMinusStr(stats.daily.active) }}
-    .help-text.text-right Last Update: {{stats.lastUpdate}}
+    .help-text.text-right Last Update: {{ stats.lastUpdate }}
 </template>
 
 <script>
