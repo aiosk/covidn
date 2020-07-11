@@ -35,8 +35,26 @@ const zones = [
   "BENGKULU",
   "NUSA_TENGGARA_TIMUR",
 ];
-const defaultZones = ["NATIONAL"];
-const defaultPeriods = 3;
+const defaultZones = [
+  "NATIONAL",
+  "JAWA_TIMUR",
+  "DKI_JAKARTA",
+  "SULAWESI_SELATAN",
+  "JAWA_TENGAH",
+  //ranking
+  "RIAU",
+  "KALIMANTAN_BARAT",
+  "KALIMANTAN_UTARA",
+  "BENGKULU",
+  "SULAWESI_UTARA",
+  "MALUKU_UTARA",
+  "SUMATERA_UTARA",
+  //ratio
+  "PAPUA",
+  "KALIMANTAN_SELATAN",
+  "MALUKU",
+];
+const defaultPeriods = 1;
 const defaultHiddenDatasets = [true, true, true, true, false, false, false, false, true, true, true, true];
 
 const cases = ["confirmed", "recover", "death", "active"];

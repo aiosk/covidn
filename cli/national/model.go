@@ -47,6 +47,8 @@ type SrcFile struct {
 // Cleaning ...
 func (v HarianList) Cleaning() HarianList {
 	var newData HarianList
+	// location, _ := time.LoadLocation("Asia/Jakarta")
+
 	start := time.Date(2020, 3, 1, 0, 0, 0, 0, time.UTC)
 	end := time.Now()
 	for d := start; d.After(end) == false; d = d.AddDate(0, 0, 1) {

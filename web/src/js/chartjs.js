@@ -151,22 +151,15 @@ const initChartDaily = (params = { zone: null, data: null }) => {
             };
           },
           label(tooltipItem, data) {
-            let datasetIndexVal = tooltipItem.datasetIndex % 8;
-            var label = data.datasets[datasetIndexVal].label || "";
-            let value = data.datasets[datasetIndexVal].data[tooltipItem.index];
+            let datasetIndexVal = tooltipItem.datasetIndex % 4;
+            var label = data.datasets[tooltipItem.datasetIndex].label || "";
+            let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
-            let total = data.datasets[datasetIndexVal + 4].data[tooltipItem.index];
+            let daily = data.datasets[datasetIndexVal].data[tooltipItem.index];
 
-            const valueStr = value == 0 ? "0" : value > 0 ? `+${value}` : value;
+            const dailyStr = daily == 0 ? "" : daily > 0 ? `(+${daily})` : `(${daily})`;
 
-            let isSecondDataset = (tooltipItem.datasetIndex / 4).toFixed(1);
-            isSecondDataset = isSecondDataset >= 1 && isSecondDataset < 2;
-
-            if (isSecondDataset) {
-              return `${label}: ${value}`;
-            } else {
-              return `${label}: ${valueStr}, Total: ${total} `;
-            }
+            return `${label}: ${value} ${dailyStr}`;
           },
         },
       },

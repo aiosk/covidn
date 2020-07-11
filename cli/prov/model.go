@@ -47,6 +47,7 @@ func (v FileItem) GetTags(tag string) map[string]string {
 // Cleaning ...
 func (v FileItem) Cleaning() FileItem {
 	var newData FileItem
+	// location, _ := time.LoadLocation("Asia/Jakarta")
 
 	start := time.Date(2020, 3, 1, 0, 0, 0, 0, time.UTC)
 	end := time.Now()

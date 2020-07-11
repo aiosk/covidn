@@ -1,12 +1,9 @@
 <template lang="pug">
   .ratio-population
-    .help-text.callout.warning
-      ul
-        li Long Tap to show legend
-        li Tap to show province detail
+    include ../html/rankingHelpText.pug
     Card('v-for'="v in cases" ':key'="v" ':class'="[`card--${v}`]" )
       template(#header)
-        h4 {{ `${v} Case per 1 Million Population Ratio` }}
+        h6 {{ `${v} Rate per 1 Million Population Ratio` }}
       template(#mainImage)
         canvas(':id'="`RatioPopulation_${v.toUpperCase()}`")
       template(#menu)
@@ -122,7 +119,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/css/_card";
+@import "@/css/_ranking";
 .ratio-population {
 }
 </style>

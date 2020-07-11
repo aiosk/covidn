@@ -1,20 +1,15 @@
 <template lang="pug">
   .home-chart-stats
-    .grid-x.small-up-2('v-if'="!!stats.population")
+    .grid-x.small-up-1('v-if'="!!stats.population")
       .cell
         .card.population
           .card-section
             h6 Population
             .total {{ numberWithCommas(stats.population) }}
-      .cell
-        .card.confirmed
-          .card-section
-            h6 Confirmed
-            .total {{ numberWithCommas(stats.total.confirmed) }}
-              sup {{ plusMinusStr(stats.daily.confirmed) }}
 
-    .grid-x(':class'="[{'medium-up-4':!stats.population},{'medium-up-3':!!stats.population},{'small-up-2':!stats.population},{'small-up-3':!!stats.population}]")
-      .cell('v-if'="!stats.population")
+    //- .grid-x(':class'="[{'small-up-4':!stats.population},{'small-up-3':!!stats.population},]")
+    .grid-x.small-up-2.medium-up-4
+      .cell
         .card.confirmed
           .card-section
             h6 Confirmed
@@ -46,7 +41,7 @@ import _delay from "lodash/delay";
 import _isEmpty from "lodash/isEmpty";
 
 export default {
-  name: "HomeChartStats",
+  name: "ZoneStats",
   props: { value: Object },
   computed: {
     stats() {
@@ -91,9 +86,6 @@ export default {
 
 .home-chart-stats {
 }
-canvas {
-  // @include absolute-center;
-}
 .population,
 .confirmed,
 .recover,
@@ -104,29 +96,25 @@ canvas {
   color: white;
   text-align: center;
   height: 100%;
-  .text {
-  }
   .total {
-    font-size: 1.125rem;
+    font-size: 1rem;
   }
-  .percentage,
-  .rate-mil {
-    font-size: 0.875rem;
+}
+
+.confirmed,
+.recover,
+.death,
+.active {
+  // @include breakpoint(small only) {
+  .card-section {
+    padding: 0.5rem;
   }
-  .rate-mil {
-    // margin-top: 0.5rem;
-  }
+  // }
 }
 .population,
 .confirmed {
   margin: 0;
   background: map-get($case-color, "confirmed");
-}
-.confirmed {
-}
-.recover,
-.death,
-.active {
 }
 .recover {
   background: map-get($case-color, "recover");

@@ -1,12 +1,9 @@
 <template lang="pug">
   .ratio
-    .help-text.callout.warning
-      ul
-        li Long Tap to show legend
-        li Tap to show province detail
+    include ../html/rankingHelpText.pug
     Card('v-for'="v in cases" ':key'="v" ':class'="[`card--${v}`]" )
       template(#header)
-        h4 {{ `Case ${v == 'death' ? 'fatality':(v == 'recover'?'recovery':v)} Ratio` }}
+        h6 {{ `Case ${v == 'death' ? 'fatality':(v == 'recover'?'recovery':v)} Ratio` }}
       template(#mainImage)
         canvas(':id'="`Ratio_${v.toUpperCase()}`")
       template(#menu)
@@ -123,7 +120,7 @@ export default {
 
 <style lang="scss">
 @import "@/css/_foundation";
-@import "@/css/_card";
+@import "@/css/_ranking";
 @include foundation-form-helptext;
 .ratio-population {
 }

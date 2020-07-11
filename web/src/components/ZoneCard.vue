@@ -2,23 +2,23 @@
   .zone-card.card('aria-describedby'="chartHelpText")
     .capture
       .card-divider.title
-        h5 {{ `Daily ${zone.split('_').join(' ')}` }}
+        h6 {{ `Daily ${zone.split('_').join(' ')}`.toUpperCase() }}
       .card-image.stats
         component(':is'="componentStats" 'v-model'='myStatsModel')
       .card-image
-        .legend(v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.medium-up-4
-        .help-text.text-right
-          div #[strong.show-for-xlarge Click]#[strong.hide-for-xlarge Tap / Touch] legend item to toggle chart line
+        .legend('v-if'="legendHTML" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
+        .help-text.text-right('v-if'="legendHTML")
+          div #[strong.show-for-large Touch / Click] legend item to toggle chart line
         canvas(:id="`Chart_${zone}`")
     .card-section.action
       a.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): i.icon-download-cloud( title="download raw")
       a.download-chart('@click'='downloadOnClick'): i.icon-floppy(title='download chart')
-      a.fullscreen.show-for-xlarge('@click'='onClickFullscreen'): i.icon-resize-full(title="resize fullscreen")
+      a.fullscreen.show-for-large('@click'='onClickFullscreen'): i.icon-resize-full(title="resize fullscreen")
 
 </template>
 
 <script>
-import HomeChartStats from "@/components/HomeChartStats";
+import ZoneStats from "@/components/ZoneStats";
 import MixinCard from "@/mixins/Card.js";
 import MixinForm from "@/mixins/Form.js";
 import _delay from "lodash/delay";
@@ -26,7 +26,7 @@ import _cloneDeep from "lodash/cloneDeep";
 
 import {
   defaultChartData,
-  // defaultPeriods,
+  defaultPeriods,
   defaultHiddenDatasets
 } from "@/js/vars";
 
@@ -40,7 +40,7 @@ export default {
   name: "ZoneCard",
   mixins: [MixinCard, MixinForm],
   components: {
-    HomeChartStats
+    ZoneStats
   },
   props: {
     zone: String,
@@ -54,7 +54,7 @@ export default {
       return this.value.population;
     },
     periods() {
-      return this.value.periods ? this.value.periods : 1;
+      return this.value.periods ? this.value.periods : defaultPeriods;
     },
     hiddenDatasets: {
       get() {
@@ -71,7 +71,7 @@ export default {
     periods(val, oldVal) {
       this.updateChartData();
     },
-    hiddenDatasets: async function(val, oldVal) {
+    hiddenDatasets(val, oldVal) {
       this.updateChartHiddenDatasets();
 
       this.updateQuery("hidden", val, defaultHiddenDatasets);
@@ -118,12 +118,23 @@ export default {
         this.$set(this.data, "datasets", resJSON.datasets);
         this.$set(this.data, "labels", resJSON.labels);
 
+        // for (const k in this.data.datasets) {
+        [4, 5, 6, 7].forEach(i => {
+          this.$set(this.data.datasets[i], "spanGaps", false);
+          this.data.datasets[i].data.forEach((v2, i2) => {
+            if (!v2) {
+              this.$set(this.data.datasets[i].data, i, NaN);
+            }
+          });
+        });
+        // }
+
         let i = 0;
         let found = false;
         const length = resJSON.datasets[4].data.length;
         while (!found) {
           i++;
-          if (resJSON.datasets[0].data[length - i] != 0) {
+          if (!!resJSON.datasets[0].data[length - i]) {
             found = true;
           }
         }
@@ -163,7 +174,7 @@ export default {
         }
       });
       this.chartInstance.update();
-      this.legendHTML = this.chartInstance.generateLegend();
+      // this.legendHTML = this.chartInstance.generateLegend();
     }
   },
   created() {
@@ -183,7 +194,7 @@ export default {
         data: this.data
       });
     }
-    this.componentStats = HomeChartStats;
+    this.componentStats = ZoneStats;
   },
   destroyed() {
     this.data = _cloneDeep(defaultChartData);

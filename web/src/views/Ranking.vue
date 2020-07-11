@@ -1,12 +1,9 @@
 <template lang="pug">
   .rangking
-    .help-text.callout.warning
-      ul
-        li Long Tap to show legend
-        li Tap to show province detail
+    include ../html/rankingHelpText.pug
     Card('v-for'="v in cases" ':key'="v" ':class'="[`card--${v}`]" )
       template(#header)
-        h4 {{ `${v} Case Ranking` }}
+        h6 {{ `${v} Case Ranking` }}
       template(#mainImage)
         canvas(':id'="`RankingBar_${v.toUpperCase()}`")
       template(#menu)
@@ -129,7 +126,7 @@ export default {
 
 <style lang="scss">
 @import "@/css/_foundation";
-@import "@/css/_card";
+@import "@/css/_ranking";
 @include foundation-form-helptext;
 
 .ranking {

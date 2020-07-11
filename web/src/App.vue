@@ -133,9 +133,5 @@ export default {
   .capture {
     background-color: white;
   }
-
-  .action {
-    text-align: right;
-  }
 }
 </style>
