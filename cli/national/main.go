@@ -18,8 +18,8 @@ func Main(file io.Reader) {
 	// libs.WriteToIcs("dist/ics/NATIONAL.ics", rawFile.Update.Harian.Cleaning())
 
 	for i := 1; i <= 14; i++ {
-		dirpath := fmt.Sprintf("dist/chartjs/NATIONAL")
-		filepath := fmt.Sprintf("%s/%d.json", dirpath, i)
+		dirpath := fmt.Sprintf("dist/chartjs/%d", i)
+		filepath := fmt.Sprintf("%s/%s.json", dirpath, "NATIONAL")
 		libs.WriteToJSON(dirpath, filepath, rawFile.Update.Harian.Cleaning().Chunk(i).ToChartjs())
 	}
 
