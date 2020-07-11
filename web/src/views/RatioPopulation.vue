@@ -101,12 +101,12 @@ export default {
               return;
             }
 
-            console.log(chartItem[0]._index);
+            // console.log(chartItem[0]._index);
             const thisCase = chartItem[0]._chart.canvas.id
               .split("_")[1]
               .toLowerCase();
             const chartItemID = chartItem[0]._view.label.replace(/ /g, "_");
-            console.log(thisCase, _this.data[thisCase]);
+            // console.log(thisCase, _this.data[thisCase]);
             _this.$set(_this.modelChart, "zone", chartItemID);
             _this.$set(
               _this.modelChart,

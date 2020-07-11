@@ -1,15 +1,31 @@
 <template lang="pug">
   .home-chart-stats
-    .grid-x.small-up-1('v-if'="!!stats.population")
+    .grid-x.small-up-2('v-if'="!!stats.population").hide-for-medium
       .cell
         .card.population
           .card-section
             h6 Population
             .total {{ numberWithCommas(stats.population) }}
-
-    //- .grid-x(':class'="[{'small-up-4':!stats.population},{'small-up-3':!!stats.population},]")
-    .grid-x.small-up-2.medium-up-4
       .cell
+        .card.confirmed
+          .card-section
+            h6 Confirmed
+            .total {{ numberWithCommas(stats.total.confirmed) }}
+              sup {{ plusMinusStr(stats.daily.confirmed) }}
+
+    .grid-x(':class'="[{'small-up-2':!stats.population},{'medium-up-4':!stats.population},{'small-up-3':!!stats.population},{'medium-up-5':!!stats.population}]")
+      .cell('v-if'="!!stats.population").show-for-medium
+        .card.population
+          .card-section
+            h6 Population
+            .total {{ numberWithCommas(stats.population) }}
+      .cell.show-for-medium
+        .card.confirmed
+          .card-section
+            h6 Confirmed
+            .total {{ numberWithCommas(stats.total.confirmed) }}
+              sup {{ plusMinusStr(stats.daily.confirmed) }}
+      .cell.hide-for-medium('v-if'="!stats.population")
         .card.confirmed
           .card-section
             h6 Confirmed
@@ -99,18 +115,18 @@ export default {
   .total {
     font-size: 1rem;
   }
-}
-
-.confirmed,
-.recover,
-.death,
-.active {
-  // @include breakpoint(small only) {
   .card-section {
     padding: 0.5rem;
   }
-  // }
 }
+
+// .confirmed,
+// .recover,
+// .death,
+// .active {
+//   // @include breakpoint(small only) {
+//   // }
+// }
 .population,
 .confirmed {
   margin: 0;

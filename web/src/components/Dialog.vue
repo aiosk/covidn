@@ -1,7 +1,7 @@
 <template lang='pug'>
   .dialog
     .reveal-overlay(':style'="{display:styleDisplay}" '@click.self'='overlayOnClick')
-      .reveal(':style'="{display:styleDisplay}" ':class'="[{collapse:isCollapse}]")
+      .reveal(':style'="{display:styleDisplay}" ':class'="[{collapse:isCollapse},{large:isLarge}]")
         button.close-button('@click'='closeOnClick' aria-label="Close Accessible Modal" type="button")
           span(aria-hidden="true") &times;
         slot
@@ -36,6 +36,14 @@ export default {
       },
       set(val) {
         this.emitModel({ isCollapse: val });
+      }
+    },
+    isLarge: {
+      get() {
+        return !!this.value && !!this.value.isLarge;
+      },
+      set(val) {
+        this.emitModel({ isLarge: val });
       }
     },
     styleDisplay() {
