@@ -5,8 +5,8 @@
 
     .grid-x.large-up-2(aria-describedby="chartHelpText")
       template(v-for="v in myModel.selectedZones")
-        //- .cell(':key'="v" ':id'="`CellChart_${v}`" ':class'='["chart-item"]' )
-        .cell(':key'="v" ':id'="`CellChart_${v}`" ':class'='[{"width-100":v=="NATIONAL"},"chart-item"]'  )
+        //- .cell(':key'="v" ':id'="`CellChart_${v}`" ':class'='[{"width-100":v=="NATIONAL"},"chart-item"]'  )
+        .cell(':key'="v" ':id'="`CellChart_${v}`" ':class'='["chart-item"]' )
           component(':key'="v"  ':is'="componentZoneCard[v]" ':zone'='v' 'v-model'="myModel")
 </template>
 

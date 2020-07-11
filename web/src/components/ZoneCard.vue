@@ -123,7 +123,7 @@ export default {
           this.$set(this.data.datasets[i], "spanGaps", false);
           this.data.datasets[i].data.forEach((v2, i2) => {
             if (!v2) {
-              this.$set(this.data.datasets[i].data, i, NaN);
+              this.$set(this.data.datasets[i].data, i2, NaN);
             }
           });
         });

@@ -54,7 +54,7 @@ const defaultZones = [
   "KALIMANTAN_SELATAN",
   "MALUKU",
 ];
-const defaultPeriods = 1;
+const defaultPeriods = 7;
 const defaultHiddenDatasets = [true, true, true, true, false, false, false, false, true, true, true, true];
 
 const cases = ["confirmed", "recover", "death", "active"];

@@ -5,7 +5,7 @@
         label(for='periods') #[span {{ periods }}] days period
       .cell.large-9
         input#periods(name="periods" type='range' min='1' max='14' step='1' 'v-model'='periods' aria-describedby="periodsHelpText" )
-        p#periodsHelpText.help-text Try slide to smaller or larger data periods.#[br]#[strong Smaller] day periods will generate complicated chart data, while #[strong larger] day periods will generate simplified chart data. Use wisely.
+        p#periodsHelpText.help-text Try slide to smaller or larger data periods. #[strong Smaller] day periods will generate complicated chart data, while #[strong larger] day periods will generate simplified chart data. Use wisely.
     .grid-x.zones
       .cell.large-3
         label(for='zones') Zone

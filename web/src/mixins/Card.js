@@ -3,7 +3,7 @@ const main = {
     downloadOnClick(e) {
       const domtoimage = require("domtoimage");
       const $card = e.target.closest(".card");
-      const $title = $card.querySelector("h4,h5");
+      const $title = $card.querySelector("h4,h5,h6");
       const downloadName = `${$title.innerText.replace(/ /g, "_")}.jpeg`;
 
       (async () => {
