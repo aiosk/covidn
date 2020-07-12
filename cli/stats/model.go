@@ -19,4 +19,5 @@ type Result struct {
 	Total           Cases  `json:"total"`
 	Ratio           Cases  `json:"ratio"`
 	PopulationRatio Cases  `json:"populationRatio"`
+	TotalPercentage Cases  `json:"totalPercentage"`
 }

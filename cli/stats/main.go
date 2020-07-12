@@ -39,26 +39,9 @@ func Main() {
 				var item Result
 				item.LastUpdate = records[lenRecords-i][0]
 				item.Total.Confirmed = totalConfirmed
-				confirmedNum, err := strconv.ParseFloat(totalConfirmed, 64)
-				// item.Confirmed = records[lenRecords-i][2]
-
 				item.Total.Recover = records[lenRecords-i][3]
-				recoverNum, err := strconv.ParseFloat(records[lenRecords-i][3], 64)
-				libs.PanicError(err)
-				item.Ratio.Recover = fmt.Sprintf("%.2f", (recoverNum/confirmedNum)*100)
-				// item.Recover = records[lenRecords-i][4]
-
 				item.Total.Death = records[lenRecords-i][5]
-				deathNum, err := strconv.ParseFloat(records[lenRecords-i][5], 64)
-				libs.PanicError(err)
-				item.Ratio.Death = fmt.Sprintf("%.2f", (deathNum/confirmedNum)*100)
-				// item.Death = records[lenRecords-i][6]
-
 				item.Total.Active = records[lenRecords-i][7]
-				activeNum, err := strconv.ParseFloat(records[lenRecords-i][7], 64)
-				libs.PanicError(err)
-				item.Ratio.Active = fmt.Sprintf("%.2f", (activeNum/confirmedNum)*100)
-				// item.Active = records[lenRecords-i][8]
 				results[dataID] = item
 
 				found = true
@@ -66,6 +49,52 @@ func Main() {
 			i++
 		}
 
+	}
+	for k, v := range results {
+		confirmedNum, err := strconv.ParseFloat(v.Total.Confirmed, 64)
+		libs.PanicError(err)
+		recoverNum, err := strconv.ParseFloat(v.Total.Recover, 64)
+		libs.PanicError(err)
+		deathNum, err := strconv.ParseFloat(v.Total.Death, 64)
+		libs.PanicError(err)
+		activeNum, err := strconv.ParseFloat(v.Total.Active, 64)
+		libs.PanicError(err)
+
+		if item, ok := results[k]; ok {
+			item.Ratio.Recover = fmt.Sprintf("%.2f", (recoverNum/confirmedNum)*100)
+			item.Ratio.Death = fmt.Sprintf("%.2f", (deathNum/confirmedNum)*100)
+			item.Ratio.Active = fmt.Sprintf("%.2f", (activeNum/confirmedNum)*100)
+
+			results[k] = item
+		}
+	}
+	resultsNational := results["NATIONAL"]
+	confirmedNationalNum, err := strconv.ParseFloat(resultsNational.Total.Confirmed, 64)
+	libs.PanicError(err)
+	recoverNationalNum, err := strconv.ParseFloat(resultsNational.Total.Recover, 64)
+	libs.PanicError(err)
+	deathNationalNum, err := strconv.ParseFloat(resultsNational.Total.Death, 64)
+	libs.PanicError(err)
+	activeNationalNum, err := strconv.ParseFloat(resultsNational.Total.Active, 64)
+	libs.PanicError(err)
+	for k, v := range results {
+		confirmedNum, err := strconv.ParseFloat(v.Total.Confirmed, 64)
+		libs.PanicError(err)
+		recoverNum, err := strconv.ParseFloat(v.Total.Recover, 64)
+		libs.PanicError(err)
+		deathNum, err := strconv.ParseFloat(v.Total.Death, 64)
+		libs.PanicError(err)
+		activeNum, err := strconv.ParseFloat(v.Total.Active, 64)
+		libs.PanicError(err)
+
+		if item, ok := results[k]; ok {
+			item.TotalPercentage.Confirmed = fmt.Sprintf("%.2f", (confirmedNum/confirmedNationalNum)*100)
+			item.TotalPercentage.Recover = fmt.Sprintf("%.2f", (recoverNum/recoverNationalNum)*100)
+			item.TotalPercentage.Death = fmt.Sprintf("%.2f", (deathNum/deathNationalNum)*100)
+			item.TotalPercentage.Active = fmt.Sprintf("%.2f", (activeNum/activeNationalNum)*100)
+
+			results[k] = item
+		}
 	}
 	// log.Printf("%+v\n", results)
 
