@@ -18,7 +18,7 @@
         .float-left
           .periods('v-if'="showPeriods")
             label Periods
-              input(':id'="`periods_${zone}`" type='number' 'v-model'='periods')
+              input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
         .float-right
           //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
           a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): i.icon-table( title="download table")
@@ -32,6 +32,7 @@ import MixinCard from "@/mixins/Card.js";
 import MixinForm from "@/mixins/Form.js";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
+import _debounce from "lodash/debounce";
 
 import {
   defaultChartData,
@@ -68,9 +69,9 @@ export default {
       get() {
         return this.value.periods ? this.value.periods : defaultPeriods;
       },
-      set(val) {
+      set: _debounce(function(val) {
         this.emitModel({ periods: val });
-      }
+      }, 500)
     },
     hiddenDatasets: {
       get() {

@@ -20,7 +20,7 @@
       .cell.small-4.medium-2
         label(for='showLegend') Show Legend
       .cell.auto
-        .switch.large
+        .switch.small
           input.switch-input#showLegend(type="checkbox" name="showLegend" 'v-model'='showLegend')
           label.switch-paddle(for="showLegend")
             span.show-for-sr Show Legend?
@@ -30,7 +30,7 @@
       .cell.small-4.medium-2
         label(for='showPeriods') Show Periods
       .cell.auto
-        .switch.large
+        .switch.small
           input.switch-input#showPeriods(type="checkbox" name="showPeriods" 'v-model'='showPeriods')
           label.switch-paddle(for="showPeriods")
             span.show-for-sr Show Periods?
