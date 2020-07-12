@@ -9,7 +9,7 @@ const main = {
       modelDialog: {
         isOpen: false,
         isCollapse: true,
-        isLarge: true,
+        // isLarge: true,
       },
       componentChart: null,
     };

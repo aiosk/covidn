@@ -16,10 +16,30 @@
         canvas(:id="`Chart_${zone}`")
     .card-section
       menu.clearfix
-        .float-left
-          .periods('v-if'="showPeriods")
-            label Periods
+        .grid-x
+          .cell.small-4.medium-3
+            label(for='showPeriods') Set Periods
+          .cell.small-3.medium-2
+            .switch.small
+              input.switch-input#showPeriods(type="checkbox" name="showPeriods" 'v-model'='showPeriods')
+              label.switch-paddle(for="showPeriods")
+                span.show-for-sr Show Periods?
+                span.switch-active(aria-hidden="true") Yes
+                span.switch-inactive(aria-hidden="true") No
+          .cell.auto
+            .periods('v-if'="showPeriods")
               input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
+
+        .grid-x
+          .cell.small-4.medium-3
+            label(for='showLegend') Show Legend
+          .cell.auto
+            .switch.small
+              input.switch-input#showLegend(type="checkbox" name="showLegend" 'v-model'='showLegend')
+              label.switch-paddle(for="showLegend")
+                span.show-for-sr Show Legend?
+                span.switch-active(aria-hidden="true") Yes
+                span.switch-inactive(aria-hidden="true") No
         .float-right
           //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
           a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
@@ -40,6 +60,7 @@ import Dialog from "@/components/Dialog.vue";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
+import _range from "lodash/range";
 
 import {
   defaultChartData,
@@ -100,18 +121,32 @@ export default {
         this.emitModel({ selectedZones: val });
       }
     },
-    showLegend() {
-      return this.value.showLegend ? this.value.showLegend : defaultShowLegend;
+    showLegend: {
+      get() {
+        return this.value.showLegend
+          ? this.value.showLegend
+          : defaultShowLegend;
+      },
+      set(val) {
+        this.emitModel({ showLegend: val });
+      }
     },
-    showPeriods() {
-      return this.value.showPeriods
-        ? this.value.showPeriods
-        : defaultShowPeriods;
+    showPeriods: {
+      get() {
+        return this.value.showPeriods
+          ? this.value.showPeriods
+          : defaultShowPeriods;
+      },
+      set(val) {
+        this.emitModel({ showPeriods: val });
+      }
     }
   },
   watch: {
     periods(val, oldVal) {
       this.updateChartData();
+
+      this.updateQuery("periods", val, defaultPeriods);
     },
     hiddenDatasets(val, oldVal) {
       this.updateChartHiddenDatasets();
@@ -130,12 +165,6 @@ export default {
     };
   },
   methods: {
-    onClickFullscreen(e) {
-      e.target.closest(".cell").classList.toggle("width-100");
-      const $icon = e.target.closest("menu").querySelector(".fullscreen i");
-      $icon.classList.toggle("icon-window-maximize");
-      $icon.classList.toggle("icon-window-restore");
-    },
     legendOnClick(e) {
       const $item = e.target.closest(".item");
       if (!$item) {
@@ -164,16 +193,16 @@ export default {
         this.$set(this.data, "datasets", resJSON.datasets);
         this.$set(this.data, "labels", resJSON.labels);
 
-        // for (const k in this.data.datasets) {
-        [4, 5, 6, 7].forEach(i => {
-          this.$set(this.data.datasets[i], "spanGaps", false);
-          this.data.datasets[i].data.forEach((v2, i2) => {
-            if (!v2) {
-              this.$set(this.data.datasets[i].data, i2, NaN);
-            }
+        _range(4)
+          .map(v => v + 4)
+          .forEach(i => {
+            this.$set(this.data.datasets[i], "spanGaps", false);
+            this.data.datasets[i].data.forEach((v2, i2) => {
+              if (!v2) {
+                this.$set(this.data.datasets[i].data, i2, NaN);
+              }
+            });
           });
-        });
-        // }
 
         let i = 0;
         let found = false;
@@ -274,6 +303,7 @@ export default {
 @include foundation-float-classes;
 @include foundation-form-helptext;
 @include foundation-button;
+@include foundation-switch;
 
 .zone-card {
   // margin: 0.5rem 0;

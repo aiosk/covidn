@@ -289,12 +289,13 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null 
       },
       plugins: {
         datalabels: {
-          color: "#fff",
-          backgroundColor: "#ccc",
-          // offset: 16,
+          color: "#000",
+          // backgroundColor: "#e6e6e6",
           anchor: "end",
           align: "end",
-          // clamp: true,
+          // textAlign: "left",
+          // opacity: 0.675,
+          clamp: true,
           // clip: true,
           font: { weight: "bold" },
           padding: {
@@ -307,4 +308,82 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null 
   });
   return chartInstance;
 };
-export { initChartDaily, initChartRanking };
+const initChartPieRanking = (params = { elementId: null, data: null, onClick: null }) => {
+  const chartInstance = new Chart(params.elementId, {
+    type: "doughnut",
+    data: params.data,
+    // plugins: [ChartDataLabels],
+    options: {
+      // maintainAspectRatio: false,
+      legend: {
+        display: false,
+      },
+      animation: { duration: 0 },
+      hover: { animationDuration: 0 },
+      responsiveAnimationDuration: 0,
+      watermark: defaultWatermark,
+
+      // scales: {
+      //   xAxes: [
+      //     {
+      //       gridLines: {
+      //         // display: false,
+      //       },
+      //       ticks: {
+      //         // display: false,
+      //         // min: 0,
+      //         // maxRotation: 23,
+      //       },
+      //     },
+      //   ],
+      //   yAxes: [
+      //     {
+      //       gridLines: {
+      //         // display: false,
+      //       },
+      //       ticks: {
+      //         // display: false,
+      //         // min: 0,
+      //         // maxRotation: 23,
+      //       },
+      //     },
+      //   ],
+      // },
+      tooltips: {
+        // enabled: false,
+        // intersect: false,
+        //   callbacks: {
+        //     label(tooltipItem, data) {
+        //       var label = data.labels[tooltipItem.index] || "";
+        //       let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+        //       return `${label}: ${value}%`;
+        //     },
+        //   },
+      },
+      plugins: {
+        datalabels: {
+          color: "#000",
+          backgroundColor: "#e6e6e6",
+          // offset: 8,
+          // anchor: "end",
+          align: "end",
+          formatter(val, ctx) {
+            // console.log(val, ctx.chart.data.labels[ctx.dataIndex]);
+            return `${val}%\n${ctx.chart.data.labels[ctx.dataIndex]}`;
+          },
+          // // textAlign: "left",
+          opacity: 0.675,
+          clamp: false,
+          clip: false,
+          font: { weight: "bold" },
+          // padding: {
+          //   top: 0,
+          //   bottom: 0,
+          // },
+        },
+      },
+    },
+  });
+  return chartInstance;
+};
+export { initChartDaily, initChartRanking, initChartPieRanking };

@@ -94,6 +94,9 @@ export default {
 //   top: 1rem;
 //   right: 0;
 // }
+.reveal {
+  top: 0;
+}
 .close-button {
   top: 0.75rem;
   span {

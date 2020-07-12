@@ -21,26 +21,6 @@
             a('@click'='selectAllOnClick') Select All
             a('@click'='deselectAllOnClick') Deselect All
         p.help-text Too many charts, i don't like to scroll, i want to select some chart
-    .grid-x
-      .cell.small-4.medium-2
-        label(for='showLegend') Show Legend
-      .cell.auto
-        .switch.small
-          input.switch-input#showLegend(type="checkbox" name="showLegend" 'v-model'='showLegend')
-          label.switch-paddle(for="showLegend")
-            span.show-for-sr Show Legend?
-            span.switch-active(aria-hidden="true") Yes
-            span.switch-inactive(aria-hidden="true") No
-    .grid-x
-      .cell.small-4.medium-2
-        label(for='showPeriods') Show Periods
-      .cell.auto
-        .switch.small
-          input.switch-input#showPeriods(type="checkbox" name="showPeriods" 'v-model'='showPeriods')
-          label.switch-paddle(for="showPeriods")
-            span.show-for-sr Show Periods?
-            span.switch-active(aria-hidden="true") Yes
-            span.switch-inactive(aria-hidden="true") No
 
 
     //- .grid-x.align-right
@@ -75,26 +55,6 @@ export default {
       },
       set(val) {
         this.emitModel({ selectedZones: val });
-      }
-    },
-    showLegend: {
-      get() {
-        return this.value.showLegend
-          ? this.value.showLegend
-          : defaultShowLegend;
-      },
-      set(val) {
-        this.emitModel({ showLegend: val });
-      }
-    },
-    showPeriods: {
-      get() {
-        return this.value.showPeriods
-          ? this.value.showPeriods
-          : defaultShowLegend;
-      },
-      set(val) {
-        this.emitModel({ showPeriods: val });
       }
     }
   },

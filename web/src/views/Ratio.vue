@@ -1,16 +1,20 @@
 <template lang="pug">
   .ratio
     include ../html/rankingHelpText.pug
-    Card('v-for'="v in cases" ':key'="v" ':class'="[`card--${v}`]" )
-      template(#header)
-        h6 {{ `Case ${v == 'death' ? 'fatality':(v == 'recover'?'recovery':v)} Ratio` }}
-      template(#mainImage)
-        canvas(':id'="`Ratio_${v.toUpperCase()}`")
-      template(#menu)
-        a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
-        a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
-    Dialog('v-model'='modelDialog')
-      component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
+    .grid-x.large-up-2
+      .cell('v-for'="v in cases" ':key'="v" )
+        Card(':class'="['card-ranking',`card-ranking--${v}`]" )
+          template(#header)
+            h6 {{ `Case ${v == 'death' ? 'fatality':(v == 'recover'?'recovery':v)} Ratio` }}
+            menu
+              a.fullscreen.show-for-large('@click'='onClickFullscreen' title="resize card" aria-label="resize card"): i.icon-window-maximize
+          template(#mainImage)
+            canvas(':id'="`Ratio_${v.toUpperCase()}`")
+          template(#menu)
+            a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
+            a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
+        Dialog('v-model'='modelDialog')
+          component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
 </template>
 
 
@@ -71,7 +75,7 @@ export default {
           },
           "desc"
         );
-        orderedResJSON.forEach(v2 => {
+        orderedResJSON.forEach((v2, i2) => {
           const k3 = v2[0];
           const v3 = v2[1];
 
@@ -81,9 +85,25 @@ export default {
             "backgroundColor",
             defaultChartColor[v]
           );
-          this.$set(this.data[v].datasets[0], "datalabels", {
-            backgroundColor: defaultChartColor[v]
-          });
+
+          if (!this.data[v].datasets[0].datalabels) {
+            this.$set(this.data[v].datasets[0], "datalabels", {
+              align: [],
+              color: []
+            });
+          }
+          const divider = 4;
+          this.$set(
+            this.data[v].datasets[0].datalabels.align,
+            i2,
+            i2 < orderedResJSON.length / divider ? "start" : "end"
+          );
+          this.$set(
+            this.data[v].datasets[0].datalabels.color,
+            i2,
+            i2 < orderedResJSON.length / divider ? "#fff" : "#000"
+          );
+
           this.data[v].labels.push(k3.split("_").join(" "));
         });
       });
