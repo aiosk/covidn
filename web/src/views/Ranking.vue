@@ -1,16 +1,16 @@
 <template lang="pug">
   .rangking
     include ../html/rankingHelpText.pug
-    .grid-x.medium-up-2.large-up-4
-      .cell('v-for'="v in cases" ':key'="v")
-        Card( ':class'="['card-percentage',`card-percentage--${v}`]" )
-          template(#header)
-            h6 {{ `${v} Case Ranking` }}
-          template(#mainImage)
-            canvas(':id'="`RankingPie_${v.toUpperCase()}`")
-          //- template(#menu)
-          //-   a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
-          //-   a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
+    //- .grid-x.medium-up-2.large-up-4
+    //-   .cell('v-for'="v in cases" ':key'="v")
+    //-     Card( ':class'="['card-percentage',`card-percentage--${v}`]" )
+    //-       template(#header)
+    //-         h6 {{ `${v} Case Ranking` }}
+    //-       template(#mainImage)
+    //-         canvas(':id'="`RankingPie_${v.toUpperCase()}`")
+    //-       //- template(#menu)
+    //-       //-   a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
+    //-       //-   a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
 
     .grid-x.large-up-2
       .cell('v-for'="v in cases" ':key'="v" )
@@ -171,16 +171,21 @@ export default {
 
               _this.modelChart.zone = chartItemID;
               _this.modelDialog.isOpen = true;
+            },
+            datalabelsFormatter(val, ctx) {
+              const percentage =
+                _this.dataPie[v].datasets[0].data[ctx.dataIndex];
+              return `${val} (${percentage}%)`;
             }
           });
         }
-        if (!this.chartPieInstance[v]) {
-          const { initChartPieRanking } = require("@/js/chartjs");
-          this.chartPieInstance[v] = initChartPieRanking({
-            elementId: `RankingPie_${v.toUpperCase()}`,
-            data: this.dataPie[v]
-          });
-        }
+        // if (!this.chartPieInstance[v]) {
+        //   const { initChartPieRanking } = require("@/js/chartjs");
+        //   this.chartPieInstance[v] = initChartPieRanking({
+        //     elementId: `RankingPie_${v.toUpperCase()}`,
+        //     data: this.dataPie[v]
+        //   });
+        // }
       });
     }, 799);
   },

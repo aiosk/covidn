@@ -126,6 +126,9 @@ export default {
 
             _this.modelChart.zone = chartItemID;
             _this.modelDialog.isOpen = true;
+          },
+          datalabelsFormatter(val, ctx) {
+            return `${val}%`;
           }
         });
       }

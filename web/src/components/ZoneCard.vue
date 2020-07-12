@@ -25,7 +25,7 @@
                 .switch.small
                   input.switch-input(':id'="`showPeriods_${zone}`" type="checkbox" 'v-model'='showPeriods')
                   label.switch-paddle(':for'='`showPeriods_${zone}`')
-                    span.show-for-sr Show Periods ?
+                    span.show-for-sr Set Periods ?
                     span.switch-active(aria-hidden="true") Yes
                     span.switch-inactive(aria-hidden="true") No
               .cell.auto
@@ -43,6 +43,27 @@
                     span.show-for-sr Show Legend ?
                     span.switch-active(aria-hidden="true") Yes
                     span.switch-inactive(aria-hidden="true") No
+          //- .cell.small-12
+          //-   .grid-x
+          //-     .cell.small-4.medium-3
+          //-       label(':for'='`showPeriodsRange_${zone}`') Set Periods Range
+          //-     .cell.small-4.medium-3
+          //-       .switch.small
+          //-         input.switch-input(':id'="`showPeriodsRange_${zone}`" type="checkbox" 'v-model'='showPeriodsRange')
+          //-         label.switch-paddle(':for'='`showPeriodsRange_${zone}`')
+          //-           span.show-for-sr Set Periods Range ?
+          //-           span.switch-active(aria-hidden="true") Yes
+          //-           span.switch-inactive(aria-hidden="true") No
+          //-     .cell.small-12.medium-auto
+          //-       .grid-x(v-if="showPeriodsRange")
+          //-         .cell.small-5
+          //-           select.begin('v-model'="periodsRange.begin")
+          //-             option('v-for'='(v,i) in data.labels' ':key'='v' ':value'="i") {{ v }}
+          //-         .cell.auto
+          //-           .text-center -
+          //-         .cell.small-5
+          //-           select.end('v-model'="periodsRange.end")
+          //-             option('v-for'='(v,i) in data.labels.slice(periodsRange.begin)' ':key'='v' ':value'="i") {{ v }}
         .float-right
           //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
           a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
@@ -158,6 +179,18 @@ export default {
       this.updateChartHiddenDatasets();
 
       this.updateQuery("hidden", val, defaultHiddenDatasets);
+    },
+    "periodsRange.begin"(val, oldVal) {
+      console.log(val, this.data);
+      this.$set(this.data, "labels", this.data.labels.slice(val));
+      this.data.datasets.forEach((v, i) => {
+        this.$set(
+          this.data.datasets[i],
+          "data",
+          this.data.datasets[i].data.slice(val)
+        );
+      });
+      this.chartInstance.update();
     }
   },
   data() {
@@ -170,7 +203,12 @@ export default {
       data: _cloneDeep(defaultChartData),
 
       // showLegend: _cloneDeep(defaultShowLegend),
-      showPeriods: _cloneDeep(defaultShowPeriods)
+      showPeriods: _cloneDeep(defaultShowPeriods),
+      showPeriodsRange: true,
+      periodsRange: {
+        begin: null,
+        end: null
+      }
     };
   },
   methods: {

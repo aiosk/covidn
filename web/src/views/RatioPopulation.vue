@@ -139,6 +139,10 @@ export default {
             );
             // _this.modelChart.zone = chartItemID;
             _this.modelDialog.isOpen = true;
+          },
+          datalabelsFormatter(val, ctx) {
+            const percentage = (val / 1000000) * 100;
+            return `${val} (${percentage.toFixed(2)}%)`;
           }
         });
       }

@@ -234,7 +234,7 @@ const initChartDaily = (params = { zone: null, data: null }) => {
   return chartInstance;
 };
 
-const initChartRanking = (params = { elementId: null, data: null, onClick: null }) => {
+const initChartRanking = (params = { elementId: null, data: null, onClick: null, datalabelsFormatter: null }) => {
   const chartInstance = new Chart(params.elementId, {
     type: "horizontalBar",
     data: params.data,
@@ -297,7 +297,11 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null 
           // opacity: 0.675,
           clamp: true,
           // clip: true,
-          font: { weight: "bold" },
+          formatter: params.datalabelsFormatter,
+          font: {
+            weight: "bold",
+            size: 10,
+          },
           padding: {
             top: 0,
             bottom: 0,
@@ -308,6 +312,7 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null 
   });
   return chartInstance;
 };
+
 const initChartPieRanking = (params = { elementId: null, data: null, onClick: null }) => {
   const chartInstance = new Chart(params.elementId, {
     type: "doughnut",
@@ -367,10 +372,11 @@ const initChartPieRanking = (params = { elementId: null, data: null, onClick: nu
           // offset: 8,
           // anchor: "end",
           align: "end",
-          formatter(val, ctx) {
-            // console.log(val, ctx.chart.data.labels[ctx.dataIndex]);
-            return `${val}%\n${ctx.chart.data.labels[ctx.dataIndex]}`;
-          },
+          // formatter:params.datalabelsFormatter,
+          // formatter(val, ctx) {
+          //   // console.log(val, ctx.chart.data.labels[ctx.dataIndex]);
+          //   return `${val}%\n${ctx.chart.data.labels[ctx.dataIndex]}`;
+          // },
           // // textAlign: "left",
           opacity: 0.675,
           clamp: false,
