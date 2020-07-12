@@ -2,7 +2,7 @@ import { defaultShare } from "@/js/vars";
 
 const main = {
   methods: {
-    onClickFullscreen(e) {
+    fullscreenOnClick(e) {
       e.target.closest(".cell").classList.toggle("width-100");
       const $icon = e.target.closest("menu").querySelector(".fullscreen i");
       $icon.classList.toggle("icon-window-maximize");

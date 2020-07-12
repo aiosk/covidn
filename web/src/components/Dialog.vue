@@ -33,18 +33,18 @@ export default {
     isCollapse: {
       get() {
         return !!this.value && !!this.value.isCollapse;
-      },
-      set(val) {
-        this.emitModel({ isCollapse: val });
       }
+      // set(val) {
+      //   this.emitModel({ isCollapse: val });
+      // }
     },
     isLarge: {
       get() {
         return !!this.value && !!this.value.isLarge;
-      },
-      set(val) {
-        this.emitModel({ isLarge: val });
       }
+      // set(val) {
+      //   this.emitModel({ isLarge: val });
+      // }
     },
     styleDisplay() {
       return this.isOpen ? "block" : "none";
@@ -96,6 +96,8 @@ export default {
 // }
 .reveal {
   top: 0;
+  height: unset;
+  min-height: unset;
 }
 .close-button {
   top: 0.75rem;

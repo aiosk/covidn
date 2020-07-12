@@ -5,39 +5,39 @@
         .title
           h6 {{ `Daily ${zone.split('_').join(' ')}`.toUpperCase() }}
         menu('v-if'='!value.isDialog')
-          a.fullscreen.show-for-large('@click'='onClickFullscreen' title="resize card" aria-label="resize card"): i.icon-window-maximize
+          a.fullscreen.show-for-large('@click'='fullscreenOnClick' title="resize card" aria-label="resize card"): i.icon-window-maximize
           a.close('@click'='closeOnClick' title="close card"): i.icon-window-close-o
       .card-image.stats
         component(':is'="componentStats" 'v-model'='myStatsModel')
       .card-image
-        .legend('v-if'="showLegend" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
-        .help-text.text-right('v-if'="showLegend")
+        .legend('v-show'="showLegend" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
+        .help-text.text-right('v-show'="showLegend")
           div #[strong.show-for-large Touch / Click] legend item to toggle chart line
         canvas(:id="`Chart_${zone}`")
     .card-section
       menu.clearfix
         .grid-x
           .cell.small-4.medium-3
-            label(for='showPeriods') Set Periods
+            label(':for'='`showPeriods_${zone}`') Set Periods
           .cell.small-3.medium-2
             .switch.small
-              input.switch-input#showPeriods(type="checkbox" name="showPeriods" 'v-model'='showPeriods')
-              label.switch-paddle(for="showPeriods")
-                span.show-for-sr Show Periods?
+              input.switch-input(':id'="`showPeriods_${zone}`" type="checkbox" 'v-model'='showPeriods')
+              label.switch-paddle(':for'='`showPeriods_${zone}`')
+                span.show-for-sr Show Periods ?
                 span.switch-active(aria-hidden="true") Yes
                 span.switch-inactive(aria-hidden="true") No
           .cell.auto
-            .periods('v-if'="showPeriods")
+            .periods(v-show="showPeriods")
               input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
 
         .grid-x
           .cell.small-4.medium-3
-            label(for='showLegend') Show Legend
+            label(':for'='`showLegend_${zone}`') Show Legend
           .cell.auto
             .switch.small
-              input.switch-input#showLegend(type="checkbox" name="showLegend" 'v-model'='showLegend')
-              label.switch-paddle(for="showLegend")
-                span.show-for-sr Show Legend?
+              input.switch-input(':id'="`showLegend_${zone}`" type="checkbox" 'v-model'='showLegend')
+              label.switch-paddle(':for'='`showLegend_${zone}`')
+                span.show-for-sr Show Legend ?
                 span.switch-active(aria-hidden="true") Yes
                 span.switch-inactive(aria-hidden="true") No
         .float-right
@@ -47,9 +47,13 @@
           a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
     Dialog('v-model'='modelDialog')
       h5 Are you sure you mant to remove {{zone}} ?
-      menu.text-right
-        button.button.secondary('@click'='closeYesOnClick') Yes
-        button.button('@click'="modelDialog.isOpen=false") No
+      menu.float-right.button-group
+        button.button.secondary('@click'='closeYesOnClick')
+          span.show-for-sr Yes
+          span(aria-hidden="true") Yes
+        button.button('@click'="modelDialog.isOpen=false")
+          span.show-for-sr No
+          span(aria-hidden="true") No
 </template>
 
 <script>
@@ -66,10 +70,10 @@ import {
   defaultChartData,
   defaultPeriods,
   defaultHiddenDatasets,
-  defaultShowLegend,
   defaultShare
 } from "@/js/vars";
 const defaultShowPeriods = false;
+const defaultShowLegend = false;
 
 const defaultStats = {
   lastUpdate: null,
@@ -130,19 +134,18 @@ export default {
       set(val) {
         this.emitModel({ showLegend: val });
       }
-    },
-    showPeriods: {
-      get() {
-        return this.value.showPeriods
-          ? this.value.showPeriods
-          : defaultShowPeriods;
-      },
-      set(val) {
-        this.emitModel({ showPeriods: val });
-      }
     }
   },
   watch: {
+    showLegend(val, oldVal) {
+      if (!this.chartInstance) {
+        return;
+      }
+      if (!val) {
+        return;
+      }
+      this.legendHTML = this.chartInstance.generateLegend();
+    },
     periods(val, oldVal) {
       this.updateChartData();
 
@@ -161,7 +164,10 @@ export default {
       legendHTML: null,
       stats: _cloneDeep(defaultStats),
       componentStats: null,
-      data: _cloneDeep(defaultChartData)
+      data: _cloneDeep(defaultChartData),
+
+      // showLegend: _cloneDeep(defaultShowLegend),
+      showPeriods: _cloneDeep(defaultShowPeriods)
     };
   },
   methods: {
@@ -303,6 +309,7 @@ export default {
 @include foundation-float-classes;
 @include foundation-form-helptext;
 @include foundation-button;
+@include foundation-button-group;
 @include foundation-switch;
 
 .zone-card {
@@ -353,6 +360,11 @@ menu {
     i {
       color: white;
     }
+  }
+}
+.reveal menu {
+  button {
+    margin: 0 0.5rem;
   }
 }
 </style>

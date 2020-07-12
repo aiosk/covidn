@@ -7,7 +7,7 @@
           template(#header)
             h6 {{ `Case ${v == 'death' ? 'fatality':(v == 'recover'?'recovery':v)} Ratio` }}
             menu
-              a.fullscreen.show-for-large('@click'='onClickFullscreen' title="resize card" aria-label="resize card"): i.icon-window-maximize
+              a.fullscreen.show-for-large('@click'='fullscreenOnClick' title="resize card" aria-label="resize card"): i.icon-window-maximize
           template(#mainImage)
             canvas(':id'="`Ratio_${v.toUpperCase()}`")
           template(#menu)

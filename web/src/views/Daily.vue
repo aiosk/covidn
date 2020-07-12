@@ -4,27 +4,20 @@
     DailyForm('v-model'="myModel")
 
     .grid-x.large-up-2(aria-describedby="chartHelpText")
-      template(v-for="v in myModel.selectedZones")
-        //- .cell(':key'="v" ':id'="`CellChart_${v}`" ':class'='[{"width-100":v=="NATIONAL"},"chart-item"]'  )
-        .cell(':key'="v" ':id'="`CellChart_${v}`" ':class'='[{"width-100":myModel.selectedZones.length == 1},"chart-item"]' )
-          component(':key'="v"  ':is'="componentZoneCard[v]" ':zone'='v' 'v-model'="myModel")
+      .cell(v-for="v in myModel.selectedZones" ':key'="v" ':id'='`Cell_${v}`' ':class'='[{"width-100":myModel.selectedZones.length == 1},"chart-item"]' )
+        component(':is'="componentZoneCard[v]" ':zone'='v' 'v-model'="myModel")
 </template>
 
 <script>
 // @ is an alias to /src
 import DailyForm from "@/components/DailyForm.vue";
 import ZoneCard from "@/components/ZoneCard.vue";
-import MixinCard from "@/mixins/Card.js";
-import MixinForm from "@/mixins/Form.js";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 import { zones, defaultZones } from "@/js/vars";
 
-let MediaQuery;
-
 export default {
   name: "Daily",
-  mixins: [MixinCard, MixinForm],
   components: {
     DailyForm,
     ZoneCard
@@ -38,8 +31,7 @@ export default {
         zones,
         selectedZones: _cloneDeep(defaultZones),
         hiddenDatasets: null,
-        showLegend: null,
-        showPeriods: null
+        showLegend: false
       }
     };
   },
@@ -102,6 +94,7 @@ export default {
     this.$set(this.myModel, "periods", null);
     this.$set(this.myModel, "selectedZones", _cloneDeep(defaultZones));
     this.$set(this.myModel, "hiddenDatasets", null);
+    this.$set(this.myModel, "componentZoneCard", {});
   }
 };
 </script>

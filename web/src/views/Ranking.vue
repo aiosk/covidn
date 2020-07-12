@@ -18,7 +18,7 @@
           template(#header)
             h6 {{ `${v} Case Ranking` }}
             menu
-              a.fullscreen.show-for-large('@click'='onClickFullscreen' title="resize card" aria-label="resize card"): i.icon-window-maximize
+              a.fullscreen.show-for-large('@click'='fullscreenOnClick' title="resize card" aria-label="resize card"): i.icon-window-maximize
 
           template(#mainImage)
             canvas(':id'="`RankingBar_${v.toUpperCase()}`")

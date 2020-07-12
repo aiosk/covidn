@@ -133,4 +133,9 @@ export default {
 .cell {
   transition: none !important;
 }
+
+#shareAPIPolyfill-backdrop,
+#shareAPIPolyfill-container {
+  z-index: 1100;
+}
 </style>

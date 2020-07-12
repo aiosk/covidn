@@ -31,7 +31,7 @@
 <script>
 import _cloneDeep from "lodash/cloneDeep";
 import MixinForm from "@/mixins/Form.js";
-import { defaultPeriods, defaultZones, defaultShowLegend } from "@/js/vars";
+import { defaultPeriods, defaultZones } from "@/js/vars";
 
 export default {
   name: "DailyForm",

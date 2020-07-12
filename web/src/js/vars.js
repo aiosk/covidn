@@ -68,7 +68,6 @@ const defaultChartColor = {
   death: "#ec6f58",
   active: "#c6ac42",
 };
-const defaultShowLegend = false;
 const defaultShare = {
   // change this configurations to hide specific unnecessary icons
   copy: true,
@@ -93,6 +92,5 @@ export {
   cases,
   defaultChartData,
   defaultChartColor,
-  defaultShowLegend,
   defaultShare,
 };

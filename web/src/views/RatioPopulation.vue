@@ -7,7 +7,7 @@
           template(#header)
             h6 {{ `${v} Rate per 1 Million Population Ratio` }}
             menu
-              a.fullscreen.show-for-large('@click'='onClickFullscreen' title="resize card" aria-label="resize card"): i.icon-window-maximize
+              a.fullscreen.show-for-large('@click'='fullscreenOnClick' title="resize card" aria-label="resize card"): i.icon-window-maximize
           template(#mainImage)
             canvas(':id'="`RatioPopulation_${v.toUpperCase()}`")
           template(#menu)
