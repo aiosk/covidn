@@ -4,7 +4,7 @@
 @include block("card") {
   @include parse("m:confirmed", "m:recover", "m:death", "m:active") {
     main.card-image {
-      min-height: 40rem;
+      min-height: 50rem;
     }
     header {
       color: white;
@@ -57,5 +57,10 @@
     menu a i {
       color: $color;
     }
+  }
+}
+menu {
+  a {
+    margin: 0 0.5rem;
   }
 }

@@ -7,7 +7,8 @@
       template(#mainImage)
         canvas(':id'="`RatioPopulation_${v.toUpperCase()}`")
       template(#menu)
-        a.download-card('@click'='downloadOnClick'): i.icon-download-cloud(title='download card')
+        a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
+        a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
 
     Dialog('v-model'='modelDialog')
       component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
@@ -58,7 +59,7 @@ export default {
       let res = await fetch(url);
       let resJSON = await res.json();
 
-      resJSON = Object.entries(resJSON).filter(v => v[0] != "NATIONAL");
+      resJSON = Object.entries(resJSON);
       cases.forEach(v => {
         let orderedResJSON = _orderBy(
           resJSON,

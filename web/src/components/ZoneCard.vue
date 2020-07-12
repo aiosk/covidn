@@ -5,7 +5,8 @@
         .title
           h6 {{ `Daily ${zone.split('_').join(' ')}`.toUpperCase() }}
         menu('v-if'='!value.isDialog')
-          a.fullscreen.show-for-large('@click'='onClickFullscreen'): i.icon-window-maximize(title="resize fullscreen")
+          a.fullscreen.show-for-large('@click'='onClickFullscreen' title="resize card" aria-label="resize card"): i.icon-window-maximize
+          a.close('@click'='closeOnClick' title="close card"): i.icon-window-close-o
       .card-image.stats
         component(':is'="componentStats" 'v-model'='myStatsModel')
       .card-image
@@ -21,15 +22,21 @@
               input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
         .float-right
           //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
-          a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): i.icon-table( title="download table")
-          a.download-card('@click'='downloadOnClick'): i.icon-download-cloud(title='download card')
-
+          a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
+          a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
+          a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
+    Dialog('v-model'='modelDialog')
+      h5 Are you sure you mant to remove {{zone}} ?
+      menu.text-right
+        button.button.secondary('@click'='closeYesOnClick') Yes
+        button.button('@click'="modelDialog.isOpen=false") No
 </template>
 
 <script>
 import ZoneStats from "@/components/ZoneStats";
 import MixinCard from "@/mixins/Card.js";
 import MixinForm from "@/mixins/Form.js";
+import Dialog from "@/components/Dialog.vue";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
@@ -38,7 +45,8 @@ import {
   defaultChartData,
   defaultPeriods,
   defaultHiddenDatasets,
-  defaultShowLegend
+  defaultShowLegend,
+  defaultShare
 } from "@/js/vars";
 const defaultShowPeriods = false;
 
@@ -52,7 +60,8 @@ export default {
   name: "ZoneCard",
   mixins: [MixinCard, MixinForm],
   components: {
-    ZoneStats
+    ZoneStats,
+    Dialog
   },
   props: {
     zone: String,
@@ -83,6 +92,14 @@ export default {
         this.emitModel({ hiddenDatasets: val });
       }
     },
+    selectedZones: {
+      get() {
+        return this.value.selectedZones;
+      },
+      set(val) {
+        this.emitModel({ selectedZones: val });
+      }
+    },
     showLegend() {
       return this.value.showLegend ? this.value.showLegend : defaultShowLegend;
     },
@@ -104,6 +121,7 @@ export default {
   },
   data() {
     return {
+      modelDialog: { isOpen: false },
       chartInstance: null,
       legendHTML: null,
       stats: _cloneDeep(defaultStats),
@@ -205,6 +223,12 @@ export default {
       if (this.showLegend) {
         this.legendHTML = this.chartInstance.generateLegend();
       }
+    },
+    closeOnClick(e) {
+      this.modelDialog.isOpen = true;
+    },
+    closeYesOnClick(e) {
+      this.$delete(this.selectedZones, this.selectedZones.indexOf(this.zone));
     }
   },
   created() {
@@ -249,6 +273,7 @@ export default {
 @include foundation-card;
 @include foundation-float-classes;
 @include foundation-form-helptext;
+@include foundation-button;
 
 .zone-card {
   // margin: 0.5rem 0;

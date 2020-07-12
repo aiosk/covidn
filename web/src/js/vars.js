@@ -41,23 +41,20 @@ const defaultZones = [
   "DKI_JAKARTA",
   "SULAWESI_SELATAN",
   "JAWA_TENGAH",
-  "JAWA_BARAT",
-  "KALIMANTAN_SELATAN",
   //ranking
   "RIAU",
   "KALIMANTAN_BARAT",
   "KALIMANTAN_UTARA",
-  "KEPULAUAN_RIAU",
-  "SULAWESI_TENGAH",
   "BENGKULU",
   "SULAWESI_UTARA",
-  "BANTEN",
-  "GORONTALO",
+  // "BANTEN",
   "MALUKU_UTARA",
   "SUMATERA_UTARA",
   //ratio
   "PAPUA",
   "MALUKU",
+  "KALIMANTAN_SELATAN",
+  //ratio pop
 ];
 const defaultPeriods = 7;
 const defaultHiddenDatasets = [true, true, true, true, false, false, false, false, true, true, true, true];
@@ -72,6 +69,21 @@ const defaultChartColor = {
   active: "#c6ac42",
 };
 const defaultShowLegend = false;
+const defaultShare = {
+  // change this configurations to hide specific unnecessary icons
+  copy: true,
+  email: true,
+  print: false,
+  sms: false,
+  messenger: true,
+  facebook: true,
+  whatsapp: true,
+  twitter: true,
+  linkedin: false,
+  telegram: true,
+  skype: false,
+  // language: "pt" // specify the default language
+};
 
 export {
   zones,
@@ -82,4 +94,5 @@ export {
   defaultChartData,
   defaultChartColor,
   defaultShowLegend,
+  defaultShare,
 };

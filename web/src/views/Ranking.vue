@@ -7,7 +7,8 @@
       template(#mainImage)
         canvas(':id'="`RankingBar_${v.toUpperCase()}`")
       template(#menu)
-        a.download-card('@click'='downloadOnClick'): i.icon-download-cloud(title='download card')
+        a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
+        a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
     Dialog('v-model'='modelDialog')
       component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
 </template>

@@ -26,7 +26,7 @@
     br
     router-view
 
-    button.button.small#top('@click'='topBtnOnClick'): i.icon-up-circled(title="Scroll to top")
+    button.button.small#top('@click'='topBtnOnClick' title="Scroll to top" aria-label="Scroll to top"): i.icon-up-circled
 </template>
 
 <script>

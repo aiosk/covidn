@@ -12,7 +12,12 @@
       .cell.small-auto.medium-auto
         select#zones(name="zones" multiple 'v-model'='selectedZones')
           option(v-for="v in zones" ':key'="v" ':value'='v' ) {{ v.split('_').join(' ') }}
-        menu.text-right
+        menu.clearfix
+          span.float-left
+            .selected
+              b {{ selectedZones.length }}&nbsp;
+              | selected
+          span.float-right
             a('@click'='selectAllOnClick') Select All
             a('@click'='deselectAllOnClick') Deselect All
         p.help-text Too many charts, i don't like to scroll, i want to select some chart
@@ -132,6 +137,7 @@ export default {
 @import "@/css/_foundation";
 @include foundation-forms;
 @include foundation-switch;
+@include foundation-float-classes;
 // @include foundation-button;
 .periods {
   input[type="range"] {
@@ -146,6 +152,7 @@ export default {
     margin-bottom: 0;
   }
   menu {
+    padding-left: 0;
     margin: {
       top: 0;
       bottom: 0.5rem;

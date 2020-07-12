@@ -38,9 +38,7 @@ const main = {
       }
 
       try {
-        await this.$router.push({
-          query: newQuery,
-        });
+        await this.$router.push({ query: newQuery });
       } catch (e) {
         // console.log(e);
       }
