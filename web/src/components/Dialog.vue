@@ -94,4 +94,10 @@ export default {
 //   top: 1rem;
 //   right: 0;
 // }
+.close-button {
+  top: 0.75rem;
+  span {
+    color: white;
+  }
+}
 </style>

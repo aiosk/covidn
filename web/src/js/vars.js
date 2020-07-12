@@ -41,20 +41,25 @@ const defaultZones = [
   "DKI_JAKARTA",
   "SULAWESI_SELATAN",
   "JAWA_TENGAH",
+  "JAWA_BARAT",
+  "KALIMANTAN_SELATAN",
   //ranking
   "RIAU",
   "KALIMANTAN_BARAT",
   "KALIMANTAN_UTARA",
+  "KEPULAUAN_RIAU",
+  "SULAWESI_TENGAH",
   "BENGKULU",
   "SULAWESI_UTARA",
+  "BANTEN",
+  "GORONTALO",
   "MALUKU_UTARA",
   "SUMATERA_UTARA",
   //ratio
   "PAPUA",
-  "KALIMANTAN_SELATAN",
   "MALUKU",
 ];
-const defaultPeriods = 1;
+const defaultPeriods = 7;
 const defaultHiddenDatasets = [true, true, true, true, false, false, false, false, true, true, true, true];
 
 const cases = ["confirmed", "recover", "death", "active"];

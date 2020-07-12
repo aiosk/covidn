@@ -7,7 +7,7 @@
       template(#mainImage)
         canvas(':id'="`RankingBar_${v.toUpperCase()}`")
       template(#menu)
-        a.download-chart('@click'='downloadOnClick'): i.icon-floppy(title='download chart')
+        a.download-card('@click'='downloadOnClick'): i.icon-download-cloud(title='download card')
     Dialog('v-model'='modelDialog')
       component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
 </template>
@@ -36,7 +36,8 @@ export default {
       cases,
       chartInstance: _zipObject(cases, [null, null, null, null]),
       modelChart: {
-        zone: null
+        zone: null,
+        isDialog: true
       },
       data: _zipObject(cases, [
         _cloneDeep(defaultChartData),

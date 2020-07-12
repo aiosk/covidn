@@ -49,18 +49,14 @@ export default {
 @include foundation-everything;
 @include foundation-menu;
 @include foundation-visibility-classes;
-
+#app {
+  padding-bottom: 2rem;
+}
 #nav {
-  // text-align: center;
-  // margin: 1rem 0;
-  // position: fixe;
-  // top: 0;
-  // height: 2rem;
 }
 .menu {
   background: $light-gray;
   .menu-text,
-  // .menu-text a,
   a {
     // padding: 0.5rem 0.75rem !important;
   }
@@ -115,13 +111,13 @@ export default {
   // background: map-get($foundation-palette, "primary");
   background: white;
 
-  // $size: 2.5rem;
-  // width: $size;
-  // height: $size;
-  // padding: 0.5rem;
+  $size: 2.5rem;
+  width: $size;
+  height: $size;
 
   border-radius: 50%;
   i {
+    @include absolute-center;
     font-size: 3rem;
     // color: white;
     color: map-get($foundation-palette, "primary");
@@ -133,5 +129,8 @@ export default {
   .capture {
     background-color: white;
   }
+}
+.cell {
+  transition: none !important;
 }
 </style>

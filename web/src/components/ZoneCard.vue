@@ -1,8 +1,11 @@
 <template lang="pug">
   .zone-card.card('aria-describedby'="chartHelpText")
     .capture
-      .card-divider.title
-        h6 {{ `Daily ${zone.split('_').join(' ')}`.toUpperCase() }}
+      .card-divider.header
+        .title
+          h6 {{ `Daily ${zone.split('_').join(' ')}`.toUpperCase() }}
+        menu('v-if'='!value.isDialog')
+          a.fullscreen.show-for-large('@click'='onClickFullscreen'): i.icon-window-maximize(title="resize fullscreen")
       .card-image.stats
         component(':is'="componentStats" 'v-model'='myStatsModel')
       .card-image
@@ -10,10 +13,16 @@
         .help-text.text-right('v-if'="showLegend")
           div #[strong.show-for-large Touch / Click] legend item to toggle chart line
         canvas(:id="`Chart_${zone}`")
-    .card-section.action
-      a.download-raw(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): i.icon-download-cloud( title="download raw")
-      a.download-chart('@click'='downloadOnClick'): i.icon-floppy(title='download chart')
-      a.fullscreen.show-for-large('@click'='onClickFullscreen'): i.icon-resize-full(title="resize fullscreen")
+    .card-section
+      menu.clearfix
+        .float-left
+          .periods('v-if'="showPeriods")
+            label Periods
+              input(':id'="`periods_${zone}`" type='number' 'v-model'='periods')
+        .float-right
+          //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
+          a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank'): i.icon-table( title="download table")
+          a.download-card('@click'='downloadOnClick'): i.icon-download-cloud(title='download card')
 
 </template>
 
@@ -30,6 +39,7 @@ import {
   defaultHiddenDatasets,
   defaultShowLegend
 } from "@/js/vars";
+const defaultShowPeriods = false;
 
 const defaultStats = {
   lastUpdate: null,
@@ -54,8 +64,13 @@ export default {
     population() {
       return this.value.population;
     },
-    periods() {
-      return this.value.periods ? this.value.periods : defaultPeriods;
+    periods: {
+      get() {
+        return this.value.periods ? this.value.periods : defaultPeriods;
+      },
+      set(val) {
+        this.emitModel({ periods: val });
+      }
     },
     hiddenDatasets: {
       get() {
@@ -69,6 +84,11 @@ export default {
     },
     showLegend() {
       return this.value.showLegend ? this.value.showLegend : defaultShowLegend;
+    },
+    showPeriods() {
+      return this.value.showPeriods
+        ? this.value.showPeriods
+        : defaultShowPeriods;
     }
   },
   watch: {
@@ -93,6 +113,9 @@ export default {
   methods: {
     onClickFullscreen(e) {
       e.target.closest(".cell").classList.toggle("width-100");
+      const $icon = e.target.closest("menu").querySelector(".fullscreen i");
+      $icon.classList.toggle("icon-window-maximize");
+      $icon.classList.toggle("icon-window-restore");
     },
     legendOnClick(e) {
       const $item = e.target.closest(".item");
@@ -184,11 +207,14 @@ export default {
     }
   },
   created() {
-    let { hidden: hiddenDatasets } = this.$route.query;
+    let { hidden: hiddenDatasets, periods } = this.$route.query;
 
     if (!!hiddenDatasets) {
       hiddenDatasets = hiddenDatasets.split("").map(v => v == "1");
       this.hiddenDatasets = hiddenDatasets;
+    }
+    if (!!periods) {
+      this.periods = periods;
     }
     this.updateChartData();
   },
@@ -220,6 +246,7 @@ export default {
 @import "@/css/_foundation";
 @import "@/css/_color";
 @include foundation-card;
+@include foundation-float-classes;
 @include foundation-form-helptext;
 
 .zone-card {
@@ -227,6 +254,8 @@ export default {
   &.card {
     $color: map-get($element-color, "title");
     border: 1px solid $color;
+    // border: none;
+    // margin-bottom: 0;
 
     .card-divider {
       background: $color;
@@ -243,9 +272,31 @@ export default {
   // padding: 1rem 0;
 }
 
-.action {
+menu {
+  margin-top: 0;
+  padding-left: 0;
+  .periods {
+    input {
+      margin-left: 0.5rem;
+      width: 3rem;
+    }
+  }
   a {
     margin: 0 0.5rem;
+  }
+  i {
+    color: map-get($foundation-palette, "primary");
+  }
+}
+.header {
+  menu {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.5rem;
+
+    i {
+      color: white;
+    }
   }
 }
 </style>

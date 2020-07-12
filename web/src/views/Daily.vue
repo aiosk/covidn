@@ -38,7 +38,8 @@ export default {
         zones,
         selectedZones: _cloneDeep(defaultZones),
         hiddenDatasets: null,
-        showLegend: null
+        showLegend: null,
+        showPeriods: null
       }
     };
   },
@@ -112,7 +113,6 @@ export default {
   min-height: 20rem;
 }
 .cell {
-  transition: width 1s;
   position: relative;
 }
 

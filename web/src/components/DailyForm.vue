@@ -1,29 +1,39 @@
 <template lang="pug">
   form.daily-form.callout.secondary
-    .grid-x.periods
-      .cell.large-3
-        label(for='periods') #[span {{ periods }}] Days Period
-      .cell.large-9
-        input#periods(name="periods" type='range' min='1' max='14' step='1' 'v-model'='periods' aria-describedby="periodsHelpText" )
-        p#periodsHelpText.help-text Try slide to smaller or larger data periods. #[strong Smaller] day periods will generate complicated chart data, while #[strong larger] day periods will generate simplified chart data. Use wisely.
+    //- .grid-x.periods
+    //-   .cell.large-3
+    //-     label(for='periods') #[span {{ periods }}] Days Period
+    //-   .cell.large-9
+    //-     input#periods(name="periods" type='range' min='1' max='14' step='1' 'v-model'='periods' aria-describedby="periodsHelpText" )
+    //-     p#periodsHelpText.help-text Try slide to smaller or larger data periods. #[strong Smaller] day periods will generate complicated chart data, while #[strong larger] day periods will generate simplified chart data. Use wisely.
     .grid-x.zones
-      .cell.large-3
+      .cell.small-12.medium-2
         label(for='zones') Zone
-      .cell.large-9
+      .cell.small-auto.medium-auto
+        select#zones(name="zones" multiple 'v-model'='selectedZones')
+          option(v-for="v in zones" ':key'="v" ':value'='v' ) {{ v.split('_').join(' ') }}
         menu.text-right
             a('@click'='selectAllOnClick') Select All
             a('@click'='deselectAllOnClick') Deselect All
-        select#zones(name="zones" multiple 'v-model'='selectedZones')
-          option(v-for="v in zones" ':key'="v" ':value'='v' ) {{ v.split('_').join(' ') }}
         p.help-text Too many charts, i don't like to scroll, i want to select some chart
     .grid-x
-      .cell.large-3
-        label(for='legend') Show Legend
-      .cell.large-9
+      .cell.small-4.medium-2
+        label(for='showLegend') Show Legend
+      .cell.auto
         .switch.large
-          input.switch-input#yes-no(type="checkbox" name="exampleSwitch" 'v-model'='showLegend')
-          label.switch-paddle(for="yes-no")
-            span.show-for-sr Do you like me?
+          input.switch-input#showLegend(type="checkbox" name="showLegend" 'v-model'='showLegend')
+          label.switch-paddle(for="showLegend")
+            span.show-for-sr Show Legend?
+            span.switch-active(aria-hidden="true") Yes
+            span.switch-inactive(aria-hidden="true") No
+    .grid-x
+      .cell.small-4.medium-2
+        label(for='showPeriods') Show Periods
+      .cell.auto
+        .switch.large
+          input.switch-input#showPeriods(type="checkbox" name="showPeriods" 'v-model'='showPeriods')
+          label.switch-paddle(for="showPeriods")
+            span.show-for-sr Show Periods?
             span.switch-active(aria-hidden="true") Yes
             span.switch-inactive(aria-hidden="true") No
 
@@ -71,6 +81,16 @@ export default {
       set(val) {
         this.emitModel({ showLegend: val });
       }
+    },
+    showPeriods: {
+      get() {
+        return this.value.showPeriods
+          ? this.value.showPeriods
+          : defaultShowLegend;
+      },
+      set(val) {
+        this.emitModel({ showPeriods: val });
+      }
     }
   },
   watch: {
@@ -79,9 +99,6 @@ export default {
     },
     selectedZones(val, oldVal) {
       this.updateQuery("zones", val, defaultZones);
-    },
-    showLegend(val, oldVal) {
-      this.updateQuery("legend", val, defaultShowLegend);
     }
   },
   methods: {
@@ -125,8 +142,14 @@ export default {
   }
 }
 .zones {
+  select {
+    margin-bottom: 0;
+  }
   menu {
-    margin: 0;
+    margin: {
+      top: 0;
+      bottom: 0.5rem;
+    }
     a {
       margin: 0 0.5rem;
     }

@@ -7,7 +7,7 @@
       template(#mainImage)
         canvas(':id'="`Ratio_${v.toUpperCase()}`")
       template(#menu)
-        a.download-chart('@click'='downloadOnClick'): i.icon-floppy(title='download chart')
+        a.download-card('@click'='downloadOnClick'): i.icon-download-cloud(title='download card')
     Dialog('v-model'='modelDialog')
       component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
 </template>
@@ -37,7 +37,7 @@ export default {
   },
   data() {
     return {
-      modelChart: { zone: null },
+      modelChart: { zone: null, isDialog: true },
       cases: defaultCases,
       chartInstance: _zipObject(defaultCases, [null, null, null]),
       data: _zipObject(defaultCases, [

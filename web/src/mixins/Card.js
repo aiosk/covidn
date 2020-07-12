@@ -7,7 +7,12 @@ const main = {
       const downloadName = `${$title.innerText.replace(/ /g, "_")}.jpeg`;
 
       (async () => {
-        const dataUrl = await domtoimage.toJpeg($card.querySelector(".capture"));
+        const dataUrl = await domtoimage.toJpeg($card.querySelector(".capture"), {
+          quality: 0.95,
+          filter(v) {
+            return v.tagName !== "MENU";
+          },
+        });
 
         var a = document.createElement("a");
         a.href = dataUrl;
