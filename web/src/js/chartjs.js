@@ -1,5 +1,7 @@
 const Chart = require("chartjs");
 
+Chart.plugins.unregister(ChartDataLabels);
+
 // Chart.plugins.register({
 //   beforeDraw: function(chartInstance) {
 //     var ctx = chartInstance.chart.ctx;
@@ -236,6 +238,7 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null 
   const chartInstance = new Chart(params.elementId, {
     type: "horizontalBar",
     data: params.data,
+    plugins: [ChartDataLabels],
     options: {
       onClick: params.onClick,
       maintainAspectRatio: false,
@@ -274,6 +277,7 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null 
         ],
       },
       tooltips: {
+        // enabled: false,
         // intersect: false,
         //   callbacks: {
         //     label(tooltipItem, data) {
@@ -282,6 +286,17 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null 
         //       return `${label}: ${value}%`;
         //     },
         //   },
+      },
+      plugins: {
+        datalabels: {
+          color: "#fff",
+          // offset: 16,
+          anchor: "end",
+          align: "start",
+          // clamp: true,
+          // clip: true,
+          font: { weight: "bold" },
+        },
       },
     },
   });
