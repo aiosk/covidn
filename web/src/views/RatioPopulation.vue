@@ -14,8 +14,8 @@
             a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
             a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
 
-        Dialog('v-model'='modelDialog')
-          component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
+    Dialog('v-model'='modelDialog')
+      component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
 </template>
 
 <script>
