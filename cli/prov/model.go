@@ -164,7 +164,7 @@ func (v FileItem) Chunk(size int) FileItem {
 func (v FileItem) ToChartjs() libs.Chartjs {
 	var data libs.Chartjs
 
-	var item [4 * 3]libs.ChartjsDatasetsItem
+	var item [4 * 2]libs.ChartjsDatasetsItem
 
 	for _, v2 := range v.ListPerkembangan {
 		data.Labels = append(data.Labels, v2.DateStr)
@@ -197,19 +197,19 @@ func (v FileItem) ToChartjs() libs.Chartjs {
 	item[6].BorderColor = libs.ChartjsColor.Death
 	item[7].BorderColor = libs.ChartjsColor.Active
 
-	item[8].Data = libs.MyRegression(item[0].Data)
-	item[9].Data = libs.MyRegression(item[1].Data)
-	item[10].Data = libs.MyRegression(item[2].Data)
-	item[11].Data = libs.MyRegression(item[3].Data)
+	// item[8].Data = libs.MyRegression(item[0].Data)
+	// item[9].Data = libs.MyRegression(item[1].Data)
+	// item[10].Data = libs.MyRegression(item[2].Data)
+	// item[11].Data = libs.MyRegression(item[3].Data)
 
-	item[8].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Confirmed)
-	item[9].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Recover)
-	item[10].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Death)
-	item[11].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Active)
-	item[8].BorderColor = libs.ChartjsColor.Confirmed
-	item[9].BorderColor = libs.ChartjsColor.Recover
-	item[10].BorderColor = libs.ChartjsColor.Death
-	item[11].BorderColor = libs.ChartjsColor.Active
+	// item[8].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Confirmed)
+	// item[9].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Recover)
+	// item[10].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Death)
+	// item[11].Label = fmt.Sprintf("%s fitted", libs.ChartjsLabel.Active)
+	// item[8].BorderColor = libs.ChartjsColor.Confirmed
+	// item[9].BorderColor = libs.ChartjsColor.Recover
+	// item[10].BorderColor = libs.ChartjsColor.Death
+	// item[11].BorderColor = libs.ChartjsColor.Active
 
 	for i := range item {
 		data.Datasets = append(data.Datasets, item[i])

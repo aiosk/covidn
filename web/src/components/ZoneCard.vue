@@ -10,36 +10,39 @@
       .card-image.stats
         component(':is'="componentStats" 'v-model'='myStatsModel')
       .card-image
-        .legend('v-show'="showLegend" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
-        .help-text.text-right('v-show'="showLegend")
+        .legend('v-if'="showLegend" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
+        .help-text.text-right('v-if'="showLegend")
           div #[strong.show-for-large Touch / Click] legend item to toggle chart line
         canvas(:id="`Chart_${zone}`")
     .card-section
       menu.clearfix
         .grid-x
-          .cell.small-4.medium-3
-            label(':for'='`showPeriods_${zone}`') Set Periods
-          .cell.small-3.medium-2
-            .switch.small
-              input.switch-input(':id'="`showPeriods_${zone}`" type="checkbox" 'v-model'='showPeriods')
-              label.switch-paddle(':for'='`showPeriods_${zone}`')
-                span.show-for-sr Show Periods ?
-                span.switch-active(aria-hidden="true") Yes
-                span.switch-inactive(aria-hidden="true") No
-          .cell.auto
-            .periods(v-show="showPeriods")
-              input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
+          .cell.small-12.medium-6
+            .grid-x
+              .cell.small-4.medium-5
+                label(':for'='`showPeriods_${zone}`') Set Periods
+              .cell.auto
+                .switch.small
+                  input.switch-input(':id'="`showPeriods_${zone}`" type="checkbox" 'v-model'='showPeriods')
+                  label.switch-paddle(':for'='`showPeriods_${zone}`')
+                    span.show-for-sr Show Periods ?
+                    span.switch-active(aria-hidden="true") Yes
+                    span.switch-inactive(aria-hidden="true") No
+              .cell.auto
+                .periods(v-if="showPeriods")
+                  input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
 
-        .grid-x
-          .cell.small-4.medium-3
-            label(':for'='`showLegend_${zone}`') Show Legend
-          .cell.auto
-            .switch.small
-              input.switch-input(':id'="`showLegend_${zone}`" type="checkbox" 'v-model'='showLegend')
-              label.switch-paddle(':for'='`showLegend_${zone}`')
-                span.show-for-sr Show Legend ?
-                span.switch-active(aria-hidden="true") Yes
-                span.switch-inactive(aria-hidden="true") No
+          .cell.small-12.medium-6
+            .grid-x
+              .cell.small-4.medium-5
+                label(':for'='`showLegend_${zone}`') Show Legend
+              .cell.auto
+                .switch.small
+                  input.switch-input(':id'="`showLegend_${zone}`" type="checkbox" 'v-model'='showLegend')
+                  label.switch-paddle(':for'='`showLegend_${zone}`')
+                    span.show-for-sr Show Legend ?
+                    span.switch-active(aria-hidden="true") Yes
+                    span.switch-inactive(aria-hidden="true") No
         .float-right
           //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
           a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
