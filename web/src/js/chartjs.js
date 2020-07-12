@@ -290,12 +290,17 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null 
       plugins: {
         datalabels: {
           color: "#fff",
+          backgroundColor: "#ccc",
           // offset: 16,
           anchor: "end",
-          align: "start",
+          align: "end",
           // clamp: true,
           // clip: true,
           font: { weight: "bold" },
+          padding: {
+            top: 0,
+            bottom: 0,
+          },
         },
       },
     },

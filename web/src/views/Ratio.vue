@@ -81,6 +81,9 @@ export default {
             "backgroundColor",
             defaultChartColor[v]
           );
+          this.$set(this.data[v].datasets[0], "datalabels", {
+            backgroundColor: defaultChartColor[v]
+          });
           this.data[v].labels.push(k3.split("_").join(" "));
         });
       });
