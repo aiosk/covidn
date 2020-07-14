@@ -5,9 +5,6 @@
   - [{name}.csv](#namecsv)
   - [rawan.csv](#rawancsv)
     - [Pengelompokan Kriteria Risiko COVID-19 di Daerah Berdasarkan Zonasi Warna](#pengelompokan-kriteria-risiko-covid-19-di-daerah-berdasarkan-zonasi-warna)
-- [ICS](#ics)
-    - [national.ics](#nationalics)
-    - [prov.ics](#provics)
 - [Credits](#credits)
 
 ## CSV
@@ -66,17 +63,7 @@ Berisi data tabular kasus **per kecamatan** indonesia dari [bersatulawancovid.id
 
 - Zona Hijau atau Tidak Terdampak
 - Zona Kuning atau Risiko Rendah
-- Zona Oranye atau Risiko Sedang
+- Zona Oranye atau Risiko Sedang `
 - Zona Risiko Tinggi
-
-## ICS
-
-#### national.ics
-
-Berisi data calendar dari [national.csv](#nationalcsv) yang bisa di-subscribe melalui [national.ics](https://github.com/aiosk/covidn/raw/master/dist/national.ics)
-
-#### prov.ics
-
-Berisi data calendar dari [prov-{name}.csv](#prov-namecsv) yang bisa di-subscribe melalui prov-{name}.ics
 
 ## [Credits](https://github.com/aiosk/covidn/#credits)
