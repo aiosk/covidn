@@ -1,5 +1,5 @@
 <template lang='pug'>
-  .ranking-card  
+  .ranking-card
     Card(':class'="[`card-${myCase[0]}`,`card-${myCase[0]}--${myCase[1]}`]" )
       template(#header)
         h6 {{ title }}
@@ -9,15 +9,17 @@
       template(#mainImage)
         canvas(':id'="`${myCase[0]}_${myCase[1].toUpperCase()}`")
       template(#menu)
-        a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
+        a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-floppy
         a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
     Dialog('v-model'='modelDialog')
       component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
+    Spinner('v-model'='modelSpinner')
 </template>
 
 <script>
 import Card from "@/components/Card.vue";
 import Dialog from "@/components/Dialog.vue";
+import Spinner from "@/components/Spinner.vue";
 import MixinRanking from "@/mixins/Ranking.js";
 import MixinCard from "@/mixins/Card.js";
 import _delay from "lodash/delay";
@@ -31,6 +33,7 @@ export default {
   mixins: [MixinRanking, MixinCard],
   components: {
     Card,
+    Spinner,
     Dialog
   },
   props: {
@@ -67,6 +70,8 @@ export default {
     return {
       chartInstance: null,
       data: _cloneDeep(defaultChartData),
+      modelSpinner: { isOpen: true },
+      modelDialog: { isOpen: false },
       modelChart: {
         zone: null,
         isDialog: true
@@ -125,55 +130,58 @@ export default {
         return;
       }
       this.chartInstance.update();
+      this.modelSpinner.isOpen = false;
     })();
   },
   mounted() {
     const _this = this;
-    // _delay(() => {
-    if (!this.chartInstance) {
-      const { initChartRanking } = require("@/js/chartjs");
-      this.chartInstance = initChartRanking({
-        elementId: `${this.myCase[0]}_${this.myCase[1].toUpperCase()}`,
-        data: this.data,
-        onClick(e, chartItem) {
-          let col;
-          this.getElementsAtEventForMode(e, "y", 1).forEach(function(item) {
-            col = item._index;
-          });
-          if (_isUndefined(col)) {
-            return;
-          }
-          const chartItemID = _this.data.labels[col].replace(/ /g, "_");
+    _delay(() => {
+      if (!this.chartInstance) {
+        const { initChartRanking } = require("@/js/chartjs");
+        this.chartInstance = initChartRanking({
+          elementId: `${this.myCase[0]}_${this.myCase[1].toUpperCase()}`,
+          data: this.data,
+          onClick(e, chartItem) {
+            let col;
+            this.getElementsAtEventForMode(e, "y", 1).forEach(function(item) {
+              col = item._index;
+            });
+            if (_isUndefined(col)) {
+              return;
+            }
+            const chartItemID = _this.data.labels[col].replace(/ /g, "_");
 
-          // if (!chartItem.length) {
-          //   return;
-          // }
-          // const chartItemID = chartItem[0]._view.label.replace(/ /g, "_");
-          _this.modelChart.zone = chartItemID;
-          if (!!_this.data.datasets[0].population[col]) {
-            _this.modelChart.population =
-              _this.data.datasets[0].population[col];
-          }
-          _this.modelDialog.isOpen = true;
-        },
-        datalabelsFormatter(val, ctx) {
-          const percentage = _this.data.datasets[0].percentage[ctx.dataIndex];
+            // if (!chartItem.length) {
+            //   return;
+            // }
+            // const chartItemID = chartItem[0]._view.label.replace(/ /g, "_");
+            _this.modelChart.zone = chartItemID;
+            if (!!_this.data.datasets[0].population[col]) {
+              _this.modelChart.population =
+                _this.data.datasets[0].population[col];
+            }
+            _this.modelDialog.isOpen = true;
+          },
+          datalabelsFormatter(val, ctx) {
+            const percentage = _this.data.datasets[0].percentage[ctx.dataIndex];
 
-          var date = new Date(_this.data.datasets[0].lastUpdate[ctx.dataIndex]);
-          var options = { month: "short", day: "numeric" };
-          const lastUpdate = date.toLocaleDateString("en-US", options);
+            var date = new Date(
+              _this.data.datasets[0].lastUpdate[ctx.dataIndex]
+            );
+            var options = { month: "short", day: "numeric" };
+            const lastUpdate = date.toLocaleDateString("en-US", options);
 
-          if (!!percentage) {
-            return `${val} (${percentage}%) (${lastUpdate})`;
+            if (!!percentage) {
+              return `${val} (${percentage}%) (${lastUpdate})`;
+            }
+            if (_this.myCase[0] == "ratio") {
+              return `${val}% (${lastUpdate})`;
+            }
+            return `${val} (${lastUpdate})`;
           }
-          if (_this.myCase[0] == "ratio") {
-            return `${val}% (${lastUpdate})`;
-          }
-          return `${val} (${lastUpdate})`;
-        }
-      });
-    }
-    // }, 299);
+        });
+      }
+    }, 9);
   },
   destroyed() {
     if (!!this.chartInstance) {

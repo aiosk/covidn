@@ -49,6 +49,7 @@ export default {
 @include foundation-everything;
 @include foundation-menu;
 @include foundation-visibility-classes;
+
 #app {
   padding-bottom: 2rem;
 }
@@ -75,7 +76,7 @@ export default {
 
 [class^="icon-"],
 [class*=" icon-"] {
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: $black;
   &:before {
     margin: {
@@ -125,6 +126,7 @@ export default {
     // color: $medium-gray;
   }
 }
+
 .card {
   .capture {
     background-color: white;

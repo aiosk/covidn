@@ -1,10 +1,7 @@
 <template lang='pug'>
-  .dialog
-    .reveal-overlay(':style'="{display:styleDisplay}" '@click.self'='overlayOnClick')
+  .spinner.reveal-overlay(':style'="{display:styleDisplay}" '@click.self'='overlayOnClick')
       .reveal(':style'="{display:styleDisplay}" ':class'="[{collapse:isCollapse},{large:isLarge}]")
-        button.close-button('@click'='closeOnClick' aria-label="Close Accessible Modal" type="button")
-          span(aria-hidden="true") &times;
-        slot
+        .spin: i.icon-spinner
 
 </template>
 
@@ -87,7 +84,32 @@ export default {
 @include foundation-close-button;
 @include foundation-reveal;
 
-.card {
+.spinner {
+}
+.reveal-overlay {
+  position: absolute;
+}
+.reveal {
+  background: none;
+  width: unset;
+  border: none;
+  @include absolute-center;
+}
+
+.icon-spinner {
+  color: white;
+  font-size: 2.5rem;
+}
+.spin {
+  animation: spin 2s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 // #close {
 //   position: absolute;
@@ -95,14 +117,8 @@ export default {
 //   right: 0;
 // }
 .reveal {
-  top: 0;
-  height: unset;
-  min-height: unset;
-}
-.close-button {
-  top: 0.75rem;
-  span {
-    color: white;
-  }
+  // top: 0;
+  // height: unset;
+  // min-height: unset;
 }
 </style>

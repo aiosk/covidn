@@ -6,7 +6,7 @@
           h6 {{ `Daily ${zone.split('_').join(' ')}`.toUpperCase() }}
         menu('v-if'='!value.isDialog')
           a.fullscreen.show-for-large('@click'='fullscreenOnClick' title="resize card" aria-label="resize card"): i.icon-window-maximize
-          a.close('@click'='closeOnClick' title="close card"): i.icon-window-close-o
+          a.close('@click'='closeOnClick' title="close card"): i.icon-window-close
       .card-image.stats
         component(':is'="componentStats" 'v-model'='myStatsModel')
       .card-image
@@ -69,7 +69,7 @@
         .float-right
           //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
           a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
-          a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
+          a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-floppy
           a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
     Dialog('v-model'='modelDialog')
       h5 Are you sure you mant to remove {{zone}} ?
@@ -80,6 +80,7 @@
         button.button('@click'="modelDialog.isOpen=false")
           span.show-for-sr No
           span(aria-hidden="true") No
+    Spinner('v-model'='modelSpinner')
 </template>
 
 <script>
@@ -87,6 +88,7 @@ import ZoneStats from "@/components/ZoneStats";
 import MixinCard from "@/mixins/Card.js";
 import MixinForm from "@/mixins/Form.js";
 import Dialog from "@/components/Dialog.vue";
+import Spinner from "@/components/Spinner.vue";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
@@ -112,6 +114,7 @@ export default {
   mixins: [MixinCard, MixinForm],
   components: {
     ZoneStats,
+    Spinner,
     Dialog
   },
   props: {
@@ -197,6 +200,7 @@ export default {
   },
   data() {
     return {
+      modelSpinner: { isOpen: true },
       modelDialog: { isOpen: false },
       chartInstance: null,
       legendHTML: null,
@@ -287,6 +291,8 @@ export default {
         }
       });
       this.chartInstance.update();
+      this.modelSpinner.isOpen = false;
+
       if (this.showLegend) {
         this.legendHTML = this.chartInstance.generateLegend();
       }
@@ -311,14 +317,16 @@ export default {
     this.updateChartData();
   },
   mounted() {
-    if (!this.chartInstance) {
-      const { initChartDaily } = require("@/js/chartjs");
-      this.chartInstance = initChartDaily({
-        zone: this.zone,
-        data: this.data
-      });
-    }
-    this.componentStats = ZoneStats;
+    _delay(() => {
+      if (!this.chartInstance) {
+        const { initChartDaily } = require("@/js/chartjs");
+        this.chartInstance = initChartDaily({
+          zone: this.zone,
+          data: this.data
+        });
+      }
+      this.componentStats = ZoneStats;
+    }, 9);
   },
   destroyed() {
     this.data = _cloneDeep(defaultChartData);
@@ -394,6 +402,7 @@ menu {
 
     i {
       color: white;
+      font-size: 1.5rem;
     }
   }
 }
