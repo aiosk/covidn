@@ -36,9 +36,6 @@ func (val OutputList) ToCsv() []byte {
 // OutputPerCase ...
 type OutputPerCase map[string]OutputList
 
-// Cases ...
-var Cases = [4]string{"confirmed", "recover", "death", "active"}
-
 // InputRawan ...
 type InputRawan struct {
 	Zone       libs.MyStringID `csv:"nama_wilayah"`
