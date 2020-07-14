@@ -1,23 +1,19 @@
 package libs
 
 import (
-	"bufio"
-	"encoding/csv"
 	"encoding/json"
 	"errors"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
-
-	"github.com/jordic/goics"
 )
 
 // OpenStdinOrFile ...
 func OpenStdinOrFile(cmd *flag.FlagSet) *os.File {
 	var err error
 
-	// log.Printf("%+v\n", cmd.Args())
 	cmdArgs := cmd.Args()
 	if len(cmdArgs) < 1 {
 		PanicError(errors.New("no file specified"))
@@ -33,8 +29,13 @@ func OpenStdinOrFile(cmd *flag.FlagSet) *os.File {
 	return r
 }
 
-// WriteToCsv ...
-func WriteToCsv(filepath string, data [][]string) {
+// WriteToFile ...
+func WriteToFile(dirpath string, filename string, data []byte) {
+	filepath := fmt.Sprintf("%s/%s", dirpath, filename)
+
+	err := os.MkdirAll(dirpath, os.ModePerm)
+	PanicError(err)
+
 	file, err := os.Create(filepath)
 	FatalError("Cannot create file", err)
 	defer func() {
@@ -42,51 +43,29 @@ func WriteToCsv(filepath string, data [][]string) {
 		PanicError(err)
 	}()
 
-	w := csv.NewWriter(file)
-	err = w.WriteAll(data)
-	FatalError("Cannot write file", err)
+	err = ioutil.WriteFile(filepath, data, os.ModePerm)
+	PanicError(err)
 	log.Printf("Write to %s", filepath)
 }
 
-// ReadCsv ...
-func ReadCsv(filepath string) [][]string {
-	file, err := os.Open(filepath)
-	PanicError(err)
-	defer file.Close()
-
-	r := csv.NewReader(file)
-	records, err := r.ReadAll()
+// ReadFile ...
+func ReadFile(filepath string) []byte {
+	file, err := ioutil.ReadFile(filepath)
 	PanicError(err)
 
-	return records
-}
-
-// WriteToIcs ...
-func WriteToIcs(filepath string, data interface{}) {
-	file, err := os.Create(filepath)
-	FatalError("Cannot create file", err)
-	defer func() {
-		err := file.Close()
-		PanicError(err)
-	}()
-
-	f := bufio.NewWriter(file)
-	defer func() {
-		err := f.Flush()
-		PanicError(err)
-		log.Printf("Write to %s", filepath)
-	}()
-	goics.NewICalEncode(f).Encode(data.(goics.ICalEmiter))
-
+	return file
 }
 
 // WriteToJSON ...
-func WriteToJSON(dirpath string, filepath string, data interface{}) {
+func WriteToJSON(dirpath string, filename string, data interface{}) {
 	// jsonStr, err := json.MarshalIndent(data, "", "  ")
-	jsonStr, err := json.Marshal(data)
+
+	filepath := fmt.Sprintf("%s/%s", dirpath, filename)
+
+	err := os.MkdirAll(dirpath, os.ModePerm)
 	PanicError(err)
 
-	err = os.MkdirAll(dirpath, os.ModePerm)
+	jsonStr, err := json.Marshal(data)
 	PanicError(err)
 
 	err = ioutil.WriteFile(filepath, jsonStr, os.ModePerm)

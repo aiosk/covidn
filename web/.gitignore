@@ -1,3 +1,6 @@
+public/web/
+src/assets/logo.png
+
 .DS_Store
 node_modules
 /dist

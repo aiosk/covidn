@@ -42,9 +42,9 @@ const defaultZones = [
   "SULAWESI_SELATAN",
   "JAWA_TENGAH",
   //ranking
-  "RIAU",
   "KALIMANTAN_BARAT",
-  "KALIMANTAN_UTARA",
+  "RIAU",
+  "KEPULAUAN_RIAU",
   "BENGKULU",
   "SULAWESI_UTARA",
   // "BANTEN",
@@ -52,12 +52,12 @@ const defaultZones = [
   "SUMATERA_UTARA",
   //ratio
   "PAPUA",
-  "MALUKU",
   "KALIMANTAN_SELATAN",
+  "MALUKU",
   //ratio pop
 ];
 const defaultPeriods = 4;
-const defaultHiddenDatasets = [true, true, true, true, false, false, false, false, true, true, true, true];
+const defaultHiddenDatasets = [false, true, false, true, false, true, false, true];
 
 const cases = ["confirmed", "recover", "death", "active"];
 const defaultChartData = { datasets: [{ data: [] }], labels: [] };

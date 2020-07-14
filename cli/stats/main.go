@@ -3,150 +3,169 @@ package stats
 import (
 	"fmt"
 	"io/ioutil"
-	"math"
+	"sort"
 	"strconv"
 	"strings"
 
 	"github.com/aiosk/covidn/libs"
+	"github.com/jszwec/csvutil"
 )
 
 // Main ...
 func Main() {
-	srcDir := "dist/csv"
+	srcDir := "dist/desktop"
 	files, err := ioutil.ReadDir(srcDir)
 	libs.PanicError(err)
 
-	results := make(map[string]Result)
+	resultRanking := make(OutputPerCase)
 	for _, file := range files {
 		dataID := strings.Split(file.Name(), ".")[0]
-		if dataID == "rawan" {
+		if dataID == "rawan" || dataID == "rawan-zones" {
 			break
 		}
+
 		filepath := fmt.Sprintf("%s/%s", srcDir, file.Name())
+		csvFile := libs.ReadFile(filepath)
+		var inputFile []InputFile
+		err := csvutil.Unmarshal(csvFile, &inputFile)
+		libs.PanicError(err)
 
-		records := libs.ReadCsv(filepath)
-		// log.Printf("%+v\n", records)
-		// log.Printf("%+v\n", dataID)
+		lenRecords := len(inputFile)
+		validIdx := lenRecords - 1
+		if inputFile[validIdx].TotalConfirmed == "0" {
+			i := 0
+			found := false
 
-		lenRecords := len(records)
-		i := 1
-		found := false
-		for found == false {
-			totalConfirmed := records[lenRecords-i][1]
-			// log.Printf("%+v\n", confirmed != "0")
+			for found == false {
+				i++
+				if i > lenRecords-1 {
+					break
+				}
 
-			if totalConfirmed != "0" {
-				var item Result
-				item.LastUpdate = records[lenRecords-i][0]
-				item.Total.Confirmed = totalConfirmed
-				item.Total.Recover = records[lenRecords-i][3]
-				item.Total.Death = records[lenRecords-i][5]
-				item.Total.Active = records[lenRecords-i][7]
-				results[dataID] = item
-
-				found = true
+				if inputFile[lenRecords-i].TotalConfirmed != "0" {
+					found = true
+				}
 			}
-			i++
+			validIdx = lenRecords - i
 		}
+		// spew.Dump(dataID, inputFile[validIdx].Date, inputFile[validIdx].TotalConfirmed)
+
+		resultRanking[Cases[0]] = append(resultRanking[Cases[0]], OutputItem{
+			Zone:       dataID,
+			Value:      inputFile[validIdx].TotalConfirmed,
+			LastUpdate: inputFile[validIdx].Date,
+		})
+		resultRanking[Cases[1]] = append(resultRanking[Cases[1]], OutputItem{
+			Zone:       dataID,
+			Value:      inputFile[validIdx].TotalRecover,
+			LastUpdate: inputFile[validIdx].Date,
+		})
+		resultRanking[Cases[2]] = append(resultRanking[Cases[2]], OutputItem{
+			Zone:       dataID,
+			Value:      inputFile[validIdx].TotalDeath,
+			LastUpdate: inputFile[validIdx].Date,
+		})
+		resultRanking[Cases[3]] = append(resultRanking[Cases[3]], OutputItem{
+			Zone:       dataID,
+			Value:      inputFile[validIdx].TotalActive,
+			LastUpdate: inputFile[validIdx].Date,
+		})
+
+		// spew.Dump(resultRangkingConfirmed)
 
 	}
-	for k, v := range results {
-		confirmedNum, err := strconv.ParseFloat(v.Total.Confirmed, 64)
-		libs.PanicError(err)
-		recoverNum, err := strconv.ParseFloat(v.Total.Recover, 64)
-		libs.PanicError(err)
-		deathNum, err := strconv.ParseFloat(v.Total.Death, 64)
-		libs.PanicError(err)
-		activeNum, err := strconv.ParseFloat(v.Total.Active, 64)
-		libs.PanicError(err)
-
-		if item, ok := results[k]; ok {
-			item.Ratio.Recover = fmt.Sprintf("%.2f", (recoverNum/confirmedNum)*100)
-			item.Ratio.Death = fmt.Sprintf("%.2f", (deathNum/confirmedNum)*100)
-			item.Ratio.Active = fmt.Sprintf("%.2f", (activeNum/confirmedNum)*100)
-
-			results[k] = item
-		}
-	}
-	resultsNational := results["NATIONAL"]
-	confirmedNationalNum, err := strconv.ParseFloat(resultsNational.Total.Confirmed, 64)
-	libs.PanicError(err)
-	recoverNationalNum, err := strconv.ParseFloat(resultsNational.Total.Recover, 64)
-	libs.PanicError(err)
-	deathNationalNum, err := strconv.ParseFloat(resultsNational.Total.Death, 64)
-	libs.PanicError(err)
-	activeNationalNum, err := strconv.ParseFloat(resultsNational.Total.Active, 64)
-	libs.PanicError(err)
-	for k, v := range results {
-		confirmedNum, err := strconv.ParseFloat(v.Total.Confirmed, 64)
-		libs.PanicError(err)
-		recoverNum, err := strconv.ParseFloat(v.Total.Recover, 64)
-		libs.PanicError(err)
-		deathNum, err := strconv.ParseFloat(v.Total.Death, 64)
-		libs.PanicError(err)
-		activeNum, err := strconv.ParseFloat(v.Total.Active, 64)
-		libs.PanicError(err)
-
-		if item, ok := results[k]; ok {
-			item.TotalPercentage.Confirmed = fmt.Sprintf("%.2f", (confirmedNum/confirmedNationalNum)*100)
-			item.TotalPercentage.Recover = fmt.Sprintf("%.2f", (recoverNum/recoverNationalNum)*100)
-			item.TotalPercentage.Death = fmt.Sprintf("%.2f", (deathNum/deathNationalNum)*100)
-			item.TotalPercentage.Active = fmt.Sprintf("%.2f", (activeNum/activeNationalNum)*100)
-
-			results[k] = item
+	nationalIdx := 0
+	for i, v := range resultRanking["confirmed"] {
+		if v.Zone == "NATIONAL" {
+			nationalIdx = i
+			break
 		}
 	}
-	// log.Printf("%+v\n", results)
-
-	filepath := fmt.Sprintf("%s/%s", srcDir, "rawan.csv")
-	records := libs.ReadCsv(filepath)
-	populationNational := 0
-	for _, v := range records[1:] {
-		dataID := strings.Join(strings.Split(v[7], " "), "_")
-		population, err := strconv.Atoi(v[1])
-		libs.PrintError("not integer", err)
-
-		if item, ok := results[dataID]; ok {
-			populationNational = populationNational + population
-			item.Population = item.Population + population
-			results[dataID] = item
+	// spew.Dump(nationalIdx, resultRanking["confirmed"][nationalIdx].Value)
+	for _, v := range Cases {
+		nationalVal := resultRanking[v][nationalIdx].Value
+		nationalValFlt, err := strconv.ParseFloat(nationalVal, 8)
+		libs.PanicError(err)
+		for i2, v2 := range resultRanking[v] {
+			thisValFlt, err := strconv.ParseFloat(v2.Value, 8)
+			libs.PanicError(err)
+			resultRanking[v][i2].Percentage = fmt.Sprintf("%.2f", (thisValFlt/nationalValFlt)*100)
 		}
-		// result[dataID].Population = item
+		resultRanking[v] = append(resultRanking[v][:nationalIdx], resultRanking[v][nationalIdx+1:]...)
 
+		sort.SliceStable(resultRanking[v], func(i, j int) bool {
+			thisValueI, err := strconv.Atoi(resultRanking[v][i].Value)
+			libs.PanicError(err)
+			thisValueJ, err := strconv.Atoi(resultRanking[v][j].Value)
+			libs.PanicError(err)
+			return thisValueI > thisValueJ
+		})
+		libs.WriteToFile("dist/web/stats", fmt.Sprintf("ranking-%s.csv", v), resultRanking[v].ToCsv())
 	}
 
-	if item, ok := results["NATIONAL"]; ok {
-		item.Population = populationNational
-		results["NATIONAL"] = item
+	resultRatio := make(OutputPerCase)
+	for _, v := range Cases[1:] {
+		for i2, v2 := range resultRanking[v] {
+			thisConfirmedFlt, err := strconv.ParseFloat(resultRanking["confirmed"][i2].Value, 8)
+			libs.PanicError(err)
+			thisValFlt, err := strconv.ParseFloat(v2.Value, 8)
+			libs.PanicError(err)
+
+			resultRatio[v] = append(resultRatio[v], OutputItem{
+				Zone:       v2.Zone,
+				Value:      fmt.Sprintf("%.2f", (thisValFlt/thisConfirmedFlt)*100),
+				LastUpdate: v2.LastUpdate,
+			})
+		}
+
+		sort.SliceStable(resultRatio[v], func(i, j int) bool {
+			thisValueI, err := strconv.ParseFloat(resultRatio[v][i].Value, 8)
+			libs.PanicError(err)
+			thisValueJ, err := strconv.ParseFloat(resultRatio[v][j].Value, 8)
+			libs.PanicError(err)
+			return thisValueI > thisValueJ
+		})
+		libs.WriteToFile("dist/web/stats", fmt.Sprintf("ratio-%s.csv", v), resultRatio[v].ToCsv())
 	}
 
-	for k, v := range results {
+	filepath := fmt.Sprintf("%s/%s", srcDir, "rawan-zones.csv")
+	file := libs.ReadFile(filepath)
+	var inputRawan []InputRawan
+	csvutil.Unmarshal(file, &inputRawan)
+	libs.PanicError(err)
 
-		confirmedNum, err := strconv.ParseFloat(v.Total.Confirmed, 64)
-		libs.PanicError(err)
-		recoverNum, err := strconv.ParseFloat(v.Total.Recover, 64)
-		libs.PanicError(err)
-		deathNum, err := strconv.ParseFloat(v.Total.Death, 64)
-		libs.PanicError(err)
-		activeNum, err := strconv.ParseFloat(v.Total.Active, 64)
-		libs.PanicError(err)
+	resultRatioPop := make(OutputPerCase)
+	for _, v := range Cases {
+		for _, v2 := range resultRanking[v] {
 
-		if item, ok := results[k]; ok {
-			item.PopulationRatio = Cases{
-				Confirmed: fmt.Sprintf("%.0f", math.Round((confirmedNum/float64(v.Population))*1000000)),
-				Recover:   fmt.Sprintf("%.0f", math.Round((recoverNum/float64(v.Population))*1000000)),
-				Death:     fmt.Sprintf("%.0f", math.Round((deathNum/float64(v.Population))*1000000)),
-				Active:    fmt.Sprintf("%.0f", math.Round((activeNum/float64(v.Population))*1000000)),
+			zonaIdx := 0
+			for i, v := range inputRawan {
+				if v.Zone.String() == v2.Zone {
+					zonaIdx = i
+					break
+				}
 			}
 
-			results[k] = item
+			thisPopFlt, err := strconv.ParseFloat(inputRawan[zonaIdx].Population, 8)
+			libs.PanicError(err)
+			thisValFlt, err := strconv.ParseFloat(v2.Value, 8)
+			libs.PanicError(err)
+			resultRatioPop[v] = append(resultRatioPop[v], OutputItem{
+				Zone:       v2.Zone,
+				LastUpdate: v2.LastUpdate,
+				Value:      fmt.Sprintf("%.0f", (thisValFlt/thisPopFlt)*1000000),
+				Population: inputRawan[zonaIdx].Population,
+			})
 		}
+
+		sort.SliceStable(resultRatioPop[v], func(i, j int) bool {
+			thisValueI, err := strconv.Atoi(resultRatioPop[v][i].Value)
+			libs.PanicError(err)
+			thisValueJ, err := strconv.Atoi(resultRatioPop[v][j].Value)
+			libs.PanicError(err)
+			return thisValueI > thisValueJ
+		})
+		libs.WriteToFile("dist/web/stats", fmt.Sprintf("ratio-population-%s.csv", v), resultRatioPop[v].ToCsv())
 	}
-
-	// log.Printf("%+v\n", results)
-	dirpath := fmt.Sprintf("dist/stats")
-	filepath = fmt.Sprintf("%s/stats.json", dirpath)
-
-	libs.WriteToJSON(dirpath, filepath, results)
 
 }
