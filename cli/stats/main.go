@@ -3,6 +3,7 @@ package stats
 import (
 	"fmt"
 	"io/ioutil"
+	"math"
 	"sort"
 	"strconv"
 	"strings"
@@ -145,23 +146,26 @@ func Main() {
 	for _, v := range Cases {
 		for _, v2 := range resultRanking[v] {
 
-			zonaIdx := 0
-			for i, v := range inputRawan {
-				if v.Zone.String() == v2.Zone {
-					zonaIdx = i
+			rawanIdx := 0
+			for i3, v3 := range inputRawan {
+				if strings.ReplaceAll(v3.Zone.String(), " ", "_") == v2.Zone {
+					// spew.Dump("i3", i3)
+					rawanIdx = i3
 					break
 				}
 			}
 
-			thisPopFlt, err := strconv.ParseFloat(inputRawan[zonaIdx].Population, 8)
+			// spew.Dump(v2.Zone, rawanIdx)
+			// spew.Dump(v2.Zone, rawanIdx, inputRawan[rawanIdx].Population)
+			thisPopFlt, err := strconv.ParseFloat(inputRawan[rawanIdx].Population, 8)
 			libs.PanicError(err)
 			thisValFlt, err := strconv.ParseFloat(v2.Value, 8)
 			libs.PanicError(err)
 			resultRatioPop[v] = append(resultRatioPop[v], OutputItem{
 				Zone:       v2.Zone,
 				LastUpdate: v2.LastUpdate,
-				Value:      fmt.Sprintf("%.0f", (thisValFlt/thisPopFlt)*1000000),
-				Population: inputRawan[zonaIdx].Population,
+				Value:      fmt.Sprintf("%.0f", math.Round((thisValFlt/thisPopFlt)*1000000)),
+				Population: inputRawan[rawanIdx].Population,
 			})
 		}
 
