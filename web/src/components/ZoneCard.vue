@@ -68,7 +68,7 @@
           //-             option('v-for'='(v,i) in data.labels.slice(periodsRange.begin)' ':key'='v' ':value'="i") {{ v }}
         .float-right
           //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
-          a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
+          a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/desktop/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
           a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-floppy
           a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
     Dialog('v-model'='modelDialog')
