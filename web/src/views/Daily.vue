@@ -36,22 +36,14 @@ export default {
     };
   },
   watch: {
-    componentZoneCard: function(val, oldVal) {
+    "myModel.selectedZones"(val, oldVal) {
       _delay(() => {
-        if (!!this.lazyLoadCanvas) {
-          this.lazyLoadCanvas.update();
-        }
-      }, 9);
-    },
-    "myModel.selectedZones": async function(val, oldVal) {
-      _delay(() => {
-        if (!!this.lazyLoadCanvas) {
-          this.lazyLoadCanvas.update();
-        }
+        val.forEach(v => {
+          this.$set(this.componentZoneCard, v, ZoneCard);
+        });
       }, 9);
     }
   },
-
   created() {
     let { zones: selectedZones } = this.$route.query;
 

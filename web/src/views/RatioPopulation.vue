@@ -27,8 +27,6 @@ export default {
       componentCard: _zipObject(cases, [null, null, null, null])
     };
   },
-  watch: {},
-  created() {},
   mounted() {
     _delay(() => {
       if (!this.lazyLoadCanvas) {

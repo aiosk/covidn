@@ -13,8 +13,8 @@
         .legend('v-if'="showLegend" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
         .help-text.text-right
           ul
-            li('v-if'="showLegend") #[strong.show-for-large Touch / Click] legend item to toggle chart line
-            li #[strong.show-for-large Long Touch / Hover] on chart to see case number
+            li('v-if'="showLegend") #[strong Touch / Click] legend item to toggle chart line
+            li #[strong Long Touch / Hover] on chart to see case number
         canvas(:id="`Chart_${zone}`")
     .card-section
       menu.clearfix

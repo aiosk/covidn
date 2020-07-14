@@ -73,16 +73,6 @@ export default {
       }
     };
   },
-  watch: {
-    data: _debounce(function(val, oldVal) {
-      console.log(val);
-
-      if (!this.chartInstance) {
-        return;
-      }
-      this.chartInstance.update();
-    }, 500)
-  },
   created() {
     (async () => {
       // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
@@ -130,57 +120,60 @@ export default {
           i < divider ? "#fff" : "#000"
         );
       });
+
+      if (!this.chartInstance) {
+        return;
+      }
+      this.chartInstance.update();
     })();
   },
   mounted() {
     const _this = this;
-    _delay(() => {
-      if (!this.chartInstance) {
-        const { initChartRanking } = require("@/js/chartjs");
-        this.chartInstance = initChartRanking({
-          elementId: `${this.myCase[0]}_${this.myCase[1].toUpperCase()}`,
-          data: this.data,
-          onClick(e, chartItem) {
-            let col;
-            this.getElementsAtEventForMode(e, "y", 1).forEach(function(item) {
-              col = item._index;
-            });
-            if (_isUndefined(col)) {
-              return;
-            }
-            const chartItemID = _this.data.labels[col].replace(/ /g, "_");
-
-            // if (!chartItem.length) {
-            //   return;
-            // }
-            // const chartItemID = chartItem[0]._view.label.replace(/ /g, "_");
-            _this.modelChart.zone = chartItemID;
-            if (!!_this.data.datasets[0].population[col]) {
-              _this.modelChart.population =
-                _this.data.datasets[0].population[col];
-            }
-            _this.modelDialog.isOpen = true;
-          },
-          datalabelsFormatter(val, ctx) {
-            const percentage = _this.data.datasets[0].percentage[ctx.dataIndex];
-
-            var date = new Date(
-              _this.data.datasets[0].lastUpdate[ctx.dataIndex]
-            );
-            var options = { month: "short", day: "numeric" };
-            const lastUpdate = date.toLocaleDateString("en-US", options);
-
-            if (!!percentage) {
-              return `${val} (${percentage}%) (${lastUpdate})`;
-            }
-            if (_this.myCase[0] == "ratio") {
-              return `${val}% (${lastUpdate})`;
-            }
-            return `${val} (${lastUpdate})`;
+    // _delay(() => {
+    if (!this.chartInstance) {
+      const { initChartRanking } = require("@/js/chartjs");
+      this.chartInstance = initChartRanking({
+        elementId: `${this.myCase[0]}_${this.myCase[1].toUpperCase()}`,
+        data: this.data,
+        onClick(e, chartItem) {
+          let col;
+          this.getElementsAtEventForMode(e, "y", 1).forEach(function(item) {
+            col = item._index;
+          });
+          if (_isUndefined(col)) {
+            return;
           }
-        });
-      }
-    }, 299);
+          const chartItemID = _this.data.labels[col].replace(/ /g, "_");
+
+          // if (!chartItem.length) {
+          //   return;
+          // }
+          // const chartItemID = chartItem[0]._view.label.replace(/ /g, "_");
+          _this.modelChart.zone = chartItemID;
+          if (!!_this.data.datasets[0].population[col]) {
+            _this.modelChart.population =
+              _this.data.datasets[0].population[col];
+          }
+          _this.modelDialog.isOpen = true;
+        },
+        datalabelsFormatter(val, ctx) {
+          const percentage = _this.data.datasets[0].percentage[ctx.dataIndex];
+
+          var date = new Date(_this.data.datasets[0].lastUpdate[ctx.dataIndex]);
+          var options = { month: "short", day: "numeric" };
+          const lastUpdate = date.toLocaleDateString("en-US", options);
+
+          if (!!percentage) {
+            return `${val} (${percentage}%) (${lastUpdate})`;
+          }
+          if (_this.myCase[0] == "ratio") {
+            return `${val}% (${lastUpdate})`;
+          }
+          return `${val} (${lastUpdate})`;
+        }
+      });
+    }
+    // }, 299);
   },
   destroyed() {
     if (!!this.chartInstance) {
