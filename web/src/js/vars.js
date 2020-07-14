@@ -42,9 +42,9 @@ const defaultZones = [
   "SULAWESI_SELATAN",
   "JAWA_TENGAH",
   //ranking
-  "RIAU",
   "KALIMANTAN_BARAT",
-  "KALIMANTAN_UTARA",
+  "RIAU",
+  "KEPULAUAN_RIAU",
   "BENGKULU",
   "SULAWESI_UTARA",
   // "BANTEN",
@@ -52,8 +52,8 @@ const defaultZones = [
   "SUMATERA_UTARA",
   //ratio
   "PAPUA",
-  "MALUKU",
   "KALIMANTAN_SELATAN",
+  "MALUKU",
   //ratio pop
 ];
 const defaultPeriods = 4;

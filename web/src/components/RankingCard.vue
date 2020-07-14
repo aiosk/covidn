@@ -74,7 +74,9 @@ export default {
     };
   },
   watch: {
-    "data.labels": _debounce(function(val, oldVal) {
+    data: _debounce(function(val, oldVal) {
+      console.log(val);
+
       if (!this.chartInstance) {
         return;
       }
@@ -83,8 +85,11 @@ export default {
   },
   created() {
     (async () => {
+      // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
       // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
-      const url = `./web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}`;
+      const url = `https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/stats/${this.myCase.join(
+        "-"
+      )}.csv?_=${Date.now()}`;
       let res = await fetch(url);
       let resText = await res.text();
       this.rankingFromCsv(resText);
@@ -175,7 +180,7 @@ export default {
           }
         });
       }
-    }, 99);
+    }, 299);
   },
   destroyed() {
     if (!!this.chartInstance) {
