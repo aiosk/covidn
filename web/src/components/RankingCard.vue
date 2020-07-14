@@ -105,6 +105,9 @@ export default {
             case "death":
               divider = 2;
               break;
+            case "confirmed":
+              divider = 4;
+              break;
             default:
               divider = 3;
           }
