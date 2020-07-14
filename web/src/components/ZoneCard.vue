@@ -80,7 +80,7 @@
         button.button('@click'="modelDialog.isOpen=false")
           span.show-for-sr No
           span(aria-hidden="true") No
-    Spinner('v-model'='modelSpinner')
+    //- Spinner('v-model'='modelSpinner')
 </template>
 
 <script>
@@ -105,8 +105,18 @@ const defaultShowLegend = false;
 
 const defaultStats = {
   lastUpdate: null,
-  total: {},
-  daily: {}
+  total: {
+    confirmed: 0,
+    recover: 0,
+    death: 0,
+    active: 0
+  },
+  daily: {
+    confirmed: 0,
+    recover: 0,
+    death: 0,
+    active: 0
+  }
 };
 
 export default {

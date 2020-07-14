@@ -13,7 +13,7 @@
         a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
     Dialog('v-model'='modelDialog')
       component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
-    Spinner('v-model'='modelSpinner')
+    //- Spinner('v-model'='modelSpinner')
 </template>
 
 <script>

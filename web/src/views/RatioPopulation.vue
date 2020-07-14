@@ -53,7 +53,7 @@ export default {
           // }
         });
       }
-    }, 99);
+    }, 299);
   },
   destroyed() {
     if (!!this.lazyLoadCanvas) {

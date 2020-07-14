@@ -78,7 +78,7 @@ export default {
           // }
         });
       }
-    }, 99);
+    }, 299);
   },
   destroyed() {
     this.lazyLoadCanvas.destroy();
