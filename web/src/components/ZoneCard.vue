@@ -11,8 +11,10 @@
         component(':is'="componentStats" 'v-model'='myStatsModel')
       .card-image
         .legend('v-if'="showLegend" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
-        .help-text.text-right('v-if'="showLegend")
-          div #[strong.show-for-large Touch / Click] legend item to toggle chart line
+        .help-text.text-right
+          ul
+            li('v-if'="showLegend") #[strong.show-for-large Touch / Click] legend item to toggle chart line
+            li #[strong.show-for-large Long Touch / Hover] on chart to see case number
         canvas(:id="`Chart_${zone}`")
     .card-section
       menu.clearfix
@@ -231,50 +233,36 @@ export default {
     },
     updateChartData() {
       (async () => {
-        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/chartjs/${
-          this.periods
-        }/${this.zone}.json?_=${Date.now()}`;
+        // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/${this.periods}/${this.zone}.csv?_=${Date.now()}
+        const url = `./web/${this.periods}/${this.zone}.csv?_=${Date.now()}`;
         let res = await fetch(url);
-        let resJSON = await res.json();
-
-        this.$set(this.data, "datasets", resJSON.datasets);
-        this.$set(this.data, "labels", resJSON.labels);
-
-        _range(4)
-          .map(v => v + 4)
-          .forEach(i => {
-            this.$set(this.data.datasets[i], "spanGaps", false);
-            this.data.datasets[i].data.forEach((v2, i2) => {
-              if (!v2) {
-                this.$set(this.data.datasets[i].data, i2, NaN);
-              }
-            });
-          });
+        let resTxt = await res.text();
+        this.fromCsv(resTxt);
 
         let i = 0;
         let found = false;
-        const length = resJSON.datasets[4].data.length;
+        const length = this.data.datasets[4].data.length;
         while (!found) {
           i++;
-          if (!!resJSON.datasets[0].data[length - i]) {
+          if (!!this.data.datasets[0].data[length - i]) {
             found = true;
           }
         }
         const validIdx = length - i;
 
         this.$set(this.stats, "population", this.population);
-        this.$set(this.stats, "lastUpdate", resJSON.labels[length - i]);
+        this.$set(this.stats, "lastUpdate", this.data.labels[length - i]);
         this.$set(this.stats, "total", {
-          confirmed: resJSON.datasets[4].data[validIdx],
-          recover: resJSON.datasets[5].data[validIdx],
-          death: resJSON.datasets[6].data[validIdx],
-          active: resJSON.datasets[7].data[validIdx]
+          confirmed: this.data.datasets[0].data[validIdx],
+          recover: this.data.datasets[2].data[validIdx],
+          death: this.data.datasets[4].data[validIdx],
+          active: this.data.datasets[6].data[validIdx]
         });
         this.$set(this.stats, "daily", {
-          confirmed: resJSON.datasets[0].data[validIdx],
-          recover: resJSON.datasets[1].data[validIdx],
-          death: resJSON.datasets[2].data[validIdx],
-          active: resJSON.datasets[3].data[validIdx]
+          confirmed: this.data.datasets[1].data[validIdx],
+          recover: this.data.datasets[3].data[validIdx],
+          death: this.data.datasets[5].data[validIdx],
+          active: this.data.datasets[7].data[validIdx]
         });
 
         this.updateChartHiddenDatasets();
@@ -371,6 +359,9 @@ export default {
 }
 .help-text {
   margin: 0;
+  ul {
+    list-style-type: none;
+  }
 }
 .card-image {
   // padding: 1rem 0;

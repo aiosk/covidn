@@ -111,7 +111,7 @@ export default {
   // background: map-get($foundation-palette, "primary");
   background: white;
 
-  $size: 2.5rem;
+  $size: 3rem;
   width: $size;
   height: $size;
 

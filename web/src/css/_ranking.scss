@@ -1,59 +1,23 @@
 @import "@/css/_bem";
 @import "@/css/_color";
-
-@include block("card-percentage") {
+@mixin card-ranking-modifier($color) {
+  $color: map-get($case-color, $color);
+  border: 1px solid $color !important;
   header {
-    color: white;
-    text-transform: capitalize;
+    background: $color !important;
   }
-  @include modifier("confirmed") {
-    $color: map-get($case-color, "confirmed");
-    border: 1px solid $color !important;
-    header {
-      background: $color !important;
-    }
-    menu a i {
-      color: $color;
-    }
-  }
-  @include modifier("recover") {
-    $color: map-get($case-color, "recover");
-    border: 1px solid $color !important;
-    header {
-      background: $color !important;
-    }
-    menu a i {
-      color: $color;
-    }
-  }
-  @include modifier("death") {
-    $color: map-get($case-color, "death");
-    border: 1px solid $color !important;
-    header {
-      background: $color !important;
-    }
-    menu a i {
-      color: $color;
-    }
-  }
-  @include modifier("active") {
-    $color: map-get($case-color, "active");
-    border: 1px solid $color !important;
-    header {
-      background: $color !important;
-    }
-    menu a i {
-      color: $color;
-    }
+  menu a i {
+    color: $color;
   }
 }
-@include block("card-ranking") {
+@mixin card-ranking {
   main.card-image {
     min-height: 50rem;
   }
   header {
     color: white;
     text-transform: capitalize;
+
     menu {
       position: absolute;
       top: 0rem;
@@ -63,53 +27,35 @@
       }
     }
   }
+
   menu {
     text-align: right;
+    a {
+      margin: 0 0.5rem;
+    }
   }
 
   @include modifier("confirmed") {
-    $color: map-get($case-color, "confirmed");
-    border: 1px solid $color !important;
-    header {
-      background: $color !important;
-    }
-    menu a i {
-      color: $color;
-    }
+    @include card-ranking-modifier("confirmed");
   }
   @include modifier("recover") {
-    $color: map-get($case-color, "recover");
-    border: 1px solid $color !important;
-    header {
-      background: $color !important;
-    }
-    menu a i {
-      color: $color;
-    }
+    @include card-ranking-modifier("recover");
   }
   @include modifier("death") {
-    $color: map-get($case-color, "death");
-    border: 1px solid $color !important;
-    header {
-      background: $color !important;
-    }
-    menu a i {
-      color: $color;
-    }
+    @include card-ranking-modifier("death");
   }
   @include modifier("active") {
-    $color: map-get($case-color, "active");
-    border: 1px solid $color !important;
-    header {
-      background: $color !important;
-    }
-    menu a i {
-      color: $color;
-    }
+    @include card-ranking-modifier("active");
   }
 }
-menu {
-  a {
-    margin: 0 0.5rem;
+@include block("card-ratio-population") {
+  @include card-ranking;
+}
+@include block("card-ratio") {
+  @include card-ranking;
+}
+@include block("card-ranking") {
+  @include card-ranking;
+  header {
   }
 }

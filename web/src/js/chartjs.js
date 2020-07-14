@@ -277,7 +277,7 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null,
         ],
       },
       tooltips: {
-        // enabled: false,
+        enabled: false,
         // intersect: false,
         //   callbacks: {
         //     label(tooltipItem, data) {
@@ -299,8 +299,8 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null,
           // clip: true,
           formatter: params.datalabelsFormatter,
           font: {
-            weight: "bold",
-            size: 10,
+            // weight: "bold",
+            // size: 10,
           },
           padding: {
             top: 0,

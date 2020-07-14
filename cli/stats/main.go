@@ -3,6 +3,7 @@ package stats
 import (
 	"fmt"
 	"io/ioutil"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -90,6 +91,15 @@ func Main() {
 			libs.PanicError(err)
 			resultRanking[v][i2].Percentage = fmt.Sprintf("%.2f", (thisValFlt/nationalValFlt)*100)
 		}
+		resultRanking[v] = append(resultRanking[v][:nationalIdx], resultRanking[v][nationalIdx+1:]...)
+
+		sort.SliceStable(resultRanking[v], func(i, j int) bool {
+			thisValueI, err := strconv.Atoi(resultRanking[v][i].Value)
+			libs.PanicError(err)
+			thisValueJ, err := strconv.Atoi(resultRanking[v][j].Value)
+			libs.PanicError(err)
+			return thisValueI > thisValueJ
+		})
 		libs.WriteToFile("dist/web/stats", fmt.Sprintf("ranking-%s.csv", v), resultRanking[v].ToCsv())
 	}
 
@@ -108,6 +118,13 @@ func Main() {
 			})
 		}
 
+		sort.SliceStable(resultRatio[v], func(i, j int) bool {
+			thisValueI, err := strconv.ParseFloat(resultRatio[v][i].Value, 8)
+			libs.PanicError(err)
+			thisValueJ, err := strconv.ParseFloat(resultRatio[v][j].Value, 8)
+			libs.PanicError(err)
+			return thisValueI > thisValueJ
+		})
 		libs.WriteToFile("dist/web/stats", fmt.Sprintf("ratio-%s.csv", v), resultRatio[v].ToCsv())
 	}
 
@@ -140,6 +157,14 @@ func Main() {
 				Population: inputRawan[zonaIdx].Population,
 			})
 		}
+
+		sort.SliceStable(resultRatioPop[v], func(i, j int) bool {
+			thisValueI, err := strconv.Atoi(resultRatioPop[v][i].Value)
+			libs.PanicError(err)
+			thisValueJ, err := strconv.Atoi(resultRatioPop[v][j].Value)
+			libs.PanicError(err)
+			return thisValueI > thisValueJ
+		})
 		libs.WriteToFile("dist/web/stats", fmt.Sprintf("ratio-population-%s.csv", v), resultRatioPop[v].ToCsv())
 	}
 

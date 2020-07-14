@@ -99,6 +99,7 @@ export default {
 @import "@/css/_foundation";
 @import "@/css/_color";
 @include foundation-card;
+@include foundation-form-helptext;
 
 .home-chart-stats {
 }

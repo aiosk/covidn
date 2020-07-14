@@ -70,8 +70,6 @@ func (val DataList) Chunk(size int) DataList {
 		var item DataItem
 		lenChunkItem := len(chunkItem)
 
-		item.Date = chunkItem[0].Date
-
 		validIdx := lenChunkItem - 1
 		if chunkItem[validIdx].TotalCase == 0 {
 			i := 0
@@ -90,6 +88,7 @@ func (val DataList) Chunk(size int) DataList {
 			validIdx = lenChunkItem - i
 		}
 
+		item.Date = chunkItem[validIdx].Date
 		item.TotalCase = chunkItem[validIdx].TotalCase
 		item.TotalRecover = chunkItem[validIdx].TotalRecover
 		item.TotalDeath = chunkItem[validIdx].TotalDeath

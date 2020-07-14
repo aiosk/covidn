@@ -82,12 +82,6 @@ func (val DataList) Chunk(size int) DataList {
 		var item DataItem
 		lenChunkItem := len(chunkItem)
 
-		item.Date = chunkItem[0].Date
-		// item.DateStr = chunkItem[0].Date.String()
-		// if size > 1 {
-		// 	item.DateStr = fmt.Sprintf("%s - %s", chunkItem[0].Date, chunkItem[lenChunkItem-1].Date)
-		// }
-
 		validIdx := lenChunkItem - 1
 		if chunkItem[validIdx].TotalCase.Value == 0 {
 			i := 0
@@ -106,6 +100,7 @@ func (val DataList) Chunk(size int) DataList {
 			validIdx = lenChunkItem - i
 		}
 
+		item.Date = chunkItem[validIdx].Date
 		item.TotalCase.Value = chunkItem[validIdx].TotalCase.Value
 		item.TotalRecover.Value = chunkItem[validIdx].TotalRecover.Value
 		item.TotalDeath.Value = chunkItem[validIdx].TotalDeath.Value
