@@ -22,17 +22,23 @@
           .cell.small-12.medium-6
             .grid-x
               .cell.small-4.medium-5
-                label(':for'='`showPeriods_${zone}`') #[strong {{ periods }}] days Periods
+                label(':for'='`showPeriods_${zone}`') #[strong {{ periods }}] Days
               .cell.auto
                 .switch.small
                   input.switch-input(':id'="`showPeriods_${zone}`" type="checkbox" 'v-model'='showPeriods')
                   label.switch-paddle(':for'='`showPeriods_${zone}`')
-                    span.show-for-sr #[strong {{ periods }}] days Periods
+                    span.show-for-sr #[strong {{ periods }}] Days
                     span.switch-active(aria-hidden="true") Hide
                     span.switch-inactive(aria-hidden="true") Set
               .cell.auto
                 .periods(v-if="showPeriods")
-                  input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
+                  //- input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
+                  select(':id'="`periods_${zone}`"  'v-model'='periods')
+                    option(value="1") 1 day
+                    option(value="3") 3 day
+                    option(value="7") 1 week
+                    option(value="14") 2 weeks
+                    option(value="28") 4 weeks
 
           .cell.small-12.medium-6
             .grid-x

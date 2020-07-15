@@ -1,0 +1,6 @@
+date,total_confirmed,confirmed,total_recover,recover,total_death,death,total_active,active
+2020-03-28,5,5,0,0,0,0,5,5
+2020-04-25,9,4,3,3,1,1,5,0
+2020-05-23,19,10,17,14,1,0,1,-4
+2020-06-20,39,20,20,3,2,1,17,16
+2020-07-12,106,67,63,43,4,2,39,22

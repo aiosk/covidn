@@ -17,9 +17,10 @@ func Main(file io.Reader) {
 	inputFileClean := inputFile.Update.Harian.Clean()
 	libs.WriteToFile("dist/desktop", "NATIONAL.csv", inputFileClean.ToCsv())
 
-	for i := 1; i <= 14; i++ {
-		dirpath := fmt.Sprintf("dist/web/%d", i)
-		libs.WriteToFile(dirpath, "NATIONAL.csv", inputFileClean.Chunk(i).ToCsv())
+	periods := [5]int{1, 3, 7, 14, 28}
+	for _, v := range periods {
+		dirpath := fmt.Sprintf("dist/web/%d", v)
+		libs.WriteToFile(dirpath, "NATIONAL.csv", inputFileClean.Chunk(v).ToCsv())
 	}
 
 }
