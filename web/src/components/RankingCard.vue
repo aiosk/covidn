@@ -198,4 +198,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 @import "@/css/_ranking";
+menu {
+  margin-top: 0.5rem;
+  a {
+    display: inline-block;
+  }
+}
 </style>

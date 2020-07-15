@@ -1,7 +1,7 @@
 <template lang='pug'>
-  .dialog
-    .reveal-overlay(':style'="{display:styleDisplay}" '@click.self'='overlayOnClick')
-      .reveal(':style'="{display:styleDisplay}" ':class'="[{collapse:isCollapse},{large:isLarge}]")
+  .dialog()
+    .reveal-overlay(':style'="{display:styleDisplay}" '@click.self'='overlayOnClick' '@keydown.esc'="overlayOnClick")
+      .reveal(':style'="{display:styleDisplay}" ':class'="[{collapse:isCollapse},{large:isLarge}]"  ref='dialog' tabindex="0")
         button.close-button('@click'='closeOnClick' aria-label="Close Accessible Modal" type="button")
           span(aria-hidden="true") &times;
         slot
@@ -10,6 +10,8 @@
 
 <script>
 import MixinForm from "@/mixins/Form.js";
+import _delay from "lodash/delay";
+
 export default {
   name: "Dialog",
   mixins: [MixinForm],
@@ -54,6 +56,9 @@ export default {
     isOpen(val, oldVal) {
       const $html = document.querySelector("html");
       if (val) {
+        _delay(() => {
+          this.$refs.dialog.focus();
+        }, 9);
         this.scrollTop = $html.scrollTop;
         $html.style.top = `-${$html.scrollTop}px`;
         $html.classList.add("zf-has-scroll");
@@ -71,9 +76,11 @@ export default {
       this.isOpen = false;
     },
     overlayOnClick(e) {
+      console.log("hi2");
       this.isOpen = false;
     }
   },
+  mounted() {},
   destroyed() {
     this.scrollTop = null;
   }

@@ -153,7 +153,7 @@ const initChartDaily = (params = { zone: null, data: null }) => {
             };
           },
           label(tooltipItem, data) {
-            let datasetIndexVal = tooltipItem.datasetIndex % 4;
+            let datasetIndexVal = tooltipItem.datasetIndex + 1;
             var label = data.datasets[tooltipItem.datasetIndex].label || "";
             let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
