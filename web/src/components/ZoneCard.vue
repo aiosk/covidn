@@ -13,8 +13,8 @@
         .legend('v-if'="showLegend" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
         .help-text.text-right
           ul
-            li('v-if'="showLegend") #[strong Touch / Click] legend item to toggle chart line
-            li #[strong Long Touch / Hover] on chart to see case number
+            li('v-if'="showLegend") #[strong Touch / Click] legend item to see available chart line
+            li #[strong Touch / Hover] on chart to see case number
         canvas(:id="`Chart_${zone}`")
     .card-section
       menu.clearfix
@@ -22,14 +22,14 @@
           .cell.small-12.medium-6
             .grid-x
               .cell.small-4.medium-5
-                label(':for'='`showPeriods_${zone}`') Set Periods
+                label(':for'='`showPeriods_${zone}`') #[strong {{ periods }}] days Periods
               .cell.auto
                 .switch.small
                   input.switch-input(':id'="`showPeriods_${zone}`" type="checkbox" 'v-model'='showPeriods')
                   label.switch-paddle(':for'='`showPeriods_${zone}`')
-                    span.show-for-sr Set Periods ?
-                    span.switch-active(aria-hidden="true") Yes
-                    span.switch-inactive(aria-hidden="true") No
+                    span.show-for-sr #[strong {{ periods }}] days Periods
+                    span.switch-active(aria-hidden="true") Hide
+                    span.switch-inactive(aria-hidden="true") Set
               .cell.auto
                 .periods(v-if="showPeriods")
                   input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
@@ -420,5 +420,8 @@ menu {
   button {
     margin: 0 0.5rem;
   }
+}
+.switch {
+  // width: 5rem !important;
 }
 </style>

@@ -56,7 +56,7 @@ const defaultZones = [
   "MALUKU",
   //ratio pop
 ];
-const defaultPeriods = 4;
+const defaultPeriods = 1;
 const defaultHiddenDatasets = [false, true, false, true, false, true, false, true];
 
 const cases = ["confirmed", "recover", "death", "active"];
