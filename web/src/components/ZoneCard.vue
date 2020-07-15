@@ -15,34 +15,28 @@
           ul
             li('v-if'="showLegend") #[strong Touch / Click] legend item to see available chart line
             li #[strong Touch / Hover] on chart to see case number
+
         canvas(:id="`Chart_${zone}`")
     .card-section
       menu.clearfix
-        .grid-x
+        .grid-x.grid-margin-x
           .cell.small-12.medium-6
             .grid-x
-              .cell.small-4.medium-5
-                label(':for'='`showPeriods_${zone}`') #[strong {{ periods }}] Days
+              .cell.small-6
+                label(':for'='`periods_${zone}`') Periods
               .cell.auto
-                .switch.small
-                  input.switch-input(':id'="`showPeriods_${zone}`" type="checkbox" 'v-model'='showPeriods')
-                  label.switch-paddle(':for'='`showPeriods_${zone}`')
-                    span.show-for-sr #[strong {{ periods }}] Days
-                    span.switch-active(aria-hidden="true") Hide
-                    span.switch-inactive(aria-hidden="true") Set
-              .cell.auto
-                .periods(v-if="showPeriods")
+                .periods
                   //- input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
                   select(':id'="`periods_${zone}`"  'v-model'='periods')
-                    option(value="1") 1 day
+                    option(value="1") Daily
                     option(value="3") 3 day
-                    option(value="7") 1 week
+                    option(value="7") Weekly
                     option(value="14") 2 weeks
                     option(value="28") 4 weeks
 
           .cell.small-12.medium-6
             .grid-x
-              .cell.small-4.medium-5
+              .cell.small-6
                 label(':for'='`showLegend_${zone}`') Show Legend
               .cell.auto
                 .switch.small
@@ -106,7 +100,7 @@ import {
   defaultHiddenDatasets,
   defaultShare
 } from "@/js/vars";
-const defaultShowPeriods = false;
+
 const defaultShowLegend = false;
 
 const defaultStats = {
@@ -225,7 +219,6 @@ export default {
       data: _cloneDeep(defaultChartData),
 
       // showLegend: _cloneDeep(defaultShowLegend),
-      showPeriods: _cloneDeep(defaultShowPeriods),
       showPeriodsRange: true,
       periodsRange: {
         begin: null,
@@ -258,10 +251,24 @@ export default {
         const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/${
           this.periods
         }/${this.zone}.csv?_=${Date.now()}`;
-        let res = await fetch(url);
-        let resTxt = await res.text();
-        this.fromCsv(resTxt);
+        try {
+          let res = await fetch(url);
 
+          if (!res.ok) {
+            console.log(res.ok);
+            // make the promise be rejected if we didn't get a 2xx response
+            throw new Error("Not 2xx response");
+          }
+          // go the desired response
+          let resTxt = await res.text();
+          this.fromCsv(resTxt);
+        } catch (e) {
+          console.log(url, " failed");
+        }
+
+        if (!this.data.datasets[0].data.length) {
+          return;
+        }
         let i = 0;
         let found = false;
         const length = this.data.datasets[4].data.length;
@@ -370,6 +377,7 @@ export default {
 
 .zone-card {
   // margin: 0.5rem 0;
+  // position: relative;
   &.card {
     $color: map-get($element-color, "title");
     border: 1px solid $color;
@@ -411,6 +419,7 @@ menu {
   }
 }
 .header {
+  position: relative;
   menu {
     position: absolute;
     top: 0.75rem;

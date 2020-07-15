@@ -138,6 +138,7 @@ const initChartDaily = (params = { zone: null, data: null }) => {
       //   text: params.zone.split("_").join(" "),
       //   fontSize: 16,
       // },
+      // maintainAspectRatio: false,
       tooltips: {
         mode: "index",
         intersect: false,
@@ -176,7 +177,7 @@ const initChartDaily = (params = { zone: null, data: null }) => {
     <div class='cell small-2'>
       <span class='color' style="background-color:${v.fillStyle};border:.2rem solid ${v.strokeStyle};"></span>
     </div>
-    <div class='cell small-10'>
+    <div class='cell auto'>
       <span class='text' style="text-decoration:${v.hidden ? "line-through" : "none"};">${v.text}</span>
     </div>
   </div>

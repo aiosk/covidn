@@ -76,7 +76,6 @@ export default {
       this.isOpen = false;
     },
     overlayOnClick(e) {
-      console.log("hi2");
       this.isOpen = false;
     }
   },

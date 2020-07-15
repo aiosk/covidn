@@ -3,7 +3,7 @@
     include ../html/rankingHelpText.pug
     .grid-x.large-up-2
       .cell.card-item('v-for'="v in cases" ':key'="v" ':id'="`card_${v}`")
-        component(':is'="componentCard[v]" ':myCase'="['ratio-population',v]" )
+        component(':is'="componentCard[v]" ':myCase'="['ratio-population',v]" 'v-model'="modelCard")
 </template>
 
 <script>
@@ -22,6 +22,9 @@ export default {
   },
   data() {
     return {
+      modelCard: {
+        periods: null
+      },
       cases: _cloneDeep(cases),
       lazyLoadCanvas: null,
       componentCard: _zipObject(cases, [null, null, null, null])
@@ -70,6 +73,6 @@ export default {
 .ratio-population {
 }
 .card-item {
-  min-height: 30rem;
+  min-height: 60rem;
 }
 </style>

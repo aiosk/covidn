@@ -17,11 +17,14 @@
   header {
     color: white;
     text-transform: capitalize;
+    position: relative;
 
     menu {
       position: absolute;
-      top: 0rem;
+      top: 0.5rem;
       right: 0.5rem;
+      margin: 0;
+      padding: 0;
       i {
         color: white !important;
       }
@@ -29,7 +32,6 @@
   }
 
   menu {
-    text-align: right;
     a {
       margin: 0 0.5rem;
     }
@@ -48,6 +50,7 @@
     @include card-ranking-modifier("active");
   }
 }
+
 @include block("card-ratio-population") {
   @include card-ranking;
 }
@@ -56,6 +59,4 @@
 }
 @include block("card-ranking") {
   @include card-ranking;
-  header {
-  }
 }

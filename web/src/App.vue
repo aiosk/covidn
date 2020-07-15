@@ -51,7 +51,7 @@ export default {
 @include foundation-visibility-classes;
 
 #app {
-  padding-bottom: 2rem;
+  padding-bottom: 3rem;
 }
 #nav {
 }
@@ -139,5 +139,8 @@ export default {
 #shareAPIPolyfill-backdrop,
 #shareAPIPolyfill-container {
   z-index: 1100;
+}
+.lazy-card {
+  min-height: 33rem;
 }
 </style>

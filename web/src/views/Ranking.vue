@@ -4,7 +4,7 @@
 
     .grid-x.large-up-2
       .cell.card-item('v-for'="v in cases" ':key'="v" ':id'="`card_${v}`")
-        component(':is'="componentCard[v]" ':myCase'="['ranking',v]" )
+        component(':is'="componentCard[v]" ':myCase'="['ranking',v]" 'v-model'="modelCard" )
 </template>
 
 <script>
@@ -21,6 +21,9 @@ export default {
   },
   data() {
     return {
+      modelCard: {
+        periods: null
+      },
       cases: _cloneDeep(cases),
       lazyLoadCanvas: null,
       componentCard: _zipObject(cases, [null, null, null, null])
@@ -69,6 +72,6 @@ export default {
 .ranking {
 }
 .card-item {
-  min-height: 30rem;
+  min-height: 60rem;
 }
 </style>
