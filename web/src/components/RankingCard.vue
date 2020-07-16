@@ -112,7 +112,7 @@ export default {
       (async () => {
         // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
         // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
-        const url = `https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/stats/${
+        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/stats/${
           this.periods
         }/${this.myCase.join("-")}.csv?_=${Date.now()}`;
         let res = await fetch(url);
