@@ -3,6 +3,7 @@ package stats
 import (
 	"fmt"
 	"io/ioutil"
+	"math"
 	"sort"
 	"strconv"
 	"strings"
@@ -10,6 +11,9 @@ import (
 	"github.com/aiosk/covidn/libs"
 	"github.com/jszwec/csvutil"
 )
+
+// Cases ...
+var Cases = [4]string{"confirmed", "recover", "death", "active"}
 
 // Main ...
 func Main() {
@@ -81,26 +85,30 @@ func Main() {
 			break
 		}
 	}
-	// spew.Dump(nationalIdx, resultRanking["confirmed"][nationalIdx].Value)
+	// spew.Dump(len(resultRanking["confirmed"]))
+	// spew.Dump(nationalIdx, resultRanking["confirmed"][nationalIdx].Zone)
 	for _, v := range Cases {
-		nationalVal := resultRanking[v][nationalIdx].Value
-		nationalValFlt, err := strconv.ParseFloat(nationalVal, 8)
+		nationalValFlt, err := strconv.ParseFloat(resultRanking[v][nationalIdx].Value, 8)
 		libs.PanicError(err)
 		for i2, v2 := range resultRanking[v] {
 			thisValFlt, err := strconv.ParseFloat(v2.Value, 8)
 			libs.PanicError(err)
 			resultRanking[v][i2].Percentage = fmt.Sprintf("%.2f", (thisValFlt/nationalValFlt)*100)
 		}
-		resultRanking[v] = append(resultRanking[v][:nationalIdx], resultRanking[v][nationalIdx+1:]...)
 
-		sort.SliceStable(resultRanking[v], func(i, j int) bool {
-			thisValueI, err := strconv.Atoi(resultRanking[v][i].Value)
+		// newResultRanking := resultRanking[v]
+		newResultRanking := make(OutputList, len(resultRanking[v]))
+		copy(newResultRanking, resultRanking[v])
+		newResultRanking = append(newResultRanking[:nationalIdx], newResultRanking[nationalIdx+1:]...)
+
+		sort.SliceStable(newResultRanking, func(i, j int) bool {
+			thisValueI, err := strconv.Atoi(newResultRanking[i].Value)
 			libs.PanicError(err)
-			thisValueJ, err := strconv.Atoi(resultRanking[v][j].Value)
+			thisValueJ, err := strconv.Atoi(newResultRanking[j].Value)
 			libs.PanicError(err)
 			return thisValueI > thisValueJ
 		})
-		libs.WriteToFile("dist/web/stats", fmt.Sprintf("ranking-%s.csv", v), resultRanking[v].ToCsv())
+		libs.WriteToFile("dist/web/stats", fmt.Sprintf("ranking-%s.csv", v), newResultRanking.ToCsv())
 	}
 
 	resultRatio := make(OutputPerCase)
@@ -138,23 +146,26 @@ func Main() {
 	for _, v := range Cases {
 		for _, v2 := range resultRanking[v] {
 
-			zonaIdx := 0
-			for i, v := range inputRawan {
-				if v.Zone.String() == v2.Zone {
-					zonaIdx = i
+			rawanIdx := 0
+			for i3, v3 := range inputRawan {
+				if strings.ReplaceAll(v3.Zone.String(), " ", "_") == v2.Zone {
+					// spew.Dump("i3", i3)
+					rawanIdx = i3
 					break
 				}
 			}
 
-			thisPopFlt, err := strconv.ParseFloat(inputRawan[zonaIdx].Population, 8)
+			// spew.Dump(v2.Zone, rawanIdx)
+			// spew.Dump(v2.Zone, rawanIdx, inputRawan[rawanIdx].Population)
+			thisPopFlt, err := strconv.ParseFloat(inputRawan[rawanIdx].Population, 8)
 			libs.PanicError(err)
 			thisValFlt, err := strconv.ParseFloat(v2.Value, 8)
 			libs.PanicError(err)
 			resultRatioPop[v] = append(resultRatioPop[v], OutputItem{
 				Zone:       v2.Zone,
 				LastUpdate: v2.LastUpdate,
-				Value:      fmt.Sprintf("%.0f", (thisValFlt/thisPopFlt)*1000000),
-				Population: inputRawan[zonaIdx].Population,
+				Value:      fmt.Sprintf("%.0f", math.Round((thisValFlt/thisPopFlt)*1000000)),
+				Population: inputRawan[rawanIdx].Population,
 			})
 		}
 

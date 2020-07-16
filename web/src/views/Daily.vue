@@ -4,8 +4,9 @@
     DailyForm('v-model'="myModel")
 
     .grid-x.large-up-2(aria-describedby="chartHelpText")
-      .cell(v-for="v in myModel.selectedZones" ':key'="v" ':id'='`Cell_${v}`' ':class'='[{"width-100":myModel.selectedZones.length == 1},"chart-item"]' )
-        component(':is'="componentZoneCard[v]" ':zone'='v' 'v-model'="myModel")
+      .cell(v-for="v in myModel.selectedZones" ':key'="v" ':class'='[{"width-100":myModel.selectedZones.length == 1}]' )
+        .lazy-card(':id'='`Cell_${v}`')
+          component(':is'="componentZoneCard[v]" ':zone'='v' 'v-model'="myModel")
 </template>
 
 <script>
@@ -36,22 +37,14 @@ export default {
     };
   },
   watch: {
-    componentZoneCard: function(val, oldVal) {
+    "myModel.selectedZones"(val, oldVal) {
       _delay(() => {
-        if (!!this.lazyLoadCanvas) {
-          this.lazyLoadCanvas.update();
-        }
-      }, 9);
-    },
-    "myModel.selectedZones": async function(val, oldVal) {
-      _delay(() => {
-        if (!!this.lazyLoadCanvas) {
-          this.lazyLoadCanvas.update();
-        }
+        val.forEach(v => {
+          this.$set(this.componentZoneCard, v, ZoneCard);
+        });
       }, 9);
     }
   },
-
   created() {
     let { zones: selectedZones } = this.$route.query;
 
@@ -66,7 +59,7 @@ export default {
         const LazyLoad = require("lazyload");
 
         this.lazyLoadCanvas = new LazyLoad({
-          elements_selector: ".chart-item",
+          elements_selector: ".lazy-card",
           unobserve_entered: true,
           callback_enter: el => {
             const elId = el.id
@@ -101,15 +94,28 @@ export default {
 
 <style lang="scss">
 @import "@/css/_foundation";
+// @include foundation-responsive-embed;
 // @import "@/css/_chart";
-.chart-item {
-  min-height: 20rem;
-}
+
 .cell {
-  position: relative;
+  // position: relative;
 }
 
 .width-100 {
   width: 100% !important;
+}
+@mixin my-responsive-embed($ratio) {
+  @include responsive-embed($ratio);
+  & > .card {
+    position: absolute;
+    top: 0;
+    #{$global-left}: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+.lazy-card {
+  min-height: 33rem;
+  // @include my-responsive-embed(3 by 4);
 }
 </style>

@@ -1,5 +1,5 @@
 <template lang='pug'>
-  .ranking-card  
+  .ranking-card
     Card(':class'="[`card-${myCase[0]}`,`card-${myCase[0]}--${myCase[1]}`]" )
       template(#header)
         h6 {{ title }}
@@ -9,34 +9,73 @@
       template(#mainImage)
         canvas(':id'="`${myCase[0]}_${myCase[1].toUpperCase()}`")
       template(#menu)
-        a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
-        a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
+        //- .grid-x
+        //-   .cell.small-6
+        //-     label(':for'='`periods_${myCase.join("-")}`') Periods
+        //-   .cell.auto
+        //-     .periods
+        //-       //- input(':id'="`periods_${myCase.join("-")}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
+        //-       select(':id'="`periods_${myCase.join('-')}`"  'v-model'='periods')
+        //-         option(value="all") All Time
+        //-         option(value="1") Last day
+        //-         option(value="3") Last 3 day
+        //-         option(value="7") Last week
+        //-         option(value="14") Last 2 weeks
+        //-         option(value="28") Last 4 weeks
+        .float-right
+          a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-floppy
+          a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
     Dialog('v-model'='modelDialog')
       component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
+    //- Spinner('v-model'='modelSpinner')
 </template>
 
 <script>
 import Card from "@/components/Card.vue";
 import Dialog from "@/components/Dialog.vue";
+import Spinner from "@/components/Spinner.vue";
 import MixinRanking from "@/mixins/Ranking.js";
 import MixinCard from "@/mixins/Card.js";
+import MixinForm from "@/mixins/Form.js";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
 import _isUndefined from "lodash/isUndefined";
-import { defaultChartData, defaultChartColor } from "@/js/vars";
+import { defaultChartData, defaultChartColor, defaultPeriods } from "@/js/vars";
 
 export default {
   name: "RankingCard",
-  mixins: [MixinRanking, MixinCard],
+  mixins: [MixinRanking, MixinCard, MixinForm],
   components: {
     Card,
+    Spinner,
     Dialog
   },
   props: {
-    myCase: Array
+    myCase: Array,
+    value: Object
+  },
+  data() {
+    return {
+      chartInstance: null,
+      data: _cloneDeep(defaultChartData),
+      modelSpinner: { isOpen: true },
+      modelDialog: { isOpen: false },
+      modelChart: {
+        zone: null,
+        isDialog: true
+      }
+    };
   },
   computed: {
+    periods: {
+      get() {
+        return !!this.value.periods ? this.value.periods : defaultPeriods;
+      },
+      set(val) {
+        this.emitModel({ periods: val });
+      }
+    },
     title() {
       switch (this.myCase[0]) {
         case "ranking":
@@ -63,74 +102,73 @@ export default {
       }
     }
   },
-  data() {
-    return {
-      chartInstance: null,
-      data: _cloneDeep(defaultChartData),
-      modelChart: {
-        zone: null,
-        isDialog: true
-      }
-    };
-  },
   watch: {
-    data: _debounce(function(val, oldVal) {
-      console.log(val);
+    periods(val, oldVal) {
+      this.updateData();
+    }
+  },
+  methods: {
+    updateData() {
+      (async () => {
+        // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
+        // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
+        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/stats/${this.myCase.join(
+          "-"
+        )}.csv?_=${Date.now()}`;
+        let res = await fetch(url);
+        let resText = await res.text();
+        this.rankingFromCsv(resText);
 
-      if (!this.chartInstance) {
-        return;
-      }
-      this.chartInstance.update();
-    }, 500)
+        if (!this.data.datasets[0].datalabels) {
+          this.$set(this.data.datasets[0], "datalabels", {
+            align: [],
+            color: []
+          });
+        }
+        let divider;
+        switch (this.myCase[0]) {
+          case "ratio":
+            divider = 10;
+            break;
+          case "ratio-population":
+            switch (this.myCase[1]) {
+              case "death":
+                divider = 2;
+                break;
+              case "confirmed":
+                divider = 4;
+                break;
+              default:
+                divider = 3;
+            }
+            break;
+          default:
+            divider = 2;
+        }
+        const datasetDataLength = this.data.datasets[0].data.length;
+        this.data.datasets[0].data.forEach((v, i) => {
+          this.$set(
+            this.data.datasets[0].datalabels.align,
+            i,
+            i < divider ? "start" : "end"
+          );
+          this.$set(
+            this.data.datasets[0].datalabels.color,
+            i,
+            i < divider ? "#fff" : "#000"
+          );
+        });
+
+        if (!this.chartInstance) {
+          return;
+        }
+        this.chartInstance.update();
+        this.modelSpinner.isOpen = false;
+      })();
+    }
   },
   created() {
-    (async () => {
-      // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
-      // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
-      const url = `https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/stats/${this.myCase.join(
-        "-"
-      )}.csv?_=${Date.now()}`;
-      let res = await fetch(url);
-      let resText = await res.text();
-      this.rankingFromCsv(resText);
-
-      if (!this.data.datasets[0].datalabels) {
-        this.$set(this.data.datasets[0], "datalabels", {
-          align: [],
-          color: []
-        });
-      }
-      let divider;
-      switch (this.myCase[0]) {
-        case "ratio":
-          divider = 10;
-          break;
-        case "ratio-population":
-          switch (this.myCase[1]) {
-            case "death":
-              divider = 2;
-              break;
-            default:
-              divider = 3;
-          }
-          break;
-        default:
-          divider = 2;
-      }
-      const datasetDataLength = this.data.datasets[0].data.length;
-      this.data.datasets[0].data.forEach((v, i) => {
-        this.$set(
-          this.data.datasets[0].datalabels.align,
-          i,
-          i < divider ? "start" : "end"
-        );
-        this.$set(
-          this.data.datasets[0].datalabels.color,
-          i,
-          i < divider ? "#fff" : "#000"
-        );
-      });
-    })();
+    this.updateData();
   },
   mounted() {
     const _this = this;
@@ -180,7 +218,7 @@ export default {
           }
         });
       }
-    }, 299);
+    }, 9);
   },
   destroyed() {
     if (!!this.chartInstance) {
@@ -194,4 +232,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 @import "@/css/_ranking";
+@import "@/css/_foundation";
+@include foundation-float-classes;
+menu {
+  // margin-top: 0.5rem;
+  a {
+    display: inline-block;
+  }
+}
 </style>

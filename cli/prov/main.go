@@ -38,9 +38,10 @@ func Item(file io.Reader) {
 	inputFileClean := inputFile.ListPerkembangan.Clean()
 	libs.WriteToFile("dist/desktop", fmt.Sprintf("%s.csv", fileName), inputFileClean.ToCsv())
 
-	for i := 1; i <= 14; i++ {
-		dirpath := fmt.Sprintf("dist/web/%d", i)
-		libs.WriteToFile(dirpath, fmt.Sprintf("%s.csv", fileName), inputFileClean.Chunk(i).ToCsv())
+	periods := [5]int{1, 3, 7, 14, 28}
+	for _, v := range periods {
+		dirpath := fmt.Sprintf("dist/web/%d", v)
+		libs.WriteToFile(dirpath, fmt.Sprintf("%s.csv", fileName), inputFileClean.Chunk(v).ToCsv())
 	}
 
 }

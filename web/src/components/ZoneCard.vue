@@ -6,37 +6,37 @@
           h6 {{ `Daily ${zone.split('_').join(' ')}`.toUpperCase() }}
         menu('v-if'='!value.isDialog')
           a.fullscreen.show-for-large('@click'='fullscreenOnClick' title="resize card" aria-label="resize card"): i.icon-window-maximize
-          a.close('@click'='closeOnClick' title="close card"): i.icon-window-close-o
+          a.close('@click'='closeOnClick' title="close card"): i.icon-window-close
       .card-image.stats
         component(':is'="componentStats" 'v-model'='myStatsModel')
       .card-image
         .legend('v-if'="showLegend" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
         .help-text.text-right
           ul
-            li('v-if'="showLegend") #[strong.show-for-large Touch / Click] legend item to toggle chart line
-            li #[strong.show-for-large Long Touch / Hover] on chart to see case number
+            li('v-if'="showLegend") #[strong Touch / Click] legend item to see available chart line
+            li #[strong Touch / Hover] on chart to see case number
+
         canvas(:id="`Chart_${zone}`")
     .card-section
       menu.clearfix
-        .grid-x
+        .grid-x.grid-margin-x
           .cell.small-12.medium-6
             .grid-x
-              .cell.small-4.medium-5
-                label(':for'='`showPeriods_${zone}`') Set Periods
+              .cell.small-6
+                label(':for'='`periods_${zone}`') Periods
               .cell.auto
-                .switch.small
-                  input.switch-input(':id'="`showPeriods_${zone}`" type="checkbox" 'v-model'='showPeriods')
-                  label.switch-paddle(':for'='`showPeriods_${zone}`')
-                    span.show-for-sr Set Periods ?
-                    span.switch-active(aria-hidden="true") Yes
-                    span.switch-inactive(aria-hidden="true") No
-              .cell.auto
-                .periods(v-if="showPeriods")
-                  input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
+                .periods
+                  //- input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
+                  select(':id'="`periods_${zone}`"  'v-model'='periods')
+                    option(value="1") Daily
+                    option(value="3") 3 day
+                    option(value="7") Weekly
+                    option(value="14") 2 weeks
+                    option(value="28") 4 weeks
 
           .cell.small-12.medium-6
             .grid-x
-              .cell.small-4.medium-5
+              .cell.small-6
                 label(':for'='`showLegend_${zone}`') Show Legend
               .cell.auto
                 .switch.small
@@ -68,8 +68,8 @@
           //-             option('v-for'='(v,i) in data.labels.slice(periodsRange.begin)' ':key'='v' ':value'="i") {{ v }}
         .float-right
           //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
-          a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/csv/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
-          a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-download-cloud
+          a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/desktop/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
+          a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-floppy
           a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
     Dialog('v-model'='modelDialog')
       h5 Are you sure you mant to remove {{zone}} ?
@@ -80,6 +80,7 @@
         button.button('@click'="modelDialog.isOpen=false")
           span.show-for-sr No
           span(aria-hidden="true") No
+    //- Spinner('v-model'='modelSpinner')
 </template>
 
 <script>
@@ -87,6 +88,7 @@ import ZoneStats from "@/components/ZoneStats";
 import MixinCard from "@/mixins/Card.js";
 import MixinForm from "@/mixins/Form.js";
 import Dialog from "@/components/Dialog.vue";
+import Spinner from "@/components/Spinner.vue";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
@@ -98,13 +100,23 @@ import {
   defaultHiddenDatasets,
   defaultShare
 } from "@/js/vars";
-const defaultShowPeriods = false;
+
 const defaultShowLegend = false;
 
 const defaultStats = {
   lastUpdate: null,
-  total: {},
-  daily: {}
+  total: {
+    confirmed: 0,
+    recover: 0,
+    death: 0,
+    active: 0
+  },
+  daily: {
+    confirmed: 0,
+    recover: 0,
+    death: 0,
+    active: 0
+  }
 };
 
 export default {
@@ -112,6 +124,7 @@ export default {
   mixins: [MixinCard, MixinForm],
   components: {
     ZoneStats,
+    Spinner,
     Dialog
   },
   props: {
@@ -197,6 +210,7 @@ export default {
   },
   data() {
     return {
+      modelSpinner: { isOpen: true },
       modelDialog: { isOpen: false },
       chartInstance: null,
       legendHTML: null,
@@ -205,7 +219,6 @@ export default {
       data: _cloneDeep(defaultChartData),
 
       // showLegend: _cloneDeep(defaultShowLegend),
-      showPeriods: _cloneDeep(defaultShowPeriods),
       showPeriodsRange: true,
       periodsRange: {
         begin: null,
@@ -235,13 +248,27 @@ export default {
       (async () => {
         // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/${this.periods}/${this.zone}.csv?_=${Date.now()}
         // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/${this.periods}/${this.zone}.csv?_=${Date.now()}
-        const url = `https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/${
+        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/${
           this.periods
         }/${this.zone}.csv?_=${Date.now()}`;
-        let res = await fetch(url);
-        let resTxt = await res.text();
-        this.fromCsv(resTxt);
+        try {
+          let res = await fetch(url);
 
+          if (!res.ok) {
+            console.log(res.ok);
+            // make the promise be rejected if we didn't get a 2xx response
+            throw new Error("Not 2xx response");
+          }
+          // go the desired response
+          let resTxt = await res.text();
+          this.fromCsv(resTxt);
+        } catch (e) {
+          console.log(url, " failed");
+        }
+
+        if (!this.data.datasets[0].data.length) {
+          return;
+        }
         let i = 0;
         let found = false;
         const length = this.data.datasets[4].data.length;
@@ -287,6 +314,8 @@ export default {
         }
       });
       this.chartInstance.update();
+      this.modelSpinner.isOpen = false;
+
       if (this.showLegend) {
         this.legendHTML = this.chartInstance.generateLegend();
       }
@@ -311,14 +340,16 @@ export default {
     this.updateChartData();
   },
   mounted() {
-    if (!this.chartInstance) {
-      const { initChartDaily } = require("@/js/chartjs");
-      this.chartInstance = initChartDaily({
-        zone: this.zone,
-        data: this.data
-      });
-    }
-    this.componentStats = ZoneStats;
+    _delay(() => {
+      if (!this.chartInstance) {
+        const { initChartDaily } = require("@/js/chartjs");
+        this.chartInstance = initChartDaily({
+          zone: this.zone,
+          data: this.data
+        });
+      }
+      this.componentStats = ZoneStats;
+    }, 9);
   },
   destroyed() {
     this.data = _cloneDeep(defaultChartData);
@@ -346,6 +377,7 @@ export default {
 
 .zone-card {
   // margin: 0.5rem 0;
+  // position: relative;
   &.card {
     $color: map-get($element-color, "title");
     border: 1px solid $color;
@@ -387,6 +419,7 @@ menu {
   }
 }
 .header {
+  position: relative;
   menu {
     position: absolute;
     top: 0.75rem;
@@ -394,6 +427,7 @@ menu {
 
     i {
       color: white;
+      font-size: 1.5rem;
     }
   }
 }
@@ -401,5 +435,8 @@ menu {
   button {
     margin: 0 0.5rem;
   }
+}
+.switch {
+  // width: 5rem !important;
 }
 </style>
