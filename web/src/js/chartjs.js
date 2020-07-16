@@ -235,7 +235,9 @@ const initChartDaily = (params = { zone: null, data: null }) => {
   return chartInstance;
 };
 
-const initChartRanking = (params = { elementId: null, data: null, onClick: null, datalabelsFormatter: null }) => {
+const initChartRanking = (
+  params = { elementId: null, data: null, onClick: null, datalabelsFormatter: null, tooltipsCallbackLabel: null }
+) => {
   const chartInstance = new Chart(params.elementId, {
     type: "horizontalBar",
     data: params.data,
@@ -278,15 +280,11 @@ const initChartRanking = (params = { elementId: null, data: null, onClick: null,
         ],
       },
       tooltips: {
-        enabled: false,
+        // enabled: false,
         // intersect: false,
-        //   callbacks: {
-        //     label(tooltipItem, data) {
-        //       var label = data.labels[tooltipItem.index] || "";
-        //       let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-        //       return `${label}: ${value}%`;
-        //     },
-        //   },
+        callbacks: {
+          label: params.tooltipsCallbackLabel,
+        },
       },
       plugins: {
         datalabels: {

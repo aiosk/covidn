@@ -248,7 +248,7 @@ export default {
       (async () => {
         // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/${this.periods}/${this.zone}.csv?_=${Date.now()}
         // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/${this.periods}/${this.zone}.csv?_=${Date.now()}
-        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/${
+        const url = `https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/daily/${
           this.periods
         }/${this.zone}.csv?_=${Date.now()}`;
         try {

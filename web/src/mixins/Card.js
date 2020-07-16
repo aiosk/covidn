@@ -31,6 +31,24 @@ const main = {
         this.data,
         "labels",
         csvBody.map((v) => v[0].replace(/_/g, " "))
+        // .map((v) => {
+        //   let abbr = v
+        //     .replace("DAERAH ISTIMEWA", "D.I.")
+        //     .replace("NUSA TENGGARA BARAT", "NTB")
+        //     .replace("NUSA TENGGARA TIMUR", "NTT")
+        //     .replace("BANGKA BELITUNG", "BABEL")
+        //     .replace("KEPULAUAN", "KEP.")
+        //     .replace("SUMATERA", "SUM.")
+        //     .replace("SULAWESI", "SUL.")
+        //     .replace("KALIMANTAN", "KAL.");
+        //   // .replace("JAWA", "JA");
+        //   // .replace("UTARA", "UT")
+        //   // .replace("SELATAN", "SEL")
+        //   // .replace("TIMUR", "TIM")
+        //   // .replace("TENGAH", "TENG")
+        //   // .replace("BARAT", "BAR");
+        //   return abbr;
+        // })
       );
     },
     fromCsv(csv) {
