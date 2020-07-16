@@ -59,12 +59,12 @@ export default {
     }
   },
   watch: {
-    periods(val, oldVal) {
-      this.updateQuery("periods", val, defaultPeriods);
-    },
-    selectedZones(val, oldVal) {
-      this.updateQuery("zones", val, defaultZones);
-    }
+    // periods(val, oldVal) {
+    //   this.updateQuery("periods", val, defaultPeriods);
+    // },
+    // selectedZones(val, oldVal) {
+    //   this.updateQuery("zones", val, defaultZones);
+    // }
   },
   methods: {
     selectAllOnClick(e) {

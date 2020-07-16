@@ -15,7 +15,7 @@
           .cell.auto
             .periods
               //- input(':id'="`periods_${myCase.join("-")}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
-              select(':id'="`periods_${myCase.join('-')}`"  'v-model'='periods')
+              select(':id'="`periods_${myCase.join('-')}`"  'v-model'='rankPeriods')
                 option(value="0") All Time
                 option(value="1") Last day
                 option(value="3") Last 3 day
@@ -41,7 +41,11 @@ import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
 import _debounce from "lodash/debounce";
 import _isUndefined from "lodash/isUndefined";
-import { defaultChartData, defaultChartColor } from "@/js/vars";
+import {
+  defaultChartData,
+  defaultChartColor,
+  defaultRankPeriods
+} from "@/js/vars";
 
 export default {
   name: "RankingCard",
@@ -68,12 +72,15 @@ export default {
     };
   },
   computed: {
-    periods: {
+    rankPeriods: {
       get() {
-        return !!this.value.periods ? this.value.periods : 0;
+        return !!this.value.rankPeriods
+          ? this.value.rankPeriods
+          : defaultRankPeriods;
       },
       set(val) {
-        this.emitModel({ periods: val });
+        this.updateQuery("rankPeriods", val, defaultRankPeriods);
+        this.emitModel({ rankPeriods: val });
       }
     },
     title() {
@@ -103,7 +110,8 @@ export default {
     }
   },
   watch: {
-    periods(val, oldVal) {
+    rankPeriods(val, oldVal) {
+      // this.emitModel({ rankPeriods: val });
       this.updateData();
     }
   },
@@ -113,7 +121,7 @@ export default {
         // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
         // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
         const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/stats/${
-          this.periods
+          this.rankPeriods
         }/${this.myCase.join("-")}.csv?_=${Date.now()}`;
         let res = await fetch(url);
         let resText = await res.text();
@@ -125,7 +133,7 @@ export default {
             color: []
           });
         }
-        let divider = 2;
+        let divider = 1;
         // switch (this.myCase[0]) {
         //   case "ratio":
         //     divider = 10;
@@ -168,6 +176,12 @@ export default {
     }
   },
   created() {
+    let { rankPeriods } = this.$route.query;
+
+    if (!!rankPeriods) {
+      this.rankPeriods = rankPeriods;
+    }
+
     this.updateData();
   },
   mounted() {

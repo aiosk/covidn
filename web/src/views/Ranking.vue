@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       modelCard: {
-        periods: null
+        rankPeriods: null
       },
       cases: _cloneDeep(cases),
       lazyLoadCanvas: null,

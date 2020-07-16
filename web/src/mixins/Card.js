@@ -94,6 +94,10 @@ const main = {
       const $icon = e.target.closest("menu").querySelector(".fullscreen i");
       $icon.classList.toggle("icon-window-maximize");
       $icon.classList.toggle("icon-window-restore");
+      if (!this.chartInstance) {
+        return;
+      }
+      this.chartInstance.resize();
     },
     downloadOnClick(e) {
       const domtoimage = require("domtoimage");

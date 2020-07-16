@@ -53,6 +53,7 @@ const defaultZones = [
   "MALUKU",
 ];
 const defaultPeriods = 3;
+const defaultRankPeriods = 0;
 const defaultHiddenDatasets = [false, true, false, true, false, true, false, true];
 
 const cases = ["confirmed", "recover", "death", "active"];
@@ -84,6 +85,7 @@ export {
   zones,
   defaultZones,
   defaultPeriods,
+  defaultRankPeriods,
   defaultHiddenDatasets,
   cases,
   defaultChartData,
