@@ -9,9 +9,47 @@ import (
 type InputFile struct {
 	Date           string `csv:"date"`
 	TotalConfirmed string `csv:"total_confirmed"`
+	DailyConfirmed string `csv:"confirmed"`
 	TotalRecover   string `csv:"total_recover"`
+	DailyRecover   string `csv:"recover"`
 	TotalDeath     string `csv:"total_death"`
+	DailyDeath     string `csv:"death"`
 	TotalActive    string `csv:"total_active"`
+	DailyActive    string `csv:"active"`
+}
+
+// GetTotalByCase ...
+func (val InputFile) GetTotalByCase(myCase string) string {
+
+	var total string
+	switch myCase {
+	case "recover":
+		total = val.TotalRecover
+	case "death":
+		total = val.TotalDeath
+	case "active":
+		total = val.TotalActive
+	default:
+		total = val.TotalConfirmed
+	}
+	return total
+}
+
+// GetDailyByCase ...
+func (val InputFile) GetDailyByCase(myCase string) string {
+
+	var daily string
+	switch myCase {
+	case "recover":
+		daily = val.DailyRecover
+	case "death":
+		daily = val.DailyDeath
+	case "active":
+		daily = val.DailyActive
+	default:
+		daily = val.DailyConfirmed
+	}
+	return daily
 }
 
 // OutputItem ...
@@ -38,6 +76,14 @@ type OutputPerCase map[string]OutputList
 
 // InputRawan ...
 type InputRawan struct {
-	Zone       libs.MyStringID `csv:"nama_wilayah"`
-	Population string          `csv:"jumlah_penduduk"`
+	Zone       string `csv:"nama_wilayah"`
+	Population string `csv:"jumlah_penduduk"`
+}
+
+// DataRawan ...
+type DataRawan map[string]DataRawanItem
+
+// DataRawanItem ...
+type DataRawanItem struct {
+	Population uint64 `csv:"jumlah_penduduk"`
 }

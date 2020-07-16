@@ -27,10 +27,10 @@ type DataItem struct {
 	Case         ItemJumlah     `json:"jumlah_positif" csv:"confirmed"`
 	TotalRecover ItemJumlah     `json:"jumlah_sembuh_kum" csv:"total_recover"`
 	Recover      ItemJumlah     `json:"jumlah_sembuh" csv:"recover"`
-	TotalActive  ItemJumlah     `json:"jumlah_dirawat_kum" csv:"total_active"`
-	Active       ItemJumlah     `json:"jumlah_dirawat" csv:"active"`
 	TotalDeath   ItemJumlah     `json:"jumlah_meninggal_kum" csv:"total_death"`
 	Death        ItemJumlah     `json:"jumlah_meninggal" csv:"death"`
+	TotalActive  ItemJumlah     `json:"jumlah_dirawat_kum" csv:"total_active"`
+	Active       ItemJumlah     `json:"jumlah_dirawat" csv:"active"`
 }
 
 // DataList ...
