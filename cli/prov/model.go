@@ -31,7 +31,7 @@ type InputFile struct {
 }
 
 // Clean ...
-func (val DataList) Clean() DataList {
+func (val DataList) Clean(appendData DisiplinIDItem) DataList {
 	var result DataList
 
 	// location, _ := time.LoadLocation("Asia/Jakarta")
@@ -52,6 +52,22 @@ func (val DataList) Clean() DataList {
 			result = append(result, item)
 		}
 	}
+	oldLastIdx := len(result) - 2
+	beforeLastIdx := oldLastIdx - 1
+	totalCase := appendData.TotalCase - (appendData.TotalRecover + appendData.TotalDeath)
+	item := DataItem{
+		Date:         result[oldLastIdx].Date,
+		TotalCase:    appendData.TotalCase,
+		Case:         appendData.Case,
+		TotalRecover: appendData.TotalRecover,
+		Recover:      appendData.Recover,
+		TotalDeath:   appendData.TotalDeath,
+		Death:        appendData.TotalDeath - result[beforeLastIdx].TotalDeath,
+		TotalActive:  totalCase,
+		Active:       totalCase - result[beforeLastIdx].TotalActive,
+	}
+	result[oldLastIdx] = item
+	// spew.Dump(appendData)
 
 	return result
 }
@@ -112,4 +128,15 @@ func (val DataList) ToCsv() []byte {
 	libs.PanicError(err)
 
 	return result
+}
+
+// DisiplinIDItem ...
+type DisiplinIDItem struct {
+	ID           string `json:"id"`
+	Provinsi     string `json:"provinsi"`
+	TotalCase    int    `json:"total_case"`
+	Case         int    `json:"new_case"`
+	TotalRecover int    `json:"total_recover"`
+	Recover      int    `json:"new_recover"`
+	TotalDeath   int    `json:"total_died"`
 }

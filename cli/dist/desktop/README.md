@@ -1,46 +1,21 @@
 # Indonesia COVID-19 Data
 
 - [CSV](#csv)
-  - [national.csv](#nationalcsv)
-  - [{name}.csv](#namecsv)
+  - [NATIONAL.csv](#nationalcsv)
+  - [{name_provinsi}.csv](#name_provinsicsv)
   - [rawan.csv](#rawancsv)
     - [Pengelompokan Kriteria Risiko COVID-19 di Daerah Berdasarkan Zonasi Warna](#pengelompokan-kriteria-risiko-covid-19-di-daerah-berdasarkan-zonasi-warna)
 - [Credits](#credits)
 
 ## CSV
 
-### national.csv
+### NATIONAL.csv
 
 Berisi data tabular kasus harian **nasional** indonesia dari [covid19.go.id](https://covid19.go.id/peta-sebaran)
 
-| judul                | keterangan                                     |
-| -------------------- | ---------------------------------------------- |
-| key                  | tanggal                                        |
-| jumlah_positif_kum   | akumulasi jumlah kasus ter-**konfirmasi**      |
-| jumlah_positif       | jumlah kasus harian ter-**konfirmasi**         |
-| jumlah_sembuh_kum    | akumulasi jumlah kasus **sembuh**              |
-| jumlah_sembuh        | jumlah kasus **sembuh** harian                 |
-| jumlah_meninggal_kum | akumulasi jumlah kasus **meninggal**           |
-| jumlah_meninggal     | jumlah kasus **meninggal** harian              |
-| jumlah_dirawat_kum   | akumulasi jumlah kasus **dirawat / diisolasi** |
-| jumlah_dirawat       | jumlah kasus **dirawat / diisolasi** harian    |
-
-### {name}.csv
+### {name_provinsi}.csv
 
 Berisi data tabular kasus harian **provinsi** indonesia dari [covid19.go.id](https://covid19.go.id/peta-sebaran)
-
-| judul                        | keterangan                                     |
-| ---------------------------- | ---------------------------------------------- |
-| provinsi                     | provins                                        |
-| tanggal                      | tanggal                                        |
-| AKUMULASI_KASUS              | akumulasi jumlah kasus ter-**konfirmasi**      |
-| KASUS                        | jumlah kasus harian ter-**konfirmasi**         |
-| AKUMULASI_SEMBUH             | akumulasi jumlah kasus **sembuh**              |
-| SEMBUH                       | jumlah kasus **sembuh** harian                 |
-| AKUMULASI_MENINGGAL          | akumulasi jumlah kasus **meninggal**           |
-| MENINGGAL                    | jumlah kasus **meninggal** harian              |
-| AKUMULASI_DIRAWAT_OR_ISOLASI | akumulasi jumlah kasus **dirawat / diisolasi** |
-| DIRAWAT_OR_ISOLASI           | jumlah kasus **dirawat / diisolasi** harian    |
 
 ### rawan.csv
 

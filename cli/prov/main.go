@@ -29,13 +29,18 @@ func Main(file io.Reader) {
 
 // Item ...
 func Item(file io.Reader) {
+	disipinID := make(map[string]DisiplinIDItem)
+	csvFile := libs.ReadFile("assets/covid19.disiplin.id.json")
+	err := json.Unmarshal(csvFile, &disipinID)
+	libs.PanicError(err)
+
 	var inputFile InputFile
-	err := json.NewDecoder(file).Decode(&inputFile)
+	err = json.NewDecoder(file).Decode(&inputFile)
 	libs.PanicError(err)
 
 	fileName := strings.ReplaceAll(inputFile.Provinsi, " ", "_")
 
-	inputFileClean := inputFile.ListPerkembangan.Clean()
+	inputFileClean := inputFile.ListPerkembangan.Clean(disipinID[inputFile.Provinsi])
 	libs.WriteToFile("dist/desktop", fmt.Sprintf("%s.csv", fileName), inputFileClean.ToCsv())
 
 	periods := [5]int{1, 3, 7, 14, 28}

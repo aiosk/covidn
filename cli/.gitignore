@@ -1,2 +1,3 @@
 assets/*
-assets/wilayah_*.json
+!assets/wilayah_*.json
+!assets/covid19.disiplin.id.js*
