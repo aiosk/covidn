@@ -28,7 +28,7 @@ export default {
       lazyLoadCanvas: null,
       componentZoneCard: {},
       myModel: {
-        periods: null,
+        interval: null,
         zones,
         selectedZones: _cloneDeep(defaultZones),
         hiddenDatasets: null,
@@ -84,7 +84,7 @@ export default {
   destroyed() {
     this.lazyLoadCanvas.destroy();
 
-    this.$set(this.myModel, "periods", null);
+    this.$set(this.myModel, "interval", null);
     this.$set(this.myModel, "selectedZones", _cloneDeep(defaultZones));
     this.$set(this.myModel, "hiddenDatasets", null);
     this.$set(this.myModel, "componentZoneCard", {});

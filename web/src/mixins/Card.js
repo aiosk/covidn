@@ -2,6 +2,9 @@ import { defaultShare, defaultChartColor } from "@/js/vars";
 
 const main = {
   methods: {
+    toTitleCase(val) {
+      return val.replace(/(^|\s)\S/g, (t) => t.toUpperCase());
+    },
     rankingFromCsv(csv) {
       const csvList = csv
         .split(/\r\n|\n/)

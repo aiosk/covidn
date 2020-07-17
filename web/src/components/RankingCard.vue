@@ -84,9 +84,32 @@ export default {
       }
     },
     title() {
+      let newTitle;
+      let rankPeriodsTitle = "all time";
+
+      switch (this.rankPeriods) {
+        case "1":
+          rankPeriodsTitle = "last day";
+          break;
+        case "3":
+          rankPeriodsTitle = "last 3 day";
+          break;
+        case "7":
+          rankPeriodsTitle = "last week";
+          break;
+        case "14":
+          rankPeriodsTitle = "last 2 weeks";
+          break;
+        case "28":
+          rankPeriodsTitle = "last 4 weeks";
+          break;
+        // default:
+        //   rankPeriodsTitle = `last ${this.rankPeriods} days`;
+      }
+
       switch (this.myCase[0]) {
         case "ranking":
-          return `${this.myCase[1]} Case ${this.myCase[0]}`;
+          newTitle = `${this.myCase[1]} Case ${this.myCase[0]}`;
         case "ratio":
           let myCase;
           switch (this.myCase[1]) {
@@ -99,14 +122,16 @@ export default {
             default:
               myCase = this.myCase[1];
           }
-          return `Case ${myCase} ${this.myCase[0]}`;
+          newTitle = `Case ${myCase} ${this.myCase[0]}`;
           break;
         case "ratio-population":
-          return `${this.myCase[1]} Case per 1M Population`;
+          newTitle = `${this.myCase[1]} Case per 1M Population`;
           break;
         default:
-          return `${this.myCase[1]} ${this.myCase[0]}`;
+          newTitle = `${this.myCase[1]} ${this.myCase[0]}`;
       }
+
+      return `${newTitle} ${rankPeriodsTitle}`;
     }
   },
   watch: {
@@ -127,13 +152,13 @@ export default {
         let resText = await res.text();
         this.rankingFromCsv(resText);
 
-        if (!this.data.datasets[0].datalabels) {
-          this.$set(this.data.datasets[0], "datalabels", {
-            align: [],
-            color: []
-          });
-        }
-        let divider = 2;
+        // if (!this.data.datasets[0].datalabels) {
+        //   this.$set(this.data.datasets[0], "datalabels", {
+        //     align: [],
+        //     color: []
+        //   });
+        // }
+        // let divider = 1;
         // switch (this.myCase[0]) {
         //   case "ratio":
         //     divider = 10;
@@ -153,19 +178,19 @@ export default {
         //   default:
         //     divider = 2;
         // }
-        const datasetDataLength = this.data.datasets[0].data.length;
-        this.data.datasets[0].data.forEach((v, i) => {
-          this.$set(
-            this.data.datasets[0].datalabels.align,
-            i,
-            i < divider ? "start" : "end"
-          );
-          this.$set(
-            this.data.datasets[0].datalabels.color,
-            i,
-            i < divider ? "#fff" : "#000"
-          );
-        });
+        // const datasetDataLength = this.data.datasets[0].data.length;
+        // this.data.datasets[0].data.forEach((v, i) => {
+        //   this.$set(
+        //     this.data.datasets[0].datalabels.align,
+        //     i,
+        //     i < divider ? "start" : "end"
+        //   );
+        //   this.$set(
+        //     this.data.datasets[0].datalabels.color,
+        //     i,
+        //     i < divider ? "#fff" : "#000"
+        //   );
+        // });
 
         if (!this.chartInstance) {
           return;
@@ -188,10 +213,18 @@ export default {
     const _this = this;
     _delay(() => {
       if (!this.chartInstance) {
+        let chartRightPadding = 64;
+        if (this.myCase[0] == "ranking") {
+          chartRightPadding += 64;
+        }
+        if (this.myCase[0] == "ratio") {
+          chartRightPadding += 16;
+        }
         const { initChartRanking } = require("@/js/chartjs");
         this.chartInstance = initChartRanking({
           elementId: `${this.myCase[0]}_${this.myCase[1].toUpperCase()}`,
           data: this.data,
+          rightPadding: chartRightPadding,
           onClick(e, chartItem) {
             let col;
             this.getElementsAtEventForMode(e, "y", 1).forEach(function(item) {
@@ -219,12 +252,12 @@ export default {
             const lastUpdate = date.toLocaleDateString("en-US", options);
 
             if (!!percentage) {
-              return `${val} (${percentage}%) (${lastUpdate})`;
+              return `${val} | ${percentage}% | ${lastUpdate}`;
             }
             if (_this.myCase[0] == "ratio") {
-              return `${val}% (${lastUpdate})`;
+              return `${val}% | ${lastUpdate}`;
             }
-            return `${val} (${lastUpdate})`;
+            return `${val} | ${lastUpdate}`;
           },
           tooltipsCallbackLabel(tooltipItem, data) {
             // var label = data.labels[tooltipItem.index] || "";
@@ -238,20 +271,24 @@ export default {
             );
             var options = { month: "short", day: "numeric" };
             const lastUpdate = date.toLocaleDateString("en-US", options);
+            const myCaseInTitleCase = _this.toTitleCase(_this.myCase[1]);
             if (!!percentage) {
               return [
-                `${_this.myCase[1]}: ${val}`,
+                `${myCaseInTitleCase}: ${val}`,
                 `Percentage: ${percentage}%`,
                 `Last Update: ${lastUpdate}`
               ];
             }
             if (_this.myCase[0] == "ratio") {
               return [
-                `${_this.myCase[1]}: ${val}%`,
+                `${myCaseInTitleCase}: ${val}%`,
                 `Last Update: ${lastUpdate}`
               ];
             }
-            return [`${_this.myCase[1]}: ${val}`, `Last Update: ${lastUpdate}`];
+            return [
+              `${myCaseInTitleCase}: ${val}`,
+              `Last Update: ${lastUpdate}`
+            ];
           }
         });
       }

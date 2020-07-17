@@ -52,7 +52,7 @@ const defaultZones = [
   "PAPUA",
   "MALUKU",
 ];
-const defaultPeriods = 3;
+const defaultInterval = 3;
 const defaultRankPeriods = 0;
 const defaultHiddenDatasets = [false, true, false, true, false, true, false, true];
 
@@ -84,7 +84,7 @@ const defaultShare = {
 export {
   zones,
   defaultZones,
-  defaultPeriods,
+  defaultInterval,
   defaultRankPeriods,
   defaultHiddenDatasets,
   cases,

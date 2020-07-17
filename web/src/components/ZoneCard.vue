@@ -3,7 +3,7 @@
     .capture
       .card-divider.header
         .title
-          h6 {{ `Daily ${zone.replace(/_/g, " ")}`.toUpperCase() }}
+          h6 {{ title }}
         menu('v-if'='!value.isDialog')
           a.fullscreen.show-for-large('@click'='fullscreenOnClick' title="resize card" aria-label="resize card"): i.icon-window-maximize
           a.close('@click'='closeOnClick' title="close card"): i.icon-window-close
@@ -23,11 +23,10 @@
           .cell.small-12.medium-6
             .grid-x
               .cell.small-6
-                label(':for'='`periods_${zone}`') Periods
+                label(':for'='`interval_${zone}`') Interval
               .cell.auto
-                .periods
-                  //- input(':id'="`periods_${zone}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
-                  select(':id'="`periods_${zone}`"  'v-model'='periods')
+                .interval
+                  select(':id'="`interval_${zone}`"  'v-model'='interval')
                     option(value="1") Daily
                     option(value="3") 3 day
                     option(value="7") Weekly
@@ -45,27 +44,6 @@
                     span.show-for-sr Show Legend ?
                     span.switch-active(aria-hidden="true") Yes
                     span.switch-inactive(aria-hidden="true") No
-          //- .cell.small-12
-          //-   .grid-x
-          //-     .cell.small-4.medium-3
-          //-       label(':for'='`showPeriodsRange_${zone}`') Set Periods Range
-          //-     .cell.small-4.medium-3
-          //-       .switch.small
-          //-         input.switch-input(':id'="`showPeriodsRange_${zone}`" type="checkbox" 'v-model'='showPeriodsRange')
-          //-         label.switch-paddle(':for'='`showPeriodsRange_${zone}`')
-          //-           span.show-for-sr Set Periods Range ?
-          //-           span.switch-active(aria-hidden="true") Yes
-          //-           span.switch-inactive(aria-hidden="true") No
-          //-     .cell.small-12.medium-auto
-          //-       .grid-x(v-if="showPeriodsRange")
-          //-         .cell.small-5
-          //-           select.begin('v-model'="periodsRange.begin")
-          //-             option('v-for'='(v,i) in data.labels' ':key'='v' ':value'="i") {{ v }}
-          //-         .cell.auto
-          //-           .text-center -
-          //-         .cell.small-5
-          //-           select.end('v-model'="periodsRange.end")
-          //-             option('v-for'='(v,i) in data.labels.slice(periodsRange.begin)' ':key'='v' ':value'="i") {{ v }}
         .float-right
           //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
           a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/desktop/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
@@ -96,7 +74,7 @@ import _range from "lodash/range";
 
 import {
   defaultChartData,
-  defaultPeriods,
+  defaultInterval,
   defaultHiddenDatasets,
   defaultShare
 } from "@/js/vars";
@@ -132,18 +110,39 @@ export default {
     value: Object
   },
   computed: {
+    title() {
+      let intervalTitle;
+
+      switch (this.interval) {
+        case "1":
+          intervalTitle = `daily`;
+          break;
+        case "7":
+          intervalTitle = `weekly`;
+          break;
+        case "14":
+          intervalTitle = `every 2 weeks`;
+          break;
+        case "28":
+          intervalTitle = `every 4 weeks`;
+          break;
+        default:
+          intervalTitle = `every ${this.interval} days`;
+      }
+      return `${this.zone.replace(/_/g, " ")} ${intervalTitle}`.toUpperCase();
+    },
     myStatsModel() {
       return { zone: this.zone, stats: this.stats };
     },
     population() {
       return this.value.population;
     },
-    periods: {
+    interval: {
       get() {
-        return this.value.periods ? this.value.periods : defaultPeriods;
+        return this.value.interval ? this.value.interval : defaultInterval;
       },
       set: _debounce(function(val) {
-        this.emitModel({ periods: val });
+        this.emitModel({ interval: val });
       }, 500)
     },
     hiddenDatasets: {
@@ -185,27 +184,15 @@ export default {
       }
       this.legendHTML = this.chartInstance.generateLegend();
     },
-    periods(val, oldVal) {
+    interval(val, oldVal) {
       this.updateChartData();
 
-      this.updateQuery("periods", val, defaultPeriods);
+      this.updateQuery("interval", val, defaultInterval);
     },
     hiddenDatasets(val, oldVal) {
       this.updateChartHiddenDatasets();
 
       this.updateQuery("hidden", val, defaultHiddenDatasets);
-    },
-    "periodsRange.begin"(val, oldVal) {
-      console.log(val, this.data);
-      this.$set(this.data, "labels", this.data.labels.slice(val));
-      this.data.datasets.forEach((v, i) => {
-        this.$set(
-          this.data.datasets[i],
-          "data",
-          this.data.datasets[i].data.slice(val)
-        );
-      });
-      this.chartInstance.update();
     }
   },
   data() {
@@ -216,14 +203,9 @@ export default {
       legendHTML: null,
       stats: _cloneDeep(defaultStats),
       componentStats: null,
-      data: _cloneDeep(defaultChartData),
+      data: _cloneDeep(defaultChartData)
 
       // showLegend: _cloneDeep(defaultShowLegend),
-      showPeriodsRange: true,
-      periodsRange: {
-        begin: null,
-        end: null
-      }
     };
   },
   methods: {
@@ -246,10 +228,10 @@ export default {
     },
     updateChartData() {
       (async () => {
-        // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/${this.periods}/${this.zone}.csv?_=${Date.now()}
-        // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/${this.periods}/${this.zone}.csv?_=${Date.now()}
+        // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/${this.interval}/${this.zone}.csv?_=${Date.now()}
+        // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/${this.interval}/${this.zone}.csv?_=${Date.now()}
         const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/daily/${
-          this.periods
+          this.interval
         }/${this.zone}.csv?_=${Date.now()}`;
         try {
           let res = await fetch(url);
@@ -328,14 +310,14 @@ export default {
     }
   },
   created() {
-    let { hidden: hiddenDatasets, periods } = this.$route.query;
+    let { hidden: hiddenDatasets, interval } = this.$route.query;
 
     if (!!hiddenDatasets) {
       hiddenDatasets = hiddenDatasets.split("").map(v => v == "1");
       this.hiddenDatasets = hiddenDatasets;
     }
-    if (!!periods) {
-      this.periods = periods;
+    if (!!interval) {
+      this.interval = interval;
     }
     this.updateChartData();
   },
@@ -405,7 +387,7 @@ export default {
 menu {
   margin-top: 0;
   padding-left: 0;
-  .periods {
+  .interval {
     input {
       margin-left: 0.5rem;
       width: 3rem;

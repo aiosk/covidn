@@ -236,7 +236,14 @@ const initChartDaily = (params = { zone: null, data: null }) => {
 };
 
 const initChartRanking = (
-  params = { elementId: null, data: null, onClick: null, datalabelsFormatter: null, tooltipsCallbackLabel: null }
+  params = {
+    elementId: null,
+    data: null,
+    onClick: null,
+    datalabelsFormatter: null,
+    tooltipsCallbackLabel: null,
+    rightPadding: null,
+  }
 ) => {
   const chartInstance = new Chart(params.elementId, {
     type: "horizontalBar",
@@ -253,6 +260,11 @@ const initChartRanking = (
       responsiveAnimationDuration: 0,
       watermark: defaultWatermark,
 
+      layout: {
+        padding: {
+          right: params.rightPadding,
+        },
+      },
       scales: {
         xAxes: [
           {
@@ -314,93 +326,13 @@ const initChartRanking = (
           align: "end",
           // textAlign: "left",
           // opacity: 0.675,
-          clamp: true,
+          // clamp: true,
           // clip: true,
           formatter: params.datalabelsFormatter,
           font: {
             // weight: "bold",
             // size: 10,
           },
-          padding: {
-            top: 0,
-            bottom: 0,
-          },
-        },
-      },
-    },
-  });
-  return chartInstance;
-};
-
-const initChartPieRanking = (params = { elementId: null, data: null, onClick: null }) => {
-  const chartInstance = new Chart(params.elementId, {
-    type: "doughnut",
-    data: params.data,
-    // plugins: [ChartDataLabels],
-    options: {
-      // maintainAspectRatio: false,
-      legend: {
-        display: false,
-      },
-      animation: { duration: 0 },
-      hover: { animationDuration: 0 },
-      responsiveAnimationDuration: 0,
-      watermark: defaultWatermark,
-
-      // scales: {
-      //   xAxes: [
-      //     {
-      //       gridLines: {
-      //         // display: false,
-      //       },
-      //       ticks: {
-      //         // display: false,
-      //         // min: 0,
-      //         // maxRotation: 23,
-      //       },
-      //     },
-      //   ],
-      //   yAxes: [
-      //     {
-      //       gridLines: {
-      //         // display: false,
-      //       },
-      //       ticks: {
-      //         // display: false,
-      //         // min: 0,
-      //         // maxRotation: 23,
-      //       },
-      //     },
-      //   ],
-      // },
-      tooltips: {
-        // enabled: false,
-        // intersect: false,
-        //   callbacks: {
-        //     label(tooltipItem, data) {
-        //       var label = data.labels[tooltipItem.index] || "";
-        //       let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-        //       return `${label}: ${value}%`;
-        //     },
-        //   },
-      },
-      plugins: {
-        datalabels: {
-          color: "#000",
-          backgroundColor: "#e6e6e6",
-          // offset: 8,
-          // anchor: "end",
-          align: "end",
-          // formatter:params.datalabelsFormatter,
-          // formatter(val, ctx) {
-          //   // console.log(val, ctx.chart.data.labels[ctx.dataIndex]);
-          //   return `${val}%\n${ctx.chart.data.labels[ctx.dataIndex]}`;
-          // },
-          // // textAlign: "left",
-          opacity: 0.675,
-          clamp: false,
-          clip: false,
-          font: { weight: "bold" },
           // padding: {
           //   top: 0,
           //   bottom: 0,
@@ -411,4 +343,5 @@ const initChartPieRanking = (params = { elementId: null, data: null, onClick: nu
   });
   return chartInstance;
 };
-export { initChartDaily, initChartRanking, initChartPieRanking };
+
+export { initChartDaily, initChartRanking };

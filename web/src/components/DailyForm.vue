@@ -1,11 +1,5 @@
 <template lang="pug">
   form.daily-form.callout.secondary
-    //- .grid-x.periods
-    //-   .cell.large-3
-    //-     label(for='periods') #[span {{ periods }}] Days Period
-    //-   .cell.large-9
-    //-     input#periods(name="periods" type='range' min='1' max='14' step='1' 'v-model'='periods' aria-describedby="periodsHelpText" )
-    //-     p#periodsHelpText.help-text Try slide to smaller or larger data periods. #[strong Smaller] day periods will generate complicated chart data, while #[strong larger] day periods will generate simplified chart data. Use wisely.
     .grid-x.zones
       .cell.small-12.medium-2
         label(for='zones') Zone
@@ -21,8 +15,6 @@
             a('@click'='selectAllOnClick') Select All
             a('@click'='deselectAllOnClick') Deselect All
         p.help-text Too many charts, i don't like to scroll, i want to select some chart
-
-
     //- .grid-x.align-right
     //-   .cell
     //-     button.button(type='submit') Submit
@@ -31,7 +23,7 @@
 <script>
 import _cloneDeep from "lodash/cloneDeep";
 import MixinForm from "@/mixins/Form.js";
-import { defaultPeriods, defaultZones } from "@/js/vars";
+import { defaultZones } from "@/js/vars";
 
 export default {
   name: "DailyForm",
@@ -40,14 +32,6 @@ export default {
   computed: {
     zones() {
       return this.value.zones;
-    },
-    periods: {
-      get() {
-        return this.value.periods ? this.value.periods : defaultPeriods;
-      },
-      set(val) {
-        this.emitModel({ periods: val });
-      }
     },
     selectedZones: {
       get() {
@@ -58,14 +42,7 @@ export default {
       }
     }
   },
-  watch: {
-    // periods(val, oldVal) {
-    //   this.updateQuery("periods", val, defaultPeriods);
-    // },
-    // selectedZones(val, oldVal) {
-    //   this.updateQuery("zones", val, defaultZones);
-    // }
-  },
+  watch: {},
   methods: {
     selectAllOnClick(e) {
       const $select = e.target.closest(".cell").querySelector("select");
@@ -82,13 +59,7 @@ export default {
       $select.dispatchEvent(new Event("change"));
     }
   },
-  created() {
-    let { periods } = this.$route.query;
-
-    if (!!periods) {
-      this.periods = periods;
-    }
-  }
+  created() {}
 };
 </script>
 
@@ -99,14 +70,7 @@ export default {
 @include foundation-switch;
 @include foundation-float-classes;
 // @include foundation-button;
-.periods {
-  input[type="range"] {
-    width: 100%;
-  }
-  label span {
-    font-weight: bold;
-  }
-}
+
 .zones {
   select {
     margin-bottom: 0;
