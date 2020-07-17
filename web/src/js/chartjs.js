@@ -282,10 +282,11 @@ const initChartRanking = (
                   .replace("NUSA TENGGARA BARAT", "NTB")
                   .replace("NUSA TENGGARA TIMUR", "NTT")
                   .replace("BANGKA BELITUNG", "BABEL")
+                  .replace("YOGYAKARTA", "YOGYA")
                   .replace("KEPULAUAN", "KEP.")
-                  .replace("KALIMANTAN", "KAL.");
-                // .replace("SUMATERA", "SUM.")
-                // .replace("SULAWESI", "SUL.")
+                  .replace("KALIMANTAN", "KAL.")
+                  .replace("SUMATERA", "SUM.")
+                  .replace("SULAWESI", "SUL.");
                 // .replace("JAWA", "JA");
                 // .replace("UTARA", "UT")
                 // .replace("SELATAN", "SEL")

@@ -133,7 +133,7 @@ export default {
             color: []
           });
         }
-        let divider = 1;
+        let divider = 2;
         // switch (this.myCase[0]) {
         //   case "ratio":
         //     divider = 10;
