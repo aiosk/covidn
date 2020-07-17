@@ -3,7 +3,7 @@
     .capture
       .card-divider.header
         .title
-          h6 {{ `Daily ${zone.split('_').join(' ')}`.toUpperCase() }}
+          h6 {{ `Daily ${zone.replace(/_/g, " ")}`.toUpperCase() }}
         menu('v-if'='!value.isDialog')
           a.fullscreen.show-for-large('@click'='fullscreenOnClick' title="resize card" aria-label="resize card"): i.icon-window-maximize
           a.close('@click'='closeOnClick' title="close card"): i.icon-window-close

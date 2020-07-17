@@ -11,7 +11,7 @@
         label(for='zones') Zone
       .cell.small-auto.medium-auto
         select#zones(name="zones" multiple 'v-model'='selectedZones')
-          option(v-for="v in zones" ':key'="v" ':value'='v' ) {{ v.split('_').join(' ') }}
+          option(v-for="v in zones" ':key'="v" ':value'='v' ) {{ v.replace(/_/g, " ") }}
         menu.clearfix
           span.float-left
             .selected

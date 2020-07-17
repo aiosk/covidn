@@ -275,6 +275,25 @@ const initChartRanking = (
               // display: false,
               // min: 0,
               // maxRotation: 23,
+              callback: function(label, index, labels) {
+                const newLabel = label.replace(/_/g, " ");
+                let abbr = newLabel
+                  .replace("DAERAH ISTIMEWA", "D.I.")
+                  .replace("NUSA TENGGARA BARAT", "NTB")
+                  .replace("NUSA TENGGARA TIMUR", "NTT")
+                  .replace("BANGKA BELITUNG", "BABEL")
+                  .replace("KEPULAUAN", "KEP.")
+                  .replace("KALIMANTAN", "KAL.");
+                // .replace("SUMATERA", "SUM.")
+                // .replace("SULAWESI", "SUL.")
+                // .replace("JAWA", "JA");
+                // .replace("UTARA", "UT")
+                // .replace("SELATAN", "SEL")
+                // .replace("TIMUR", "TIM")
+                // .replace("TENGAH", "TENG")
+                // .replace("BARAT", "BAR");
+                return abbr;
+              },
             },
           },
         ],

@@ -200,12 +200,8 @@ export default {
             if (_isUndefined(col)) {
               return;
             }
-            const chartItemID = _this.data.labels[col].replace(/ /g, "_");
+            const chartItemID = _this.data.labels[col];
 
-            // if (!chartItem.length) {
-            //   return;
-            // }
-            // const chartItemID = chartItem[0]._view.label.replace(/ /g, "_");
             _this.modelChart.zone = chartItemID;
             if (!!_this.data.datasets[0].population[col]) {
               _this.modelChart.population =
