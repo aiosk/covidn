@@ -52,21 +52,37 @@ func (val DataList) Clean(appendData DisiplinIDItem) DataList {
 			result = append(result, item)
 		}
 	}
-	oldLastIdx := len(result) - 2
-	beforeLastIdx := oldLastIdx - 1
-	totalCase := appendData.TotalCase - (appendData.TotalRecover + appendData.TotalDeath)
-	item := DataItem{
-		Date:         result[oldLastIdx].Date,
-		TotalCase:    appendData.TotalCase,
-		Case:         appendData.Case,
-		TotalRecover: appendData.TotalRecover,
-		Recover:      appendData.Recover,
-		TotalDeath:   appendData.TotalDeath,
-		Death:        appendData.TotalDeath - result[beforeLastIdx].TotalDeath,
-		TotalActive:  totalCase,
-		Active:       totalCase - result[beforeLastIdx].TotalActive,
+
+	lenRecords := len(result)
+	i := 1
+	lastNonZeroIdx := lenRecords - i
+	found := false
+	// if nextTotal == "0" {
+	for found == false && i < lenRecords-1 {
+		lastNonZeroIdx = lenRecords - i
+		nextTotal := result[lastNonZeroIdx].TotalCase
+		if nextTotal != 0 {
+			found = true
+		}
+		i++
 	}
-	result[oldLastIdx] = item
+	// }
+	beforeLastIdx := lastNonZeroIdx
+	if appendData.TotalCase != result[lastNonZeroIdx].TotalCase {
+		totalActive := appendData.TotalCase - (appendData.TotalRecover + appendData.TotalDeath)
+		item := DataItem{
+			Date:         result[lastNonZeroIdx+1].Date,
+			TotalCase:    appendData.TotalCase,
+			Case:         appendData.Case,
+			TotalRecover: appendData.TotalRecover,
+			Recover:      appendData.Recover,
+			TotalDeath:   appendData.TotalDeath,
+			Death:        appendData.TotalDeath - result[beforeLastIdx].TotalDeath,
+			TotalActive:  totalActive,
+			Active:       totalActive - result[beforeLastIdx].TotalActive,
+		}
+		result[lastNonZeroIdx+1] = item
+	}
 	// spew.Dump(appendData)
 
 	return result
