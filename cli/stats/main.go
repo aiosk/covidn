@@ -193,7 +193,7 @@ func Main() {
 	for _, file := range files {
 		zone := strings.Split(file.Name(), ".")[0]
 		if zone == "rawan" || zone == "rawan-zones" || zone == "README" {
-			break
+			continue
 		}
 		zones = append(zones, zone)
 	}
