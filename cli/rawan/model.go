@@ -16,10 +16,10 @@ type Wilayah map[string]map[string]string
 type DataItem struct {
 	NamaProvinsi      string  `json:"nama_provinsi" csv:"nama_provinsi"`
 	KodeProvinsi      string  `json:"kode_provinsi" csv:"kode_provinsi"`
-	KodeKecamatan     string  `json:"kode_kecamatan" csv:"kode_kecamatan"`
-	NamaKecamatan     string  `json:"nama_kecamatan" csv:"nama_kecamatan"`
-	KodeKabupatenKota string  `json:"kode_kabupatenkota" csv:"kode_kabupatenkota"`
 	NamaKabupatenKota string  `json:"nama_kabupatenkota" csv:"nama_kabupatenkota"`
+	KodeKabupatenKota string  `json:"kode_kabupatenkota" csv:"kode_kabupatenkota"`
+	NamaKecamatan     string  `json:"nama_kecamatan" csv:"nama_kecamatan"`
+	KodeKecamatan     string  `json:"kode_kecamatan" csv:"kode_kecamatan"`
 	JumlahPenduduk    int     `json:"jumlah_penduduk" csv:"jumlah_penduduk"`
 	Total             int     `json:"total" csv:"total"`
 	Density           float64 `json:"density" csv:"density"`
