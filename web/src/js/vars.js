@@ -52,7 +52,7 @@ const defaultZones = [
   "PAPUA",
   "MALUKU",
 ];
-const defaultInterval = 3;
+const defaultInterval = 1;
 const defaultRankPeriods = 0;
 const defaultHiddenDatasets = [false, true, false, true, false, true, false, true];
 
