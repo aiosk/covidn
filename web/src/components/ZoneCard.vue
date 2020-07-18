@@ -111,11 +111,14 @@ export default {
   },
   computed: {
     title() {
-      let intervalTitle;
+      let intervalTitle = "daily";
 
       switch (this.interval) {
         case "1":
           intervalTitle = `daily`;
+          break;
+        case "3":
+          intervalTitle = `every 3 days`;
           break;
         case "7":
           intervalTitle = `weekly`;
@@ -126,8 +129,8 @@ export default {
         case "28":
           intervalTitle = `every 4 weeks`;
           break;
-        default:
-          intervalTitle = `every ${this.interval} days`;
+        // default:
+        //   intervalTitle = `every ${this.interval} days`;
       }
       return `${this.zone.replace(/_/g, " ")} ${intervalTitle}`.toUpperCase();
     },
