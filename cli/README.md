@@ -42,7 +42,7 @@ $ cd /path/to/project
 $ curl --compressed "https://data.covid19.go.id/public/api/update.json?_=$(date +%s%3N)" | ./covidn national -
 ```
 
-<!-- $ ~/Dropbox/Scripts/curlz.sh "https://data.covid19.go.id/public/api/update.json?_=$(date +%s%3N)" | ./covidn national - -->
+<!-- ~/Dropbox/Scripts/curlz.sh "https://data.covid19.go.id/public/api/update.json?_=$(date +%s%3N)" | ./covidn national - -->
 
 #### Province
 
@@ -52,7 +52,7 @@ $ cd /path/to/project
 $ curl --compressed "https://data.covid19.go.id/public/index.html?_=$(date +%s%3N)" |  ./covidn prov - | parallel -k "curl --compressed 'https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s%3N)' | ./covidn provitem -"
 ```
 
-<!-- $ ~/Dropbox/Scripts/curlz.sh "https://data.covid19.go.id/public/index.html?_=$(date +%s%3N)" |  ./covidn prov - | parallel -k "~/Dropbox/Scripts/curlz.sh 'https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s%3N)' | ./covidn provitem -" -->
+<!-- ~/Dropbox/Scripts/curlz.sh "https://data.covid19.go.id/public/index.html?_=$(date +%s%3N)" |  ./covidn prov - | parallel -k "~/Dropbox/Scripts/curlz.sh 'https://data.covid19.go.id/public/api/prov_detail_{}.json?_=$(date +%s%3N)' | ./covidn provitem -" -->
 
 ### Stats
 
@@ -77,6 +77,6 @@ $ cd /path/to/project
 $ curl --compressed "https://api-rdt-v2.bersatulawancovid.id/dev/location/all_rawan?_=$(date +%s%3N)" | ./covidn rawan -
 ```
 
-<!-- $ ~/Dropbox/Scripts/curlz.sh "https://api-rdt-v2.bersatulawancovid.id/dev/location/all_rawan?_=$(date +%s%3N)" | ./covidn rawan - -->
+<!-- ~/Dropbox/Scripts/curlz.sh "https://api-rdt-v2.bersatulawancovid.id/dev/location/all_rawan?_=$(date +%s%3N)" | ./covidn rawan - -->
 
 ## [Credits](https://github.com/aiosk/covidn/#credits)
