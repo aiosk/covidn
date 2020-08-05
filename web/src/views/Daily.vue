@@ -1,16 +1,21 @@
 <template lang='pug'>
-  .daily
-    h3 Daily Cases per Provinces
-    DailyForm('v-model'="myModel")
+.daily
+  h3 Daily Cases per Provinces
+  DailyForm(v-model="myModel")
 
-    .grid-x.large-up-2(aria-describedby="chartHelpText")
-      .cell(v-for="v in myModel.selectedZones" ':key'="v" ':class'='[{"width-100":myModel.selectedZones.length == 1}]' )
-        .lazy-card(':id'='`Cell_${v}`')
-          component(':is'="componentZoneCard[v]" ':zone'='v' 'v-model'="myModel")
+  .grid-x.large-up-2(aria-describedby="chartHelpText")
+    .cell(
+      v-for="v in myModel.selectedZones",
+      :key="v",
+      :class="[{ 'width-100': myModel.selectedZones.length == 1 }]"
+    )
+      .lazy-card(:id="`Cell_${v}`")
+        component(:is="componentZoneCard[v]", :zone="v", v-model="myModel")
 </template>
 
 <script>
 // @ is an alias to /src
+import MixinForm from "@/mixins/Form.js";
 import DailyForm from "@/components/DailyForm.vue";
 import ZoneCard from "@/components/ZoneCard.vue";
 import _delay from "lodash/delay";
@@ -19,9 +24,10 @@ import { zones, defaultZones } from "@/js/vars";
 
 export default {
   name: "Daily",
+  mixins: [MixinForm],
   components: {
     DailyForm,
-    ZoneCard
+    ZoneCard,
   },
   data() {
     return {
@@ -32,18 +38,20 @@ export default {
         zones,
         selectedZones: _cloneDeep(defaultZones),
         hiddenDatasets: null,
-        showLegend: false
-      }
+        showLegend: false,
+      },
     };
   },
   watch: {
     "myModel.selectedZones"(val, oldVal) {
       _delay(() => {
-        val.forEach(v => {
+        val.forEach((v) => {
           this.$set(this.componentZoneCard, v, ZoneCard);
         });
       }, 9);
-    }
+
+      this.updateQuery("zone", val, defaultZones);
+    },
   },
   created() {
     let { zones: selectedZones } = this.$route.query;
@@ -61,14 +69,11 @@ export default {
         this.lazyLoadCanvas = new LazyLoad({
           elements_selector: ".lazy-card",
           unobserve_entered: true,
-          callback_enter: el => {
-            const elId = el.id
-              .split("_")
-              .slice(1)
-              .join("_");
+          callback_enter: (el) => {
+            const elId = el.id.split("_").slice(1).join("_");
 
             this.$set(this.componentZoneCard, elId, ZoneCard);
-          }
+          },
           // callback_exit: el => {
           //   const elId = el
           //     .querySelector("canvas")
@@ -88,7 +93,7 @@ export default {
     this.$set(this.myModel, "selectedZones", _cloneDeep(defaultZones));
     this.$set(this.myModel, "hiddenDatasets", null);
     this.$set(this.myModel, "componentZoneCard", {});
-  }
+  },
 };
 </script>
 

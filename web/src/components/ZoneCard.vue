@@ -1,64 +1,85 @@
 <template lang="pug">
-  .zone-card.card('aria-describedby'="chartHelpText")
-    .capture
-      .card-divider.header
-        .title
-          h6 {{ title }}
-        menu('v-if'='!value.isDialog')
-          a.fullscreen.show-for-large('@click'='fullscreenOnClick' title="resize card" aria-label="resize card"): i.icon-window-maximize
-          a.close('@click'='closeOnClick' title="close card"): i.icon-window-close
-      .card-image.stats
-        component(':is'="componentStats" 'v-model'='myStatsModel')
-      .card-image
-        .legend('v-if'="showLegend" v-html='legendHTML' '@click'='legendOnClick').grid-x.small-up-2.large-up-4
-        .help-text.text-right
-          ul
-            li('v-if'="showLegend") #[strong Touch / Click] legend item to see available chart line
-            li #[strong Touch / Hover] on chart to see case number
+.zone-card.card(aria-describedby="chartHelpText")
+  .capture
+    .card-divider.header
+      .title
+        h6 {{ title }}
+      menu(v-if="!value.isDialog")
+        a.fullscreen.show-for-large(
+          @click="fullscreenOnClick",
+          title="resize card",
+          aria-label="resize card"
+        ): i.icon-window-maximize
+        a.close(@click="closeOnClick", title="close card"): i.icon-window-close
+    .card-image.stats
+      component(:is="componentStats", v-model="myStatsModel")
+    .card-image
+      .legend.grid-x.small-up-2.large-up-4(
+        v-if="showLegend",
+        v-html="legendHTML",
+        @click="legendOnClick"
+      )
+      .help-text.text-right
+        ul
+          li(v-if="showLegend") #[strong Touch / Click] legend item to see available chart line
+          li #[strong Touch / Hover] on chart to see case number
 
-        canvas(:id="`Chart_${zone}`")
-    .card-section
-      menu.clearfix
-        .grid-x.grid-margin-x
-          .cell.small-12.medium-6
-            .grid-x
-              .cell.small-6
-                label(':for'='`interval_${zone}`') Interval
-              .cell.auto
-                .interval
-                  select(':id'="`interval_${zone}`"  'v-model'='interval')
-                    option(value="1") Daily
-                    option(value="3") 3 day
-                    option(value="7") Weekly
-                    option(value="14") 2 weeks
-                    option(value="28") 4 weeks
+      canvas(:id="`Chart_${zone}`")
+  .card-section
+    menu.clearfix
+      .grid-x.grid-margin-x
+        .cell.small-12.medium-6
+          .grid-x
+            .cell.small-6
+              label(:for="`interval_${zone}`") Interval
+            .cell.auto
+              .interval
+                select(:id="`interval_${zone}`", v-model="interval")
+                  option(value="1") Daily
+                  option(value="3") 3 day
+                  option(value="7") Weekly
+                  option(value="14") 2 weeks
+                  option(value="28") 4 weeks
 
-          .cell.small-12.medium-6
-            .grid-x
-              .cell.small-6
-                label(':for'='`showLegend_${zone}`') Show Legend
-              .cell.auto
-                .switch.small
-                  input.switch-input(':id'="`showLegend_${zone}`" type="checkbox" 'v-model'='showLegend')
-                  label.switch-paddle(':for'='`showLegend_${zone}`')
-                    span.show-for-sr Show Legend ?
-                    span.switch-active(aria-hidden="true") Yes
-                    span.switch-inactive(aria-hidden="true") No
-        .float-right
-          //- a.subscribe-ics(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/ics/${this.zone}.ics`' target='_blank'): i.icon-calendar( title="subcribe ics")
-          a.download-table(rel="noopener" ':href'='`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/desktop/${this.zone}.csv`' target='_blank' title="download table" aria-label='download table'): i.icon-table
-          a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-floppy
-          a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
-    Dialog('v-model'='modelDialog')
-      h5 Are you sure you mant to remove {{zone}} ?
-      menu.float-right.button-group
-        button.button.secondary('@click'='closeYesOnClick')
-          span.show-for-sr Yes
-          span(aria-hidden="true") Yes
-        button.button('@click'="modelDialog.isOpen=false")
-          span.show-for-sr No
-          span(aria-hidden="true") No
-    //- Spinner('v-model'='modelSpinner')
+        .cell.small-12.medium-6
+          .grid-x
+            .cell.small-6
+              label(:for="`showLegend_${zone}`") Show Legend
+            .cell.auto
+              .switch.small
+                input.switch-input(
+                  :id="`showLegend_${zone}`",
+                  type="checkbox",
+                  v-model="showLegend"
+                )
+                label.switch-paddle(:for="`showLegend_${zone}`")
+                  span.show-for-sr Show Legend ?
+                  span.switch-active(aria-hidden="true") Yes
+                  span.switch-inactive(aria-hidden="true") No
+      .float-right
+        a.download-table(
+          rel="noopener",
+          :href="`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/desktop/${this.zone}.csv`",
+          target="_blank",
+          title="download table",
+          aria-label="download table"
+        ): i.icon-table
+        a.download-card(
+          @click="downloadOnClick",
+          title="download card",
+          aria-label="download card"
+        ): i.icon-floppy
+        a.share(@click="shareOnClick", title="share", aria-label="share"): i.icon-share
+  Dialog(v-model="modelDialog")
+    h5 Are you sure you mant to remove {{ zone }} ?
+    menu.float-right.button-group
+      button.button.secondary(@click="closeYesOnClick")
+        span.show-for-sr Yes
+        span(aria-hidden="true") Yes
+      button.button(@click="modelDialog.isOpen = false")
+        span.show-for-sr No
+        span(aria-hidden="true") No
+  //- Spinner('v-model'='modelSpinner')
 </template>
 
 <script>
@@ -76,7 +97,7 @@ import {
   defaultChartData,
   defaultInterval,
   defaultHiddenDatasets,
-  defaultShare
+  defaultShare,
 } from "@/js/vars";
 
 const defaultShowLegend = false;
@@ -87,14 +108,14 @@ const defaultStats = {
     confirmed: 0,
     recover: 0,
     death: 0,
-    active: 0
+    active: 0,
   },
   daily: {
     confirmed: 0,
     recover: 0,
     death: 0,
-    active: 0
-  }
+    active: 0,
+  },
 };
 
 export default {
@@ -103,11 +124,11 @@ export default {
   components: {
     ZoneStats,
     Spinner,
-    Dialog
+    Dialog,
   },
   props: {
     zone: String,
-    value: Object
+    value: Object,
   },
   computed: {
     title() {
@@ -144,9 +165,9 @@ export default {
       get() {
         return this.value.interval ? this.value.interval : defaultInterval;
       },
-      set: _debounce(function(val) {
+      set: _debounce(function (val) {
         this.emitModel({ interval: val });
-      }, 500)
+      }, 500),
     },
     hiddenDatasets: {
       get() {
@@ -156,7 +177,7 @@ export default {
       },
       set(val) {
         this.emitModel({ hiddenDatasets: val });
-      }
+      },
     },
     selectedZones: {
       get() {
@@ -164,7 +185,7 @@ export default {
       },
       set(val) {
         this.emitModel({ selectedZones: val });
-      }
+      },
     },
     showLegend: {
       get() {
@@ -174,8 +195,8 @@ export default {
       },
       set(val) {
         this.emitModel({ showLegend: val });
-      }
-    }
+      },
+    },
   },
   watch: {
     showLegend(val, oldVal) {
@@ -196,7 +217,7 @@ export default {
       this.updateChartHiddenDatasets();
 
       this.updateQuery("hidden", val, defaultHiddenDatasets);
-    }
+    },
   },
   data() {
     return {
@@ -206,7 +227,7 @@ export default {
       legendHTML: null,
       stats: _cloneDeep(defaultStats),
       componentStats: null,
-      data: _cloneDeep(defaultChartData)
+      data: _cloneDeep(defaultChartData),
 
       // showLegend: _cloneDeep(defaultShowLegend),
     };
@@ -225,7 +246,7 @@ export default {
         e.target.style.textDecoration = "none";
       }
       let hiddenDatasets = [...$legend.querySelectorAll(".text")].map(
-        v => v.style.textDecoration != "none"
+        (v) => v.style.textDecoration != "none"
       );
       this.hiddenDatasets = hiddenDatasets;
     },
@@ -271,13 +292,13 @@ export default {
           confirmed: this.data.datasets[0].data[validIdx],
           recover: this.data.datasets[2].data[validIdx],
           death: this.data.datasets[4].data[validIdx],
-          active: this.data.datasets[6].data[validIdx]
+          active: this.data.datasets[6].data[validIdx],
         });
         this.$set(this.stats, "daily", {
           confirmed: this.data.datasets[1].data[validIdx],
           recover: this.data.datasets[3].data[validIdx],
           death: this.data.datasets[5].data[validIdx],
-          active: this.data.datasets[7].data[validIdx]
+          active: this.data.datasets[7].data[validIdx],
         });
 
         this.updateChartHiddenDatasets();
@@ -310,13 +331,13 @@ export default {
     },
     closeYesOnClick(e) {
       this.$delete(this.selectedZones, this.selectedZones.indexOf(this.zone));
-    }
+    },
   },
   created() {
     let { hidden: hiddenDatasets, interval } = this.$route.query;
 
     if (!!hiddenDatasets) {
-      hiddenDatasets = hiddenDatasets.split("").map(v => v == "1");
+      hiddenDatasets = hiddenDatasets.split("").map((v) => v == "1");
       this.hiddenDatasets = hiddenDatasets;
     }
     if (!!interval) {
@@ -330,7 +351,7 @@ export default {
         const { initChartDaily } = require("@/js/chartjs");
         this.chartInstance = initChartDaily({
           zone: this.zone,
-          data: this.data
+          data: this.data,
         });
       }
       this.componentStats = ZoneStats;
@@ -345,7 +366,7 @@ export default {
     }
     this.chartInstance.destroy();
     this.chartInstance = null;
-  }
+  },
 };
 </script>
 
