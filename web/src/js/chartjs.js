@@ -154,15 +154,23 @@ const initChartDaily = (params = { zone: null, data: null }) => {
             };
           },
           label(tooltipItem, data) {
-            let datasetIndexVal = tooltipItem.datasetIndex + 1;
             var label = data.datasets[tooltipItem.datasetIndex].label || "";
-            let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
-            let daily = data.datasets[datasetIndexVal].data[tooltipItem.index];
+            let dailyDatasetIndexVal;
+            let totalDatasetIndexVal;
+            if (tooltipItem.datasetIndex % 2 == 0) {
+              dailyDatasetIndexVal = tooltipItem.datasetIndex + 1;
+              totalDatasetIndexVal = tooltipItem.datasetIndex;
+            } else {
+              dailyDatasetIndexVal = tooltipItem.datasetIndex;
+              totalDatasetIndexVal = tooltipItem.datasetIndex - 1;
+            }
+            let daily = data.datasets[dailyDatasetIndexVal].data[tooltipItem.index];
+            let total = data.datasets[totalDatasetIndexVal].data[tooltipItem.index];
 
             const dailyStr = daily == 0 ? "" : daily > 0 ? `(+${daily})` : `(${daily})`;
 
-            return `${label}: ${value} ${dailyStr}`;
+            return `${label}: ${total} ${dailyStr}`;
           },
         },
       },
@@ -291,8 +299,9 @@ const initChartRanking = (
                 const newLabel = label.replace(/_/g, " ");
                 let abbr = newLabel
                   .replace("DAERAH ISTIMEWA", "D.I.")
-                  .replace("NUSA TENGGARA BARAT", "NTB")
-                  .replace("NUSA TENGGARA TIMUR", "NTT")
+                  .replace("NUSA TENGGARA", "NUSTRA.")
+                  // .replace("NUSA TENGGARA BARAT", "NTB")
+                  // .replace("NUSA TENGGARA TIMUR", "NTT")
                   .replace("BANGKA BELITUNG", "BABEL")
                   .replace("YOGYAKARTA", "YOGYA")
                   .replace("KEPULAUAN", "KEP.")

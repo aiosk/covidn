@@ -35,23 +35,6 @@ const zones = [
   "BENGKULU",
   "NUSA_TENGGARA_TIMUR",
 ];
-const defaultZones = [
-  "NATIONAL",
-  //ranking
-  "JAWA_TIMUR",
-  "DKI_JAKARTA",
-
-  //ratio
-  "KALIMANTAN_BARAT",
-  "RIAU",
-  "BENGKULU",
-  "MALUKU_UTARA",
-  "SUMATERA_UTARA",
-  //ratio pop
-  "KALIMANTAN_SELATAN",
-  "PAPUA",
-  "MALUKU",
-];
 const defaultInterval = 1;
 const defaultRankPeriods = 0;
 const defaultHiddenDatasets = [false, true, false, true, false, true, false, true];
@@ -83,7 +66,6 @@ const defaultShare = {
 
 export {
   zones,
-  defaultZones,
   defaultInterval,
   defaultRankPeriods,
   defaultHiddenDatasets,

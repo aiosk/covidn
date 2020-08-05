@@ -20,7 +20,7 @@ import DailyForm from "@/components/DailyForm.vue";
 import ZoneCard from "@/components/ZoneCard.vue";
 import _delay from "lodash/delay";
 import _cloneDeep from "lodash/cloneDeep";
-import { zones, defaultZones } from "@/js/vars";
+import { zones } from "@/js/vars";
 
 export default {
   name: "Daily",
@@ -29,6 +29,14 @@ export default {
     DailyForm,
     ZoneCard,
   },
+  props: {
+    value: Object,
+  },
+  computed: {
+    defaultZones() {
+      return this.value.defaultZones;
+    },
+  },
   data() {
     return {
       lazyLoadCanvas: null,
@@ -36,13 +44,16 @@ export default {
       myModel: {
         interval: null,
         zones,
-        selectedZones: _cloneDeep(defaultZones),
+        selectedZones: [],
         hiddenDatasets: null,
         showLegend: false,
       },
     };
   },
   watch: {
+    defaultZones(val, oldVal) {
+      this.updateSelectedZones(val);
+    },
     "myModel.selectedZones"(val, oldVal) {
       _delay(() => {
         val.forEach((v) => {
@@ -50,10 +61,19 @@ export default {
         });
       }, 9);
 
-      this.updateQuery("zones", val, defaultZones);
+      this.updateQuery("zones", val, this.defaultZones);
     },
   },
+  methods: {
+    updateSelectedZones(val) {
+      this.myModel.selectedZones = this.myModel.selectedZones.length
+        ? this.myModel.selectedZones
+        : val;
+    },
+  },
+
   created() {
+    this.updateSelectedZones(this.defaultZones);
     let { zones: selectedZones } = this.$route.query;
 
     if (!!selectedZones) {
@@ -90,7 +110,7 @@ export default {
     this.lazyLoadCanvas.destroy();
 
     this.$set(this.myModel, "interval", null);
-    this.$set(this.myModel, "selectedZones", _cloneDeep(defaultZones));
+    this.$set(this.myModel, "selectedZones", _cloneDeep(this.defaultZones));
     this.$set(this.myModel, "hiddenDatasets", null);
     this.$set(this.myModel, "componentZoneCard", {});
   },

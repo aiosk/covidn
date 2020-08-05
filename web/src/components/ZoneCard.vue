@@ -218,6 +218,11 @@ export default {
 
       this.updateQuery("hidden", val, defaultHiddenDatasets);
     },
+    selectedZones(val, oldVal) {
+      _delay(() => {
+        this.chartInstance.resize();
+      }, 9);
+    },
   },
   data() {
     return {

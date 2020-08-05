@@ -1,0 +1,18 @@
+{
+  "zones": [
+    "NATIONAL",
+    "JAWA_TIMUR",
+    "DKI_JAKARTA",
+    "JAWA_TENGAH",
+    "SULAWESI_SELATAN",
+
+    "KALIMANTAN_BARAT",
+    "KEPULAUAN_BANGKA_BELITUNG",
+    "BENGKULU",
+    "MALUKU_UTARA",
+    "ACEH",
+
+    "KALIMANTAN_SELATAN",
+    "PAPUA"
+  ]
+}

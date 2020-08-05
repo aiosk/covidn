@@ -1,33 +1,45 @@
 <template lang='pug'>
-  .ranking-card
-    Card(':class'="[`card-${myCase[0]}`,`card-${myCase[0]}--${myCase[1]}`]" )
-      template(#header)
-        h6 {{ title }}
-        menu
-          a.fullscreen.show-for-large('@click'='fullscreenOnClick' title="resize card" aria-label="resize card"): i.icon-window-maximize
+.ranking-card
+  Card(:class="[`card-${myCase[0]}`, `card-${myCase[0]}--${myCase[1]}`]")
+    template(#header)
+      h6 {{ title }}
+      menu
+        a.fullscreen.show-for-large(
+          @click="fullscreenOnClick",
+          title="resize card",
+          aria-label="resize card"
+        ): i.icon-window-maximize
 
-      template(#mainImage)
-        canvas(':id'="`${myCase[0]}_${myCase[1].toUpperCase()}`")
-      template(#menu)
-        .grid-x
-          .cell.small-6
-            label(':for'='`periods_${myCase.join("-")}`') Periods
-          .cell.auto
-            .periods
-              //- input(':id'="`periods_${myCase.join("-")}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
-              select(':id'="`periods_${myCase.join('-')}`"  'v-model'='rankPeriods')
-                option(value="0") All Time
-                option(value="1") Last day
-                option(value="3") Last 3 day
-                option(value="7") Last week
-                option(value="14") Last 2 weeks
-                option(value="28") Last 4 weeks
-        .float-right
-          a.download-card('@click'='downloadOnClick' title='download card' aria-label='download card'): i.icon-floppy
-          a.share('@click'='shareOnClick' title='share' aria-label='share'): i.icon-share
-    Dialog('v-model'='modelDialog')
-      component(:is='componentChart' ':zone'='modelChart.zone' 'v-model'="modelChart")
-    //- Spinner('v-model'='modelSpinner')
+    template(#mainImage)
+      canvas(:id="`${myCase[0]}_${myCase[1].toUpperCase()}`")
+    template(#menu)
+      .grid-x
+        .cell.small-6
+          label(:for="`periods_${myCase.join('-')}`") Periods
+        .cell.auto
+          .periods
+            //- input(':id'="`periods_${myCase.join("-")}`" 'v-model'='periods' type='number' min='1' max='14' step='1')
+            select(:id="`periods_${myCase.join('-')}`", v-model="rankPeriods")
+              option(value="0") All Time
+              option(value="1") Last day
+              option(value="3") Last 3 day
+              option(value="7") Last week
+              option(value="14") Last 2 weeks
+              option(value="28") Last 4 weeks
+      .float-right
+        a.download-card(
+          @click="downloadOnClick",
+          title="download card",
+          aria-label="download card"
+        ): i.icon-floppy
+        a.share(@click="shareOnClick", title="share", aria-label="share"): i.icon-share
+  Dialog(v-model="modelDialog")
+    component(
+      :is="componentChart",
+      :zone="modelChart.zone",
+      v-model="modelChart"
+    )
+  //- Spinner('v-model'='modelSpinner')
 </template>
 
 <script>
@@ -44,7 +56,7 @@ import _isUndefined from "lodash/isUndefined";
 import {
   defaultChartData,
   defaultChartColor,
-  defaultRankPeriods
+  defaultRankPeriods,
 } from "@/js/vars";
 
 export default {
@@ -53,11 +65,11 @@ export default {
   components: {
     Card,
     Spinner,
-    Dialog
+    Dialog,
   },
   props: {
     myCase: Array,
-    value: Object
+    value: Object,
   },
   data() {
     return {
@@ -67,8 +79,8 @@ export default {
       modelDialog: { isOpen: false },
       modelChart: {
         zone: null,
-        isDialog: true
-      }
+        isDialog: true,
+      },
     };
   },
   computed: {
@@ -81,7 +93,7 @@ export default {
       set(val) {
         this.updateQuery("rankPeriods", val, defaultRankPeriods);
         this.emitModel({ rankPeriods: val });
-      }
+      },
     },
     title() {
       let newTitle;
@@ -132,13 +144,13 @@ export default {
       }
 
       return `${newTitle} ${rankPeriodsTitle}`;
-    }
+    },
   },
   watch: {
     rankPeriods(val, oldVal) {
       // this.emitModel({ rankPeriods: val });
       this.updateData();
-    }
+    },
   },
   methods: {
     updateData() {
@@ -152,53 +164,13 @@ export default {
         let resText = await res.text();
         this.rankingFromCsv(resText);
 
-        // if (!this.data.datasets[0].datalabels) {
-        //   this.$set(this.data.datasets[0], "datalabels", {
-        //     align: [],
-        //     color: []
-        //   });
-        // }
-        // let divider = 1;
-        // switch (this.myCase[0]) {
-        //   case "ratio":
-        //     divider = 10;
-        //     break;
-        //   case "ratio-population":
-        //     switch (this.myCase[1]) {
-        //       case "death":
-        //         divider = 2;
-        //         break;
-        //       case "confirmed":
-        //         divider = 4;
-        //         break;
-        //       default:
-        //         divider = 3;
-        //     }
-        //     break;
-        //   default:
-        //     divider = 2;
-        // }
-        // const datasetDataLength = this.data.datasets[0].data.length;
-        // this.data.datasets[0].data.forEach((v, i) => {
-        //   this.$set(
-        //     this.data.datasets[0].datalabels.align,
-        //     i,
-        //     i < divider ? "start" : "end"
-        //   );
-        //   this.$set(
-        //     this.data.datasets[0].datalabels.color,
-        //     i,
-        //     i < divider ? "#fff" : "#000"
-        //   );
-        // });
-
         if (!this.chartInstance) {
           return;
         }
         this.chartInstance.update();
         this.modelSpinner.isOpen = false;
       })();
-    }
+    },
   },
   created() {
     let { rankPeriods } = this.$route.query;
@@ -210,15 +182,18 @@ export default {
     this.updateData();
   },
   mounted() {
-    const _this = this;
+    const that = this;
     _delay(() => {
       if (!this.chartInstance) {
         let chartRightPadding = 64;
         if (this.myCase[0] == "ranking") {
-          chartRightPadding += 64;
+          chartRightPadding += 64 + 16;
         }
         if (this.myCase[0] == "ratio") {
-          chartRightPadding += 16;
+          chartRightPadding += 32;
+        }
+        if (this.myCase[0] == "ratio-population") {
+          chartRightPadding += 32;
         }
         const { initChartRanking } = require("@/js/chartjs");
         this.chartInstance = initChartRanking({
@@ -227,37 +202,38 @@ export default {
           rightPadding: chartRightPadding,
           onClick(e, chartItem) {
             let col;
-            this.getElementsAtEventForMode(e, "y", 1).forEach(function(item) {
+            this.getElementsAtEventForMode(e, "y", 1).forEach(function (item) {
               col = item._index;
             });
             if (_isUndefined(col)) {
               return;
             }
-            const chartItemID = _this.data.labels[col];
+            const chartItemID = that.data.labels[col];
 
-            _this.modelChart.zone = chartItemID;
-            if (!!_this.data.datasets[0].population[col]) {
-              _this.modelChart.population =
-                _this.data.datasets[0].population[col];
+            that.modelChart.zone = chartItemID;
+            if (!!that.data.datasets[0].population[col]) {
+              that.modelChart.population =
+                that.data.datasets[0].population[col];
             }
-            _this.modelDialog.isOpen = true;
+            that.modelDialog.isOpen = true;
           },
           datalabelsFormatter(val, ctx) {
-            const percentage = _this.data.datasets[0].percentage[ctx.dataIndex];
+            const percentage = that.data.datasets[0].percentage[ctx.dataIndex];
 
-            var date = new Date(
-              _this.data.datasets[0].lastUpdate[ctx.dataIndex]
+            const date = new Date(
+              that.data.datasets[0].lastUpdate[ctx.dataIndex]
             );
-            var options = { month: "short", day: "numeric" };
+            const options = { month: "short", day: "numeric" };
             const lastUpdate = date.toLocaleDateString("en-US", options);
+            const ranking = ctx.dataIndex + 1;
 
             if (!!percentage) {
-              return `${val} | ${percentage}% | ${lastUpdate}`;
+              return `#${ranking} | ${val} | ${percentage}% | ${lastUpdate}`;
             }
-            if (_this.myCase[0] == "ratio") {
-              return `${val}% | ${lastUpdate}`;
+            if (that.myCase[0] == "ratio") {
+              return `#${ranking} | ${val}% | ${lastUpdate}`;
             }
-            return `${val} | ${lastUpdate}`;
+            return `#${ranking} | ${val} | ${lastUpdate}`;
           },
           tooltipsCallbackLabel(tooltipItem, data) {
             // var label = data.labels[tooltipItem.index] || "";
@@ -265,31 +241,31 @@ export default {
               data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
             const percentage =
-              _this.data.datasets[0].percentage[tooltipItem.datasetIndex];
+              that.data.datasets[0].percentage[tooltipItem.datasetIndex];
             var date = new Date(
-              _this.data.datasets[0].lastUpdate[tooltipItem.datasetIndex]
+              that.data.datasets[0].lastUpdate[tooltipItem.datasetIndex]
             );
             var options = { month: "short", day: "numeric" };
             const lastUpdate = date.toLocaleDateString("en-US", options);
-            const myCaseInTitleCase = _this.toTitleCase(_this.myCase[1]);
+            const myCaseInTitleCase = that.toTitleCase(that.myCase[1]);
             if (!!percentage) {
               return [
                 `${myCaseInTitleCase}: ${val}`,
                 `Percentage: ${percentage}%`,
-                `Last Update: ${lastUpdate}`
+                `Last Update: ${lastUpdate}`,
               ];
             }
-            if (_this.myCase[0] == "ratio") {
+            if (that.myCase[0] == "ratio") {
               return [
                 `${myCaseInTitleCase}: ${val}%`,
-                `Last Update: ${lastUpdate}`
+                `Last Update: ${lastUpdate}`,
               ];
             }
             return [
               `${myCaseInTitleCase}: ${val}`,
-              `Last Update: ${lastUpdate}`
+              `Last Update: ${lastUpdate}`,
             ];
-          }
+          },
         });
       }
     }, 9);
@@ -299,7 +275,7 @@ export default {
       this.chartInstance.destroy();
     }
     this.data = _cloneDeep(defaultChartData);
-  }
+  },
 };
 </script>
 

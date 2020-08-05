@@ -1,45 +1,84 @@
 <template lang='pug'>
-  #app.grid-container
-    //- a(href='./')
+#app.grid-container
+  //- a(href='./')
 
-    ul#nav.menu.vertical.medium-horizontal
-      li.menu-text: a(href='./') COVIDN
-      router-link( to="/daily" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
-        li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
-          a(':href'="href" '@click'="navigate") Daily
-      router-link( to="/ranking" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
-        li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
-          a(':href'="href" '@click'="navigate") Ranking
-      router-link( to="/ratio" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
-        li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
-          a(':href'="href" '@click'="navigate") Ratio
-      router-link( to="/ratio-population" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
-        li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
-          a(':href'="href" '@click'="navigate") Population Ratio
-      router-link( to="/about" 'v-slot'="{ href, route, navigate, isActive, isExactActive }" )
-        li( ':class'="[isActive && 'is-active', isExactActive && 'is-active']" )
-          a(':href'="href" '@click'="navigate") About
-    
-    #chartHelpText.callout.warning.hide-for-medium
-      ul.help-text
-        li For best results please view in #[strong landscape] mode
-    br
-    router-view
+  ul#nav.menu.vertical.medium-horizontal
+    li.menu-text: a(href="./") COVIDN
+    router-link(
+      to="/daily",
+      v-slot="{ href, route, navigate, isActive, isExactActive }"
+    )
+      li(:class="[isActive && 'is-active', isExactActive && 'is-active']")
+        a(:href="href", @click="navigate") Daily
+    router-link(
+      to="/ranking",
+      v-slot="{ href, route, navigate, isActive, isExactActive }"
+    )
+      li(:class="[isActive && 'is-active', isExactActive && 'is-active']")
+        a(:href="href", @click="navigate") Ranking
+    router-link(
+      to="/ratio",
+      v-slot="{ href, route, navigate, isActive, isExactActive }"
+    )
+      li(:class="[isActive && 'is-active', isExactActive && 'is-active']")
+        a(:href="href", @click="navigate") Ratio
+    router-link(
+      to="/ratio-population",
+      v-slot="{ href, route, navigate, isActive, isExactActive }"
+    )
+      li(:class="[isActive && 'is-active', isExactActive && 'is-active']")
+        a(:href="href", @click="navigate") Population Ratio
+    router-link(
+      to="/about",
+      v-slot="{ href, route, navigate, isActive, isExactActive }"
+    )
+      li(:class="[isActive && 'is-active', isExactActive && 'is-active']")
+        a(:href="href", @click="navigate") About
 
-    button.button.small#top('@click'='topBtnOnClick' title="Scroll to top" aria-label="Scroll to top"): i.icon-up-circled
+  #chartHelpText.callout.warning.hide-for-medium
+    ul.help-text
+      li For best results please view in #[strong landscape] mode
+  br
+  router-view(v-model="myModel")
+
+  button#top.button.small(
+    @click="topBtnOnClick",
+    title="Scroll to top",
+    aria-label="Scroll to top"
+  ): i.icon-up-circled
 </template>
 
 <script>
 export default {
   name: "App",
+  data() {
+    return {
+      myModel: {
+        defaultZones: [],
+      },
+    };
+  },
   methods: {
     topBtnOnClick(e) {
       document.querySelector("#nav").scrollIntoView({ behavior: "smooth" });
       // window.scroll({ top: 0, left: 0, behavior: "smooth" });
-    }
+    },
+    async getDefault() {
+      const res = await fetch("./json/defaults.json");
+      return await res.json();
+    },
+  },
+  created() {
+    const that = this;
+    (async () => {
+      const { zones: defaultZones } = await this.getDefault();
+      that.myModel.defaultZones = defaultZones;
+    })();
   },
   mounted() {},
-  destroyed() {}
+  destroyed() {
+    this.myModel.defaultZones = [];
+  },
 };
 </script>
 
