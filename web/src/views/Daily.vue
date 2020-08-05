@@ -50,7 +50,7 @@ export default {
         });
       }, 9);
 
-      this.updateQuery("zone", val, defaultZones);
+      this.updateQuery("zones", val, defaultZones);
     },
   },
   created() {
