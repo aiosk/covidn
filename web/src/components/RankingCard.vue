@@ -155,9 +155,9 @@ export default {
   methods: {
     updateData() {
       (async () => {
-        // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
-        // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
-        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/stats/${
+        // https://raw.githubusercontent.com/aiosk/covidn/develop/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
+        // https://raw.githubusercontent.com/aiosk/covidn/master/dist/web/stats/${this.myCase.join("-")}.csv?_=${Date.now()}
+        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/dist/web/stats/${
           this.rankPeriods
         }/${this.myCase.join("-")}.csv?_=${Date.now()}`;
         let res = await fetch(url);

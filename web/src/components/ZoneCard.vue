@@ -59,7 +59,7 @@
       .float-right
         a.download-table(
           rel="noopener",
-          :href="`https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/desktop/${this.zone}.csv`",
+          :href="`https://raw.githubusercontent.com/aiosk/covidn/master/dist/desktop/${this.zone}.csv`",
           target="_blank",
           title="download table",
           aria-label="download table"
@@ -257,9 +257,9 @@ export default {
     },
     updateChartData() {
       (async () => {
-        // https://raw.githubusercontent.com/aiosk/covidn/develop/cli/dist/web/${this.interval}/${this.zone}.csv?_=${Date.now()}
-        // https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/${this.interval}/${this.zone}.csv?_=${Date.now()}
-        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/cli/dist/web/daily/${
+        // https://raw.githubusercontent.com/aiosk/covidn/develop/dist/web/${this.interval}/${this.zone}.csv?_=${Date.now()}
+        // https://raw.githubusercontent.com/aiosk/covidn/master/dist/web/${this.interval}/${this.zone}.csv?_=${Date.now()}
+        const url = `https://raw.githubusercontent.com/aiosk/covidn/master/dist/web/daily/${
           this.interval
         }/${this.zone}.csv?_=${Date.now()}`;
         try {

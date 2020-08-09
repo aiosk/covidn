@@ -41,11 +41,11 @@ func Item(file io.Reader) {
 	fileName := strings.ReplaceAll(inputFile.Provinsi, " ", "_")
 
 	inputFileClean := inputFile.ListPerkembangan.Clean(disipinID[inputFile.Provinsi])
-	libs.WriteToFile("dist/desktop", fmt.Sprintf("%s.csv", fileName), inputFileClean.ToCsv())
+	libs.WriteToFile("../dist/desktop", fmt.Sprintf("%s.csv", fileName), inputFileClean.ToCsv())
 
 	periods := [5]int{1, 3, 7, 14, 28}
 	for _, v := range periods {
-		dirpath := fmt.Sprintf("dist/web/daily/%d", v)
+		dirpath := fmt.Sprintf("../dist/web/daily/%d", v)
 		libs.WriteToFile(dirpath, fmt.Sprintf("%s.csv", fileName), inputFileClean.Chunk(v).ToCsv())
 	}
 

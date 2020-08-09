@@ -1,17 +1,12 @@
 Indonesia COVID-19 Data
 
-- [Data](#data)
-- [Chart](#chart)
-- [Generate data ur self](#generate-data-ur-self)
-- [Credits](#credits)
-
 # Data
 
-see [raw **CSV**](https://github.com/aiosk/covidn/blob/master/cli/dist/desktop) file
+see [raw **CSV**](https://github.com/aiosk/covidn/blob/master/dist/desktop) file
 
-# Chart
+# Interactive Chart
 
-see [**Chart**](https://aiosk.github.io/covidn/) on web
+see [**interactive chart**](https://aiosk.github.io/covidn/) on web
 
 # Generate data ur self
 
@@ -30,7 +25,7 @@ see [**instructions**](https://github.com/aiosk/covidn/blob/master/cli)
 - Sumber resmi covid19.go.id
 - Mobile friendly
 - Interaktif
-- Kasus harian / periode (konfirmasi, sembuh, meninggal, dirawat / diisolasi)
+- Kasus harian / periode (konfirmasi, sembuh, meninggal, dirawat)
 - Grafik nasional & provinsi
 - Unduh grafik & data CSV
 

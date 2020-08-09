@@ -21,7 +21,7 @@ func Main(file io.Reader) {
 		}
 		return inputFileClean[i].Density > inputFileClean[j].Density
 	})
-	libs.WriteToFile("dist/desktop", "rawan.csv", inputFileClean.ToCsv())
+	libs.WriteToFile("../dist/desktop", "rawan.csv", inputFileClean.ToCsv())
 
 	inputFileCleanZones := inputFileClean.ToZones()
 	sort.SliceStable(inputFileCleanZones, func(i, j int) bool {
@@ -30,5 +30,5 @@ func Main(file io.Reader) {
 		}
 		return inputFileCleanZones[i].Density > inputFileCleanZones[j].Density
 	})
-	libs.WriteToFile("dist/desktop", "rawan-zones.csv", inputFileCleanZones.ToCsv())
+	libs.WriteToFile("../dist/desktop", "rawan-zones.csv", inputFileCleanZones.ToCsv())
 }

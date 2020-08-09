@@ -17,7 +17,7 @@ var myCases = [4]string{"confirmed", "recover", "death", "active"}
 
 // getRawan ...
 func getRawan() DataRawan {
-	file := libs.ReadFile("dist/desktop/rawan-zones.csv")
+	file := libs.ReadFile("../dist/desktop/rawan-zones.csv")
 
 	var inputRawan []InputRawan
 	err := csvutil.Unmarshal(file, &inputRawan)
@@ -58,10 +58,10 @@ func getLastNonZero(myCase string, inputFileList []InputFile) int {
 
 func mainPerPeriod(period int, zones []string) {
 	outputRankingPerCase := make(OutputPerCase)
-	outputDir := fmt.Sprintf("dist/web/stats/%d", period)
+	outputDir := fmt.Sprintf("../dist/web/stats/%d", period)
 
 	for _, zone := range zones {
-		filepath := fmt.Sprintf("dist/desktop/%s.csv", zone)
+		filepath := fmt.Sprintf("../dist/desktop/%s.csv", zone)
 		csvFile := libs.ReadFile(filepath)
 		var inputFileList []InputFile
 		err := csvutil.Unmarshal(csvFile, &inputFileList)
@@ -184,7 +184,7 @@ func mainPerPeriod(period int, zones []string) {
 
 // Main ...
 func Main() {
-	srcDir := "dist/desktop"
+	srcDir := "../dist/desktop"
 	files, err := ioutil.ReadDir(srcDir)
 	libs.PanicError(err)
 
