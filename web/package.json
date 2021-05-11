@@ -16,7 +16,7 @@
     "@vue/cli-plugin-router": "~4.4.0",
     "@vue/cli-service": "~4.4.0",
     "foundation-sites": "^6.6.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "pug": "^3.0.0",
     "pug-plain-loader": "^1.0.0",
     "sass": "^1.26.5",
